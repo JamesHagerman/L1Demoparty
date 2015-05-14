@@ -39,17 +39,31 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 #define IPU_DESTADDR	    0x7200
 #define IPU_DECOMPRESS	  0x7400
 
-#define CLOCKDIV 69
-#define HOR_RES 80UL
+//80x480@60: 8bpp
+//#define CLOCKDIV 69
+//#define HOR_RES 80UL
+//#define VER_RES 480UL
+//#define HOR_FRONT_PORCH 32
+//#define HOR_PULSE_WIDTH 8
+//#define HOR_BACK_PORCH  32
+//#define VER_FRONT_PORCH 10
+//#define VER_PULSE_WIDTH 5
+//#define VER_BACK_PORCH  10
+//#define BPP 8
+
+//640x480@60: 1bpp
+#define CLOCKDIV 11
+#define HOR_RES 640UL
 #define VER_RES 480UL
-#define HOR_FRONT_PORCH 32
-#define HOR_PULSE_WIDTH 8
-#define HOR_BACK_PORCH  32
+#define HOR_FRONT_PORCH 16
+#define HOR_PULSE_WIDTH 96
+#define HOR_BACK_PORCH  48
 #define VER_FRONT_PORCH 10
-#define VER_PULSE_WIDTH 5
-#define VER_BACK_PORCH  10
-#define BPP 8
-#define VENST_FUDGE 0
+#define VER_PULSE_WIDTH 2
+#define VER_BACK_PORCH  33
+#define BPP 1
+
+#define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
 #define HENST_FUDGE 0
 #define VSPOL 0 /* sync polarities */
 #define HSPOL 0
@@ -67,17 +81,26 @@ void config_graphics(void) {
 	_G1CLKSEL = 1;
 	_GCLKDIV = CLOCKDIV;
 
-	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+        //80x480@60: 8bpp
+//	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+//	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+//	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+        //640x480@60: 1bpp
+        G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+        G1DPADRH = 0;
+        G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+        G1W1ADRH = 0;
+        G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+        G1W2ADRH = 0;
 
 	_GDBEN = 0xFFFF;
 
 	// Using PIC24F manual section 43 page 37-38
-        _DPTEST = 3;
+        _DPTEST = 2; // Test mode: 2 = bars. 3 = borders...
 	_DPMODE = 1;      /* TFT */
 	_GDBEN = 0xFFFF;
 	_DPW = _PUW = HOR_RES; // Work area and FB size so GPU works
@@ -568,133 +591,133 @@ int main(void) {
 	TRISB = 0x0000;
 
 	config_graphics();
-//	config_chr();
-//	config_timer();
-//
-//
-//	// clear buffers
-//	rcc_setdest(GFXDisplayBuffer[0]);
-//	blank_background();
-//	rcc_setdest(GFXDisplayBuffer[1]);
-//	blank_background();
-//
-//	_VMRGNIF = 0;
-//	_HMRGNIF = 0;
-//	_HMRGNIE = 1;
-//	_VMRGNIE = 1;
-//	_GFX1IE = 1;
-//
-//	//loadSprite(0);
-//	loadAllSprites();
-//
-//	int d;
-//	for(d = 0; d < MAX_PARTICLES; d++)
-//		addParticle();
-//
-//
-//	double fire_x, fire_y;
-//	uint16_t balls=0;
-//	signed int max_fire=0;
-//	uint16_t fire_s = 10;
-//	float fire_b = 1.0;
-//	// y = offset + A*sin(x*2*pi*B)
-//
-//	float amp = 0.5;
-//	float amp_s = 0.05;
-//	uint16_t angle=0;
-//
-//	uint8_t aa = 1;
-//	int next_fb = 1;
-//	int box_color = 0;
+	config_chr();
+	config_timer();
+
+
+	// clear buffers
+	rcc_setdest(GFXDisplayBuffer[0]);
+	blank_background();
+	rcc_setdest(GFXDisplayBuffer[1]);
+	blank_background();
+
+	_VMRGNIF = 0;
+	_HMRGNIF = 0;
+	_HMRGNIE = 1;
+	_VMRGNIE = 1;
+	_GFX1IE = 1;
+
+	//loadSprite(0);
+	loadAllSprites();
+
+	int d;
+	for(d = 0; d < MAX_PARTICLES; d++)
+		addParticle();
+
+
+	double fire_x, fire_y;
+	uint16_t balls=0;
+	signed int max_fire=0;
+	uint16_t fire_s = 10;
+	float fire_b = 1.0;
+	// y = offset + A*sin(x*2*pi*B)
+
+	float amp = 0.5;
+	float amp_s = 0.05;
+	uint16_t angle=0;
+
+	uint8_t aa = 1;
+	int next_fb = 1;
+	int box_color = 0;
 	while (1) {
-//		rcc_setdest(GFXDisplayBuffer[next_fb]);
-//
-//		blank_background();
-//		//omar();
-//
-//		int c;
-//		for(c = 0; c < numPart; c++)
-//		{
-//			if (p[c].posx + p[c].size >= HOR_RES-1) {
-//				p[c].posx = rand()%5;
-//				p[c].posy = 1+(rand()%(VER_RES-6));
-//				p[c].color = rand() & 0xff;
-//			}
-//			p[c].posx += p[c].speedx;
-//                }
-//                for(c = 0; c < numPart; c++)
-//                {
-//                        rcc_color(p[c].color);
-//                        fast_pixel(p[c].posx, p[c].posy);
-//                }
-//
-//
-//		drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6,0);
-//		drawSprite(HOR_RES/2-s[7].width/2, VER_RES/2, 7,0);
-//
-//		drawSprite(HOR_RES/2-s[7].width/2 - s[2].width - 1, VER_RES/2 + PIX_H*(s[2].width/2), 2+aa, 0);
-//		drawSprite(HOR_RES/2+s[7].width/2 + 2, VER_RES/2 + PIX_H*(s[3].width/2), 2+!aa, 0);
-//		if ( frames%4 == 0) {
-//			aa = !aa;
-//		}
-//
-//		rcc_color(0);
-//
-//		/*if (frames < 200) {
-//                    omar();
-//                    //TODO: text fix
-//                    rcc_color(0x92);
-//                    rcc_draw(0, 210, 24, 42);
-//		} else if (frames >= 200 && frames < 400) {
-//                    verBlind();
-//		} else if (frames >= 400) {
-//                    drawSprite( 10, 60, 4, 0); // TROGDOOOOOR
-//		}*/
-//
-////		rcc_color(0x3);
-////		render(angle, 360-angle, 0);
-////		angle+=5;
-//
-//                // My drawing:
-//                int myColor = 0;
-//                int h = 0;
-//                for (h = 0; h < HOR_RES; h++ ) {
-//                    myColor = h;
-//
-//                    rcc_color(myColor); // 8bit yellow == 0b111 111 00 = 0xFC
-//                    fast_pixel(h, 5);
-//
-//                    myColor = h*2;
-//                    rcc_color(myColor); // 8bit yellow == 0b111 111 00
-//                    fast_pixel(5, h);
-//
-//                }
-//
-//
-//
-//		// CIRCLE DRAWING
-//		int x, y;
-//		int ox,oy, radius;
-//		radius = 3;
-//		ox = HOR_RES/2;
-//		oy = VER_RES/2;
-//		for(y=-radius; y<=radius; y++) {
-//                    for(x=-radius; x<=radius; x++) {
-//                        rcc_color(1+(rand()%3));
-//                        if(x*x+y*y <= radius*radius + radius*0.8f) fast_pixel(ox+x, oy+y*PIX_H);
-//                    }
-//                }
-//
-//
-//		drawBorder(0x92);
-//		cleanup();
-//
-//		while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-//		gpu_setfb(GFXDisplayBuffer[next_fb]);
-//		_VMRGNIF = 0;
-//		while(!_VMRGNIF) continue; // wait for vsync
-//		next_fb = !next_fb;
-//		frames++;
+		rcc_setdest(GFXDisplayBuffer[next_fb]);
+
+		blank_background();
+		//omar();
+
+		int c;
+		for(c = 0; c < numPart; c++)
+		{
+			if (p[c].posx + p[c].size >= HOR_RES-1) {
+				p[c].posx = rand()%5;
+				p[c].posy = 1+(rand()%(VER_RES-6));
+				p[c].color = rand() & 0xff;
+			}
+			p[c].posx += p[c].speedx;
+                }
+                for(c = 0; c < numPart; c++)
+                {
+                        rcc_color(p[c].color);
+                        fast_pixel(p[c].posx, p[c].posy);
+                }
+
+
+		drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6,0);
+		drawSprite(HOR_RES/2-s[7].width/2, VER_RES/2, 7,0);
+
+		drawSprite(HOR_RES/2-s[7].width/2 - s[2].width - 1, VER_RES/2 + PIX_H*(s[2].width/2), 2+aa, 0);
+		drawSprite(HOR_RES/2+s[7].width/2 + 2, VER_RES/2 + PIX_H*(s[3].width/2), 2+!aa, 0);
+		if ( frames%4 == 0) {
+			aa = !aa;
+		}
+
+		rcc_color(0);
+
+		/*if (frames < 200) {
+                    omar();
+                    //TODO: text fix
+                    rcc_color(0x92);
+                    rcc_draw(0, 210, 24, 42);
+		} else if (frames >= 200 && frames < 400) {
+                    verBlind();
+		} else if (frames >= 400) {
+                    drawSprite( 10, 60, 4, 0); // TROGDOOOOOR
+		}*/
+
+//		rcc_color(0x3);
+//		render(angle, 360-angle, 0);
+//		angle+=5;
+
+                // My drawing:
+                int myColor = 0;
+                int h = 0;
+                for (h = 0; h < HOR_RES; h++ ) {
+                    myColor = h;
+
+                    rcc_color(myColor); // 8bit yellow == 0b111 111 00 = 0xFC
+                    fast_pixel(h, 5);
+
+                    myColor = h*2;
+                    rcc_color(myColor); // 8bit yellow == 0b111 111 00
+                    fast_pixel(5, h);
+
+                }
+
+
+
+		// CIRCLE DRAWING
+		int x, y;
+		int ox,oy, radius;
+		radius = 3;
+		ox = HOR_RES/2;
+		oy = VER_RES/2;
+		for(y=-radius; y<=radius; y++) {
+                    for(x=-radius; x<=radius; x++) {
+                        rcc_color(1+(rand()%3));
+                        if(x*x+y*y <= radius*radius + radius*0.8f) fast_pixel(ox+x, oy+y*PIX_H);
+                    }
+                }
+
+
+		drawBorder(0x92);
+		cleanup();
+
+		while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+		gpu_setfb(GFXDisplayBuffer[next_fb]);
+		_VMRGNIF = 0;
+		while(!_VMRGNIF) continue; // wait for vsync
+		next_fb = !next_fb;
+		frames++;
 	}
 
 	return 0;
