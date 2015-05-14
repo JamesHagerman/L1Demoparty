@@ -111,14 +111,14 @@ section                    address   length (PC units)   length (bytes) (dec)
 .text                        0x200               0x610           0x918  (2328)
 .const                       0x810               0x100           0x180  (384)
 .text                        0x910              0x1dfc          0x2cfa  (11514)
-_038c94e05554537f           0x270c              0x1900          0x2580  (9600)
-_038c96c05554537f           0x400c              0x1900          0x2580  (9600)
-_038c98a05554537f           0x590c              0x1900          0x2580  (9600)
-_038c9a805554537f           0x720c              0x1900          0x2580  (9600)
-_038c9c605554537f           0x8b0c              0x1900          0x2580  (9600)
-_038c9e405554537f           0xa40c              0x1900          0x2580  (9600)
-_03b5e0605554537f           0xbd0c              0x1900          0x2580  (9600)
-_038c93005554537f           0xd60c               0xc68          0x129c  (4764)
+_03a214e055545483           0x270c              0x1900          0x2580  (9600)
+_03a216c055545483           0x400c              0x1900          0x2580  (9600)
+_03a218a055545483           0x590c              0x1900          0x2580  (9600)
+_03a21a8055545483           0x720c              0x1900          0x2580  (9600)
+_03a21c6055545483           0x8b0c              0x1900          0x2580  (9600)
+_03a21e4055545483           0xa40c              0x1900          0x2580  (9600)
+_03cb006055545483           0xbd0c              0x1900          0x2580  (9600)
+_03a2130055545483           0xd60c               0xc68          0x129c  (4764)
 .dinit                      0xe274               0x85c           0xc8a  (3210)
 .init.delay32               0xead0                0x1c            0x2a  (42)
 
@@ -2198,51 +2198,51 @@ FONTS               0x4ff8        0xc08
                   0x001ea6                  _main
                   0x0025ac                  _omar
 
-_038c94e05554537f
+_03a214e055545483
                   0x00270c       0x1900
- _038c94e05554537f
+ _03a214e055545483
                   0x00270c       0x1900 build/default/production/main.o
                   0x00270c                  _SnoopOne
 
-_038c96c05554537f
+_03a216c055545483
                   0x00400c       0x1900
- _038c96c05554537f
+ _03a216c055545483
                   0x00400c       0x1900 build/default/production/main.o
                   0x00400c                  _SnoopTwo
 
-_038c98a05554537f
+_03a218a055545483
                   0x00590c       0x1900
- _038c98a05554537f
+ _03a218a055545483
                   0x00590c       0x1900 build/default/production/main.o
                   0x00590c                  _SnoopThree
 
-_038c9a805554537f
+_03a21a8055545483
                   0x00720c       0x1900
- _038c9a805554537f
+ _03a21a8055545483
                   0x00720c       0x1900 build/default/production/main.o
                   0x00720c                  _SnoopFour
 
-_038c9c605554537f
+_03a21c6055545483
                   0x008b0c       0x1900
- _038c9c605554537f
+ _03a21c6055545483
                   0x008b0c       0x1900 build/default/production/main.o
                   0x008b0c                  _SnoopFive
 
-_038c9e405554537f
+_03a21e4055545483
                   0x00a40c       0x1900
- _038c9e405554537f
+ _03a21e4055545483
                   0x00a40c       0x1900 build/default/production/main.o
                   0x00a40c                  _SnoopSix
 
-_03b5e0605554537f
+_03cb006055545483
                   0x00bd0c       0x1900
- _03b5e0605554537f
+ _03cb006055545483
                   0x00bd0c       0x1900 build/default/production/main.o
                   0x00bd0c                  _OhIndeed
 
-_038c93005554537f
+_03a2130055545483
                   0x00d60c        0xc68
- _038c93005554537f
+ _03a2130055545483
                   0x00d60c        0xc68 build/default/production/main.o
                   0x00d60c                  _SpriteMap
 

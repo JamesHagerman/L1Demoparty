@@ -18,7 +18,7 @@
 #include <libpic30.h>
 
 _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
-_CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
+_CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2 & IOL1WAY_OFF)
 _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
 
@@ -64,7 +64,7 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 #define BPP 1
 
 #define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
-#define HENST_FUDGE 0
+#define HENST_FUDGE 6 // 6 works for me on my monitor. How fix during demo?!?
 #define VSPOL 0 /* sync polarities */
 #define HSPOL 0
 
@@ -89,6 +89,7 @@ void config_graphics(void) {
 //	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 //	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
 
+
         //640x480@60: 1bpp
         G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
         G1DPADRH = 0;
@@ -100,7 +101,7 @@ void config_graphics(void) {
 	_GDBEN = 0xFFFF;
 
 	// Using PIC24F manual section 43 page 37-38
-        _DPTEST = 2; // Test mode: 2 = bars. 3 = borders...
+        _DPTEST = 3; // Test mode: 2 = bars. 3 = borders...
 	_DPMODE = 1;      /* TFT */
 	_GDBEN = 0xFFFF;
 	_DPW = _PUW = HOR_RES; // Work area and FB size so GPU works
@@ -132,6 +133,13 @@ void config_graphics(void) {
 	_DPBPP = _PUBPP = logc;
 	_G1EN = 1;
 	__delay_ms(1);
+}
+
+void config_uart(void) {
+    OSCCONbits.IOLOCK = 0; // unlock the peripheral Control Register Lock
+    RPINR18bits.U1RXR = 7; // Map UART1 RX peripheral to RP7
+    RPOR3bits.RP6R = 3; // Map RP6 pin to UART1 TX
+    OSCCONbits.IOLOCK = 1; // relock the peripheral Control Register Lock
 }
 
 void config_chr(void) {
