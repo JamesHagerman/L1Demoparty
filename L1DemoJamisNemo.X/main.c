@@ -117,7 +117,7 @@ void config_graphics(void) {
 	_GDBEN = 0xFFFF;
 
 	// Using PIC24F manual section 43 page 37-38
-        //_DPTEST = 3; // Test mode: 2 = bars. 3 = borders...
+//        _DPTEST = 3; // Test mode: 2 = bars. 3 = borders...
 	_DPMODE = 1;      /* TFT */
 	_GDBEN = 0xFFFF;
 	_DPW = _PUW = HOR_RES; // Work area and FB size so GPU works
@@ -247,8 +247,8 @@ void config_chr(void) {
 
 int maxCharHeight = ((int)VER_RES)-8;
 void chr_print(char *c, uint16_t x, uint16_t y) {
-    G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
-    G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
+//    G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
+//    G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
 
     if (y > maxCharHeight) {
         y = maxCharHeight;
@@ -294,10 +294,10 @@ void gpu_setfb(__eds__ uint8_t *buf) {
 }
 
 void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
-        G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
-	G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
-	G1W2ADRL = (unsigned long)(GFXDisplayBuffer);
-	G1W2ADRH = (unsigned long)(GFXDisplayBuffer);
+//        G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
+//	G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
+//	G1W2ADRL = (unsigned long)(GFXDisplayBuffer);
+//	G1W2ADRH = (unsigned long)(GFXDisplayBuffer);
 
 	// destination
 	while(_CMDFUL) continue;
@@ -696,12 +696,12 @@ void addParticle()
 
 // TODO this shit is dirty
 void omar(void);
-__prog__ uint8_t *pSnoop1 = SnoopOne;
-__prog__ uint8_t *pSnoop2 = SnoopTwo;
-__prog__ uint8_t *pSnoop3 = SnoopThree;
-__prog__ uint8_t *pSnoop4 = SnoopFour;
-__prog__ uint8_t *pSnoop5 = SnoopFive;
-__prog__ uint8_t *pSnoop6 = SnoopSix;
+//__prog__ uint8_t *pSnoop1 = SnoopOne;
+//__prog__ uint8_t *pSnoop2 = SnoopTwo;
+//__prog__ uint8_t *pSnoop3 = SnoopThree;
+//__prog__ uint8_t *pSnoop4 = SnoopFour;
+//__prog__ uint8_t *pSnoop5 = SnoopFive;
+//__prog__ uint8_t *pSnoop6 = SnoopSix;
 
 
 char message[20];
@@ -725,25 +725,67 @@ int main(void) {
 	while(!_CMDMPT) continue; // Wait for GPU to finish drawing
 //	ipu_decomp(gfx_compressed, GFXDisplayBuffer, GFX_BUFFER_SIZE);
 //	while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+
+        char buf[20];
 //	chr_print("Hello\nHello\nHello\nHello\n", 0, 0);
-	char buf[20];
 //	sprintf(buf, "%x\n", G1IPU);
 //	chr_print(buf, 20, 0);
 	rcc_draw(79, 0, 1, 480); /* Weird things occur if the right column isn't 0 */
 
-        uint16_t c = 200;
+        int x = 0;
+        int y = 0;
+        int xSpeed = 1;
+        int ySpeed = 1;
+        int xDir = 1;
+        int yDir = 1;
+        int w = 1;
+        int h = 1;
+        int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
+        int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
+        int xOld, yOld;
+        
         while (1) {
-            c++;
+//            blank_background();
+            drawBorder(1);
+            xOld = x;
+            yOld = y;
+            x += xDir;
+            y += yDir;
+
+            if (x > xMax) {
+                x = xMax;
+                xDir *= -1;
+            }
+            if (y > yMax) {
+                y = yMax;
+                yDir *= -1;
+            }
+            if (x <= 0) {
+                x = 0;
+                xDir *= -1;
+            }
+            if (y <= 0) {
+                y = 0;
+                yDir *= -1;
+            }
 //            rcc_color(c++);
 //            rcc_draw(100, 20, 20, 200);
 //            rcc_draw(0, 0, HOR_RES, VER_RES);
 //            rcc_draw(638, 0, 1, 200);
-            sprintf(buf, "%i", c);
-            chr_print(buf, 0, 0);
+//            sprintf(buf, "%i, %i %i, %i", x, y, xDir, yDir);
+//            chr_print(buf, ((int)HOR_RES)/2, ((int)VER_RES)/2);
 
-            sprintf(buf, "o.O");
-            chr_print(buf, c, c); // x, y are bounded in chr_print
-            __delay_ms(20);
+            // Draw a ball (actually, just a letter)
+//            sprintf(buf, "O");
+//            chr_print(buf, x, y); // x, y are bounded in chr_print
+
+            // Draw a pixel:
+            rcc_color(0); // delete last pixel position
+            rcc_draw(xOld, yOld, w, h);
+            rcc_color(1); // draw new position
+            rcc_draw(x, y, w, h);
+            __delay_ms(5);
+
 	}
 
         // ORIGINAL:
@@ -878,35 +920,35 @@ int main(void) {
 	return 0;
 }
 
-__prog__ uint8_t *pIndeed = OhIndeed;
+//__prog__ uint8_t *pIndeed = OhIndeed;
 
-void omar(void) {
-	uint16_t width, height, w, h;
-	width = 80;
-	height = 80;
-	uint8_t col;
-	uint8_t off;
-	off = lol%6;
-
-	for (h=0; h < height; h++) {
-		for (w=0; w < width; w++) {
-			if (off == 0) {
-				col = pSnoop1[w + h*width];
-			} else if (off == 1) {
-				col = pSnoop2[w + h*width];
-			} else if (off == 2) {
-				col = pSnoop3[w + h*width];
-			} else if (off == 3) {
-				col = pSnoop4[w + h*width];
-			} else if (off == 4){
-				col = pSnoop5[w + h*width];
-			} else if (off == 5){
-				col = pSnoop6[w + h*width];
-			}
-			rcc_color(col);
-			rcc_draw(w,h*6,1,6);
-
-		}
-	}
-	lol++;
-}
+//void omar(void) {
+//	uint16_t width, height, w, h;
+//	width = 80;
+//	height = 80;
+//	uint8_t col;
+//	uint8_t off;
+//	off = lol%6;
+//
+//	for (h=0; h < height; h++) {
+//		for (w=0; w < width; w++) {
+//			if (off == 0) {
+//				col = pSnoop1[w + h*width];
+//			} else if (off == 1) {
+//				col = pSnoop2[w + h*width];
+//			} else if (off == 2) {
+//				col = pSnoop3[w + h*width];
+//			} else if (off == 3) {
+//				col = pSnoop4[w + h*width];
+//			} else if (off == 4){
+//				col = pSnoop5[w + h*width];
+//			} else if (off == 5){
+//				col = pSnoop6[w + h*width];
+//			}
+//			rcc_color(col);
+//			rcc_draw(w,h*6,1,6);
+//
+//		}
+//	}
+//	lol++;
+//}
