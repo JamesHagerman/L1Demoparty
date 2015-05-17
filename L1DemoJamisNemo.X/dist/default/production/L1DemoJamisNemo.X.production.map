@@ -112,12 +112,12 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0x62e           0x945  (2373)
 .const                       0x82e               0x100           0x180  (384)
-.text                        0x92e              0x147e          0x1ebd  (7869)
-_0398e30055584c53           0x1dac               0xc68          0x129c  (4764)
-.dinit                      0x2a14               0x84a           0xc6f  (3183)
-.init.delay32               0x325e                0x1c            0x2a  (42)
+.text                        0x92e              0x149e          0x1eed  (7917)
+_038d130055584ed7           0x1dcc               0xc68          0x129c  (4764)
+.dinit                      0x2a34               0x84a           0xc6f  (3183)
+.init.delay32               0x327e                0x1c            0x2a  (42)
 
-                     Total program memory used (bytes):         0x48b7  (18615) 7%
+                     Total program memory used (bytes):         0x48e7  (18663) 7%
 
 
 Data Memory  [Origin = 0x800, Length = 0x18000]
@@ -265,19 +265,19 @@ External Symbols in Program Memory (by address):
                   0x001a84                  _verBlind
                   0x001aba                  _addParticle
                   0x001cc8                  _main
-                  0x001dac                  _SpriteMap
-                  0x00325e                  ___delay32
+                  0x001dcc                  _SpriteMap
+                  0x00327e                  ___delay32
 
 External Symbols in Program Memory (by name):
 
-                  0x001dac                  _SpriteMap
+                  0x001dcc                  _SpriteMap
                   0x0002d2                  __DefaultInterrupt
                   0x001a14                  __T1Interrupt
                   0x001a4c                  __T2Interrupt
                   0x000a66                  __U1RXInterrupt
                   0x000a94                  __U1TXInterrupt
                   0x0002d8                  ___addsf3
-                  0x00325e                  ___delay32
+                  0x00327e                  ___delay32
                   0x000396                  ___divsf3
                   0x00068a                  ___eqsf2
                   0x00041e                  ___fixsfsi
@@ -499,9 +499,9 @@ __CONFIG1         0x02abfe          0x2
  *(.debug_abbrev)
  .debug_abbrev    0x000000        0x2a4 build/default/production/main.o
 
-.debug_line       0x000000        0xd4a
+.debug_line       0x000000        0xd6a
  *(.debug_line)
- .debug_line      0x000000        0xd4a build/default/production/main.o
+ .debug_line      0x000000        0xd6a build/default/production/main.o
 
 .debug_frame      0x000000        0x1f4
  *(.debug_frame)
@@ -2148,8 +2148,8 @@ FONTS               0x4ff8        0xc08
  .const             0x882e        0x100 build/default/production/main.o
                     0x882e                  _sinetable
 
-.text             0x00092e       0x147e
- .text            0x00092e       0x147e build/default/production/main.o
+.text             0x00092e       0x149e
+ .text            0x00092e       0x149e build/default/production/main.o
                   0x00092e                  _config_graphics
                   0x000a66                  __U1RXInterrupt
                   0x000a94                  __U1TXInterrupt
@@ -2179,15 +2179,15 @@ FONTS               0x4ff8        0xc08
                   0x001aba                  _addParticle
                   0x001cc8                  _main
 
-_0398e30055584c53
-                  0x001dac        0xc68
- _0398e30055584c53
-                  0x001dac        0xc68 build/default/production/main.o
-                  0x001dac                  _SpriteMap
+_038d130055584ed7
+                  0x001dcc        0xc68
+ _038d130055584ed7
+                  0x001dcc        0xc68 build/default/production/main.o
+                  0x001dcc                  _SpriteMap
 
-.dinit            0x002a14        0x84a
- .dinit           0x002a14        0x84a data_init
+.dinit            0x002a34        0x84a
+ .dinit           0x002a34        0x84a data_init
 
-.init.delay32     0x00325e         0x1c
- .init.delay32    0x00325e         0x1c c:/program files (x86)/microchip/xc16/v1.24/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
-                  0x00325e                  ___delay32
+.init.delay32     0x00327e         0x1c
+ .init.delay32    0x00327e         0x1c c:/program files (x86)/microchip/xc16/v1.24/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
+                  0x00327e                  ___delay32

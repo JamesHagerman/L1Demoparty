@@ -1,3 +1,4 @@
+
 // Layerone Demoscene Board - C Example Code
 // Built on MPLABX using X16 compiler (MPLAB IDE compatible)
 //
@@ -178,7 +179,7 @@ void config_graphics(void) {
 }
 
 void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
-    
+
     IFS0bits.U1RXIF = 0; // Clear interrupt flag
 
     //Check for UART receive overrun
@@ -204,7 +205,7 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
 int	rx1Buf[RX_BUF_SIZE];
 int	tx1Buf[TX_BUF_SIZE];
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
-    
+
     int ch;
     ch = tx1Buf[0];
     U1TXREG = ch;
@@ -230,7 +231,7 @@ void config_uart(void) {
     U1STAbits.UTXEN = 1;
     IFS0bits.U1RXIF = 0;
 
-    
+
 
     // Turn interrupt for UART receive on, with highest priority
     IEC0bits.U1RXIE = 1;
