@@ -1,3 +1,4 @@
+
 // Layerone Demoscene Board - C Example Code
 // Built on MPLABX using X16 compiler (MPLAB IDE compatible)
 //
@@ -44,31 +45,31 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
 // These settings FULLY work:
 //80x480@60: 16bpp
-#define CLOCKDIV 69
-#define HOR_RES 80UL
-#define VER_RES 480UL
-#define HOR_FRONT_PORCH 32
-#define HOR_PULSE_WIDTH 16
-#define HOR_BACK_PORCH  32
-#define VER_FRONT_PORCH 10
-#define VER_PULSE_WIDTH 5
-#define VER_BACK_PORCH  10
-#define BPP 16
-#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
-
-// 160x480@4bpp
-//#define CLOCKDIV 47
-//#define HOR_RES 160UL
+//#define CLOCKDIV 69
+//#define HOR_RES 80UL
 //#define VER_RES 480UL
 //#define HOR_FRONT_PORCH 32
-//#define HOR_PULSE_WIDTH 24
+//#define HOR_PULSE_WIDTH 16
 //#define HOR_BACK_PORCH  32
 //#define VER_FRONT_PORCH 10
 //#define VER_PULSE_WIDTH 5
 //#define VER_BACK_PORCH  10
-//#define BPP 8
+//#define BPP 16
+//#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
 
-// 320x480@4bpp This one acts weird...
+// 160x480@4bpp
+#define CLOCKDIV 47
+#define HOR_RES 160UL
+#define VER_RES 480UL
+#define HOR_FRONT_PORCH 32
+#define HOR_PULSE_WIDTH 24
+#define HOR_BACK_PORCH  32
+#define VER_FRONT_PORCH 10
+#define VER_PULSE_WIDTH 5
+#define VER_BACK_PORCH  10
+#define BPP 4
+
+// 320x480@4bpp
 //#define CLOCKDIV 25
 //#define HOR_RES 320UL
 //#define VER_RES 480UL
@@ -114,13 +115,18 @@ uint8_t PIX_H = VER_RES/HOR_RES;
 uint16_t frames = 0;
 
 // Comment this out if you're using 16bpp:
-//#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
+#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
 
 // Double buffering. Just pick one of these...
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY"), address(0x1000)));
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((section("DISPLAY"),space(eds)));
 
-__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
+
+// Single buffering:
+//__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
+
+// Double buffering:
+__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
 
 void config_graphics(void) {
 	_G1CLKSEL = 1;
@@ -131,11 +137,11 @@ void config_graphics(void) {
         // So, we're just gonna ignore the high bits and move right the hell along.
         // JUst double check that the address the compiler spits out is under 16 bits
 	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
 	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
 	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
 
         G1PUW = HOR_RES;
         G1PUH = VER_RES;
@@ -178,7 +184,7 @@ void config_graphics(void) {
 }
 
 void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
-    
+
     IFS0bits.U1RXIF = 0; // Clear interrupt flag
 
     //Check for UART receive overrun
@@ -204,7 +210,7 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
 int	rx1Buf[RX_BUF_SIZE];
 int	tx1Buf[TX_BUF_SIZE];
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
-    
+
     int ch;
     ch = tx1Buf[0];
     U1TXREG = ch;
@@ -230,7 +236,7 @@ void config_uart(void) {
     U1STAbits.UTXEN = 1;
     IFS0bits.U1RXIF = 0;
 
-    
+
 
     // Turn interrupt for UART receive on, with highest priority
     IEC0bits.U1RXIE = 1;
@@ -750,16 +756,16 @@ int main(void) {
 //	chr_print("Hello\nHello\nHello\nHello\n", 0, 0);
 //	sprintf(buf, "%x\n", G1IPU);
 //	chr_print(buf, 20, 0);
-	rcc_draw(79, 0, 1, 480); /* Weird things occur if the right column isn't 0 */
+	rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
 
         int x = 0;
         int y = 0;
-        int xSpeed = 1;
-        int ySpeed = 1;
+        int xSpeed = 6;
+        int ySpeed = 6;
         int xDir = 1;
         int yDir = 1;
-        int w = 2;
-        int h = 2;
+        int w = 6;
+        int h = 6;
         int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
         int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
         int xOld, yOld;
@@ -771,8 +777,8 @@ int main(void) {
             drawBorder(color);
             xOld = x;
             yOld = y;
-            x += xDir;
-            y += yDir;
+            x += xDir * xSpeed;
+            y += yDir * ySpeed;
 
             if (x > xMax) {
                 x = xMax;
@@ -810,11 +816,14 @@ int main(void) {
 //            chr_print(buf, x, y); // x, y are bounded in chr_print
 
             // Draw a pixel:
-            rcc_color(0); // delete last pixel position
-            rcc_draw(xOld, yOld, w, h);
+//            rcc_color(0); // delete last pixel position
+//            rcc_draw(xOld, yOld, w, h);
             rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
-            __delay_ms(5);
+
+            rcc_color(0);
+            rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
+//            __delay_ms(5);
 
 	}
 
