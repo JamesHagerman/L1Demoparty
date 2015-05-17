@@ -41,20 +41,58 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 #define IPU_DESTADDR	    0x7200
 #define IPU_DECOMPRESS	  0x7400
 
-//80x480@60: 8bpp
+
+// These settings FULLY work:
+//80x480@60: 16bpp
 #define CLOCKDIV 69
 #define HOR_RES 80UL
 #define VER_RES 480UL
 #define HOR_FRONT_PORCH 32
-#define HOR_PULSE_WIDTH 8
+#define HOR_PULSE_WIDTH 16
 #define HOR_BACK_PORCH  32
 #define VER_FRONT_PORCH 10
 #define VER_PULSE_WIDTH 5
 #define VER_BACK_PORCH  10
 #define BPP 16
+#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
+
+// 160x480@4bpp
+//#define CLOCKDIV 47
+//#define HOR_RES 160UL
+//#define VER_RES 480UL
+//#define HOR_FRONT_PORCH 32
+//#define HOR_PULSE_WIDTH 24
+//#define HOR_BACK_PORCH  32
+//#define VER_FRONT_PORCH 10
+//#define VER_PULSE_WIDTH 5
+//#define VER_BACK_PORCH  10
+//#define BPP 8
+
+// 320x480@4bpp This one acts weird...
+//#define CLOCKDIV 25
+//#define HOR_RES 320UL
+//#define VER_RES 480UL
+//#define HOR_FRONT_PORCH 32
+//#define HOR_PULSE_WIDTH 48
+//#define HOR_BACK_PORCH  32
+//#define VER_FRONT_PORCH 10
+//#define VER_PULSE_WIDTH 5
+//#define VER_BACK_PORCH  10
+//#define BPP 4
+
+// 480x480@2bpp
+//#define CLOCKDIV 17
+//#define HOR_RES 480UL
+//#define VER_RES 480UL
+//#define HOR_FRONT_PORCH 32
+//#define HOR_PULSE_WIDTH 64
+//#define HOR_BACK_PORCH  32
+//#define VER_FRONT_PORCH 10
+//#define VER_PULSE_WIDTH 5
+//#define VER_BACK_PORCH  10
+//#define BPP 2
 
 //640x480@60: 1bpp
-// These settings FULLY work:
 //#define CLOCKDIV 11
 //#define HOR_RES 640UL
 //#define VER_RES 480UL
@@ -67,7 +105,7 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 //#define BPP 1
 
 #define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
-#define HENST_FUDGE 6 // 6 works for me on my monitor. How fix during demo?!?
+#define HENST_FUDGE 0 // 6 works for me on my monitor. How fix during demo?!?
 #define VSPOL 0 /* sync polarities */
 #define HSPOL 0
 
@@ -75,14 +113,13 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 uint8_t PIX_H = VER_RES/HOR_RES;
 uint16_t frames = 0;
 
+// Comment this out if you're using 16bpp:
 //#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
-#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
 
 // Double buffering. Just pick one of these...
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY"), address(0x1000)));
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((section("DISPLAY"),space(eds)));
 
-// 640x480@60+1bpp:
 __eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
 
 void config_graphics(void) {
@@ -731,7 +768,7 @@ int main(void) {
         while (1) {
             color += 1;
 //            blank_background();
-            drawBorder(color);
+//            drawBorder(color);
             xOld = x;
             yOld = y;
             x += xDir;
@@ -777,7 +814,7 @@ int main(void) {
 //            rcc_draw(xOld, yOld, w, h);
             rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
-//            __delay_ms(1);
+//            __delay_ms(5);
 
 	}
 
