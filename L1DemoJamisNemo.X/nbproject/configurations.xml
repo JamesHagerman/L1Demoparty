@@ -130,7 +130,7 @@
         <property key="enable-check-sections" value="false"/>
         <property key="enable-data-init" value="true"/>
         <property key="enable-default-isr" value="true"/>
-        <property key="enable-handles" value="true"/>
+        <property key="enable-handles" value="false"/>
         <property key="enable-pack-data" value="true"/>
         <property key="extra-lib-directories" value=""/>
         <property key="fill-flash-options-addr" value=""/>

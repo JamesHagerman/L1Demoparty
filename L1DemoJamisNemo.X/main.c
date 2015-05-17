@@ -9,11 +9,11 @@
 #include <xc.h>
 #include <string.h>
 #include <math.h>
-#include <float.h>
+//#include <float.h>
 #include "fonts.h"
 #include "music.h"
 #include "sprites.h"
-#include "screens.h"
+//#include "screens.h"
 //#include "testgfx.h"
 
 #define  FCY    16000000UL    // Instruction cycle frequency, Hz
@@ -42,28 +42,29 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 #define IPU_DECOMPRESS	  0x7400
 
 //80x480@60: 8bpp
-//#define CLOCKDIV 69
-//#define HOR_RES 80UL
-//#define VER_RES 480UL
-//#define HOR_FRONT_PORCH 32
-//#define HOR_PULSE_WIDTH 8
-//#define HOR_BACK_PORCH  32
-//#define VER_FRONT_PORCH 10
-//#define VER_PULSE_WIDTH 5
-//#define VER_BACK_PORCH  10
-//#define BPP 8
+#define CLOCKDIV 69
+#define HOR_RES 80UL
+#define VER_RES 480UL
+#define HOR_FRONT_PORCH 32
+#define HOR_PULSE_WIDTH 8
+#define HOR_BACK_PORCH  32
+#define VER_FRONT_PORCH 10
+#define VER_PULSE_WIDTH 5
+#define VER_BACK_PORCH  10
+#define BPP 16
 
 //640x480@60: 1bpp
-#define CLOCKDIV 11
-#define HOR_RES 640UL
-#define VER_RES 480UL
-#define HOR_FRONT_PORCH 16
-#define HOR_PULSE_WIDTH 96
-#define HOR_BACK_PORCH  48
-#define VER_FRONT_PORCH 10
-#define VER_PULSE_WIDTH 2
-#define VER_BACK_PORCH  33
-#define BPP 1
+// These settings FULLY work:
+//#define CLOCKDIV 11
+//#define HOR_RES 640UL
+//#define VER_RES 480UL
+//#define HOR_FRONT_PORCH 16
+//#define HOR_PULSE_WIDTH 96
+//#define HOR_BACK_PORCH  48
+//#define VER_FRONT_PORCH 10
+//#define VER_PULSE_WIDTH 2
+//#define VER_BACK_PORCH  33
+//#define BPP 1
 
 #define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
 #define HENST_FUDGE 6 // 6 works for me on my monitor. How fix during demo?!?
@@ -74,50 +75,36 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 uint8_t PIX_H = VER_RES/HOR_RES;
 uint16_t frames = 0;
 
-#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
-//#define GFX_BUFFER_SIZE 2400 // This is only for BPP = 16
+//#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
+#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
 
+// Double buffering. Just pick one of these...
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY"), address(0x1000)));
 //__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((section("DISPLAY"),space(eds)));
 
 // 640x480@60+1bpp:
-__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((space(eds), section("DISPLAY")));
+__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
 
 void config_graphics(void) {
 	_G1CLKSEL = 1;
 	_GCLKDIV = CLOCKDIV;
 
-        //80x480@60: 8bpp
-//	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+        // This SHOULD work... but because the memory address is somehow fucked, it's not.
+        // Compiler says 0xf200, chip says 0x1f200. Compiler is right. (somehow)
+        // So, we're just gonna ignore the high bits and move right the hell along.
+        // JUst double check that the address the compiler spits out is under 16 bits
+	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 //	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-//	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 //	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-//	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 //	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-
-
-        //640x480@60: 1bpp
-//        G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//        G1DPADRH = 0;
-//        G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//        G1W1ADRH = 0;
-//        G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-//        G1W2ADRH = 0;
-
-        G1DPADRL = (unsigned long)(GFXDisplayBuffer);
-	G1DPADRH = (unsigned long)(GFXDisplayBuffer);
-	G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
-	G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
-	G1W2ADRL = (unsigned long)(GFXDisplayBuffer);
-	G1W2ADRH = (unsigned long)(GFXDisplayBuffer);
 
         G1PUW = HOR_RES;
         G1PUH = VER_RES;
 
-	_GDBEN = 0xFFFF;
-
 	// Using PIC24F manual section 43 page 37-38
-//        _DPTEST = 3; // Test mode: 2 = bars. 3 = borders...
+//        _DPTEST = 2; // Test mode: 2 = bars. 3 = borders...
 	_DPMODE = 1;      /* TFT */
 	_GDBEN = 0xFFFF;
 	_DPW = _PUW = HOR_RES; // Work area and FB size so GPU works
@@ -294,10 +281,6 @@ void gpu_setfb(__eds__ uint8_t *buf) {
 }
 
 void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
-//        G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
-//	G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
-//	G1W2ADRL = (unsigned long)(GFXDisplayBuffer);
-//	G1W2ADRH = (unsigned long)(GFXDisplayBuffer);
 
 	// destination
 	while(_CMDFUL) continue;
@@ -738,15 +721,17 @@ int main(void) {
         int ySpeed = 1;
         int xDir = 1;
         int yDir = 1;
-        int w = 1;
-        int h = 1;
+        int w = 2;
+        int h = 2;
         int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
         int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
         int xOld, yOld;
-        
+
+        uint16_t color = 0;
         while (1) {
+            color += 1;
 //            blank_background();
-            drawBorder(1);
+            drawBorder(color);
             xOld = x;
             yOld = y;
             x += xDir;
@@ -775,16 +760,24 @@ int main(void) {
 //            sprintf(buf, "%i, %i %i, %i", x, y, xDir, yDir);
 //            chr_print(buf, ((int)HOR_RES)/2, ((int)VER_RES)/2);
 
+            // Draw debug:
+//            sprintf(buf, "Low: %lx", (unsigned long)GFXDisplayBuffer & 0xFFFFFF ); //((unsigned long)(GFXDisplayBuffer) & 0xFFFF)
+//            chr_print(buf, ((int)HOR_RES)/2, ((int)VER_RES)/2);
+//
+//            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
+//            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
+
+
             // Draw a ball (actually, just a letter)
 //            sprintf(buf, "O");
 //            chr_print(buf, x, y); // x, y are bounded in chr_print
 
             // Draw a pixel:
-            rcc_color(0); // delete last pixel position
-            rcc_draw(xOld, yOld, w, h);
-            rcc_color(1); // draw new position
+//            rcc_color(0); // delete last pixel position
+//            rcc_draw(xOld, yOld, w, h);
+            rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
-            __delay_ms(5);
+//            __delay_ms(1);
 
 	}
 
