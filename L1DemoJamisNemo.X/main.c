@@ -3,6 +3,7 @@
 // Built on MPLABX using X16 compiler (MPLAB IDE compatible)
 //
 // Demo written by: Datagram and Hotdogs
+// Fucked with by: jamisnemo
 //
 #include <stdint.h>
 #include <stdio.h>
@@ -11,185 +12,28 @@
 #include <string.h>
 #include <math.h>
 //#include <float.h>
+
+#include "system.h" // declares FCY
+#include <libpic30.h>
+
 #include "fonts.h"
 #include "music.h"
 #include "sprites.h"
 //#include "screens.h"
 //#include "testgfx.h"
 
-#include "color_management.c"
-#include "resolution_management.c"
+// jamis
+#include "color_management.h"
+#include "resolution_management.h"
+//#include "serial.c"
 
-#define  FCY    16000000UL    // Instruction cycle frequency, Hz
-#include <libpic30.h>
+
 
 _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
 _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
 _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
 
-// GPU Commands:
-#define CHR_FGCOLOR	     0x5000
-#define CHR_BGCOLOR	     0x5100
-#define CHR_FONTBASE	    0x5200
-#define CHR_PRINTCHAR	   0x5300
-#define CHR_TXTAREASTART	0x5800
-#define CHR_TXTAREAEND	  0x5900
-#define CHR_PRINTPOS	    0x5A00
-#define RCC_SRCADDR	     0x6200
-#define RCC_DESTADDR	    0x6300
-#define RCC_RECTSIZE	    0x6400
-#define RCC_COLOR	       0x6600
-#define RCC_STARTCOPY	   0x6700
-#define IPU_SRCADDR	     0x7100
-#define IPU_DESTADDR	    0x7200
-#define IPU_DECOMPRESS	  0x7400
-
-
-
-
-#define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
-#define HENST_FUDGE 0 // 6 works for me on my monitor. How fix during demo?!?
-#define VSPOL 0 /* sync polarities */
-#define HSPOL 0
-
-#define PIX_W 1
-uint8_t PIX_H = VER_RES/HOR_RES;
-uint16_t frames = 0;
-
-// Comment this out if you're using 16bpp:
-#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
-
-// Double buffering. Just pick one of these...
-//__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY"), address(0x1000)));
-//__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((section("DISPLAY"),space(eds)));
-
-
-// Single buffering:
-//__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
-
-// Double buffering:
-__eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
-
-void config_graphics(void) {
-	_G1CLKSEL = 1;
-	_GCLKDIV = CLOCKDIV;
-
-        // This SHOULD work... but because the memory address is somehow fucked, it's not.
-        // Compiler says 0xf200, chip says 0x1f200. Compiler is right. (somehow)
-        // So, we're just gonna ignore the high bits and move right the hell along.
-        // JUst double check that the address the compiler spits out is under 16 bits
-	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
-	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
-
-        G1PUW = HOR_RES;
-        G1PUH = VER_RES;
-
-	// Using PIC24F manual section 43 page 37-38
-//        _DPTEST = 2; // Test mode: 2 = bars. 3 = borders...
-	_DPMODE = 1;      /* TFT */
-	_GDBEN = 0xFFFF;
-	_DPW = _PUW = HOR_RES; // Work area and FB size so GPU works
-	_DPH = _PUH = VER_RES;
-	_DPWT = HOR_FRONT_PORCH + HOR_PULSE_WIDTH + HOR_BACK_PORCH + HOR_RES;
-
-        // _DPHT may need to be adjusted for vertical centering
-	_DPHT = (VER_FRONT_PORCH + VER_PULSE_WIDTH + VER_BACK_PORCH)*2 + VER_RES;
-	_DPCLKPOL = 0;
-	_DPENOE = 0;
-	_DPENPOL = 0;
-	_DPVSOE = 1;      /* use VSYNC */
-	_DPHSOE = 1;      /* use HSYNC */
-	_DPVSPOL = VSPOL;     /* VSYNC negative polarity (if VSPOL = 0)*/
-	_DPHSPOL = HSPOL;     /* HSYNC negative polarity (if HSPOL = 0)*/
-
-        // _ACTLINE may need to be adjusted for vertical centering
-	_ACTLINE = _VENST = VER_FRONT_PORCH + VER_PULSE_WIDTH + VER_BACK_PORCH - VENST_FUDGE;
-	_ACTPIX = _HENST = HOR_FRONT_PORCH + HOR_PULSE_WIDTH + HOR_BACK_PORCH - HENST_FUDGE;
-	_VSST = VER_FRONT_PORCH;
-	_HSST = HOR_FRONT_PORCH;
-	_VSLEN = VER_PULSE_WIDTH;
-	_HSLEN = HOR_PULSE_WIDTH;
-	_DPPWROE = 0;
-	_DPPINOE = 1;
-	_DPPOWER = 1;
-
-	int logc=0;
-	while (BPP>>logc > 1) { logc++; }
-	_DPBPP = _PUBPP = logc;
-
-	_G1EN = 1;
-	__delay_ms(1);
-}
-
-void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
-
-    IFS0bits.U1RXIF = 0; // Clear interrupt flag
-
-    //Check for UART receive overrun
-    if(U1STAbits.OERR == 1) {
-        U1STAbits.OERR = 0;
-    } else {
-        if(U1STAbits.FERR == 0) {
-
-            // Read out the UART FIFO
-            uint8_t ch;
-            while(U1STAbits.URXDA == 1) {
-                ch = U1RXREG;
-            }
-        } else {
-            // UART framming error...
-            // grab from U1RXREG;
-        }
-    }
-}
-
-#define	RX_BUF_SIZE	128
-#define	TX_BUF_SIZE	128
-int	rx1Buf[RX_BUF_SIZE];
-int	tx1Buf[TX_BUF_SIZE];
-void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
-
-    int ch;
-    ch = tx1Buf[0];
-    U1TXREG = ch;
-    IFS0bits.U1TXIF = 0; // Clear interrupt flag
-}
-void config_uart(void) {
-    OSCCONbits.IOLOCK = 0; // unlock the peripheral Control Register Lock
-    RPINR18bits.U1RXR = 7; // Map UART1 RX peripheral to RP7
-    RPOR3bits.RP6R = 3; // Map RP6 pin to UART1 TX
-    OSCCONbits.IOLOCK = 1; // relock the peripheral Control Register Lock
-
-
-    /* ripped from some other code:
-#define BAUDRATE2       31250UL
-#define BRG_DIV2        4
-#define BRGH2           1
-     */
-    U1BRG = (((FCY)/(4 * 9600UL)) - 1);
-    U1MODE = 0;
-    U1MODEbits.BRGH = 1;
-    U1STA = 0;
-    U1MODEbits.UARTEN = 1;
-    U1STAbits.UTXEN = 1;
-    IFS0bits.U1RXIF = 0;
-
-
-
-    // Turn interrupt for UART receive on, with highest priority
-    IEC0bits.U1RXIE = 1;
-    IPC7 |= 0x0700;
-}
-
-int putc(int ch, FILE *fd) {
-    tx1Buf[0] = ch;
-    return 0;
-}
 
 void config_chr(void) {
     while(_CMDFUL) continue;
@@ -679,6 +523,8 @@ void omar(void);
 char message[20];
 uint8_t lol=0;
 
+
+uint16_t frames = 0;
 int main(void) {
 
 	ANSB = 0x0000;
@@ -702,7 +548,7 @@ int main(void) {
 //	chr_print("Hello\nHello\nHello\nHello\n", 0, 0);
 //	sprintf(buf, "%x\n", G1IPU);
 //	chr_print(buf, 20, 0);
-	rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
+//	rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
 
         int x = 0;
         int y = 0;
@@ -716,14 +562,16 @@ int main(void) {
         int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
         int xOld, yOld;
 
-        uint8_t index = 0;
         uint8_t color = 0;
+        uint8_t r, g, b, hue, sat = 255, val = 255;
         while (1) {
-            index += 1;
+            frames += 1;
 
-            hsvtorgb(&r,&g,&b,h,s,v);
+//            color =  frames;
+//            color = getRGBColor(0,0,frames);
 
-            color = getRGBColor(0,0,index);
+            hsvtorgb(&r,&g,&b,frames,sat,val);
+            color = getRGBColor(r,g,b);
 
 //            blank_background();
             drawBorder(color);
@@ -762,8 +610,8 @@ int main(void) {
 //            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
-            sprintf(buf, "color: %x", color );
-            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
+//            sprintf(buf, "color: %x", color );
+//            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
 
             // Draw a ball (actually, just a letter)

@@ -5,6 +5,8 @@
 #include <string.h>
 #include <math.h>
 //#include <float.h>
+#include <libpic30.h>
+#include "color_management.h"
 
 uint8_t getRGBColor(uint8_t red, uint8_t blue, uint8_t green) {
     red = ((red << 5) & 0xe0);
@@ -14,8 +16,8 @@ uint8_t getRGBColor(uint8_t red, uint8_t blue, uint8_t green) {
     return red | blue | green;
 }
 
-void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v)
-{
+// Taken from: http://web.mit.edu/storborg/Public/hsvtorgb.c
+void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v) {
     unsigned char region, fpart, p, q, t;
 
     if(s == 0) {
