@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1684650831/original.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/_ext/1684650831/original.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1684650831/original.o ${OBJECTDIR}/_ext/1684650831/color_management.o ${OBJECTDIR}/_ext/1684650831/resolution_management.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/_ext/1684650831/original.o.d ${OBJECTDIR}/_ext/1684650831/color_management.o.d ${OBJECTDIR}/_ext/1684650831/resolution_management.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1684650831/original.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1684650831/original.o ${OBJECTDIR}/_ext/1684650831/color_management.o ${OBJECTDIR}/_ext/1684650831/resolution_management.o
 
 # Source Files
-SOURCEFILES=main.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c
+SOURCEFILES=main.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c
 
 
 CFLAGS=
@@ -96,6 +96,20 @@ ${OBJECTDIR}/_ext/1684650831/original.o: C:/Users/jamis/Desktop/my_root/Developm
 	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c  -o ${OBJECTDIR}/_ext/1684650831/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/original.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/_ext/1684650831/color_management.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1684650831" 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/color_management.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/color_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c  -o ${OBJECTDIR}/_ext/1684650831/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/color_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1684650831/resolution_management.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1684650831" 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/resolution_management.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/resolution_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c  -o ${OBJECTDIR}/_ext/1684650831/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/resolution_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -110,6 +124,20 @@ ${OBJECTDIR}/_ext/1684650831/original.o: C:/Users/jamis/Desktop/my_root/Developm
 	@${RM} ${OBJECTDIR}/_ext/1684650831/original.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c  -o ${OBJECTDIR}/_ext/1684650831/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/original.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1684650831/color_management.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1684650831" 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/color_management.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/color_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c  -o ${OBJECTDIR}/_ext/1684650831/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/color_management.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1684650831/resolution_management.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1684650831" 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/resolution_management.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1684650831/resolution_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c  -o ${OBJECTDIR}/_ext/1684650831/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1684650831/resolution_management.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1684650831/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 

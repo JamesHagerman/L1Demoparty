@@ -19,6 +19,8 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

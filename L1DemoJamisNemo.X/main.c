@@ -17,6 +17,9 @@
 //#include "screens.h"
 //#include "testgfx.h"
 
+#include "color_management.c"
+#include "resolution_management.c"
+
 #define  FCY    16000000UL    // Instruction cycle frequency, Hz
 #include <libpic30.h>
 
@@ -43,67 +46,7 @@ _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 #define IPU_DECOMPRESS	  0x7400
 
 
-// These settings FULLY work:
-//80x480@60: 16bpp
-//#define CLOCKDIV 69
-//#define HOR_RES 80UL
-//#define VER_RES 480UL
-//#define HOR_FRONT_PORCH 32
-//#define HOR_PULSE_WIDTH 16
-//#define HOR_BACK_PORCH  32
-//#define VER_FRONT_PORCH 10
-//#define VER_PULSE_WIDTH 5
-//#define VER_BACK_PORCH  10
-//#define BPP 16
-//#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
 
-// 160x480@4bpp
-#define CLOCKDIV 47
-#define HOR_RES 160UL
-#define VER_RES 480UL
-#define HOR_FRONT_PORCH 32
-#define HOR_PULSE_WIDTH 24
-#define HOR_BACK_PORCH  32
-#define VER_FRONT_PORCH 10
-#define VER_PULSE_WIDTH 5
-#define VER_BACK_PORCH  10
-#define BPP 4
-
-// 320x480@4bpp
-//#define CLOCKDIV 25
-//#define HOR_RES 320UL
-//#define VER_RES 480UL
-//#define HOR_FRONT_PORCH 32
-//#define HOR_PULSE_WIDTH 48
-//#define HOR_BACK_PORCH  32
-//#define VER_FRONT_PORCH 10
-//#define VER_PULSE_WIDTH 5
-//#define VER_BACK_PORCH  10
-//#define BPP 4
-
-// 480x480@2bpp
-//#define CLOCKDIV 17
-//#define HOR_RES 480UL
-//#define VER_RES 480UL
-//#define HOR_FRONT_PORCH 32
-//#define HOR_PULSE_WIDTH 64
-//#define HOR_BACK_PORCH  32
-//#define VER_FRONT_PORCH 10
-//#define VER_PULSE_WIDTH 5
-//#define VER_BACK_PORCH  10
-//#define BPP 2
-
-//640x480@60: 1bpp
-//#define CLOCKDIV 11
-//#define HOR_RES 640UL
-//#define VER_RES 480UL
-//#define HOR_FRONT_PORCH 16
-//#define HOR_PULSE_WIDTH 96
-//#define HOR_BACK_PORCH  48
-//#define VER_FRONT_PORCH 10
-//#define VER_PULSE_WIDTH 2
-//#define VER_BACK_PORCH  33
-//#define BPP 1
 
 #define VENST_FUDGE 0 /* vertical and horizontal offsets (to center display)*/
 #define HENST_FUDGE 0 // 6 works for me on my monitor. How fix during demo?!?
@@ -730,6 +673,9 @@ void omar(void);
 //__prog__ uint8_t *pSnoop6 = SnoopSix;
 
 
+
+
+
 char message[20];
 uint8_t lol=0;
 
@@ -760,19 +706,25 @@ int main(void) {
 
         int x = 0;
         int y = 0;
-        int xSpeed = 6;
-        int ySpeed = 6;
+        int xSpeed = 1;
+        int ySpeed = 1;
         int xDir = 1;
         int yDir = 1;
-        int w = 6;
-        int h = 6;
+        int w = 2;
+        int h = 2;
         int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
         int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
         int xOld, yOld;
 
-        uint16_t color = 0;
+        uint8_t index = 0;
+        uint8_t color = 0;
         while (1) {
-            color += 1;
+            index += 1;
+
+            hsvtorgb(&r,&g,&b,h,s,v);
+
+            color = getRGBColor(0,0,index);
+
 //            blank_background();
             drawBorder(color);
             xOld = x;
@@ -810,6 +762,9 @@ int main(void) {
 //            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
+            sprintf(buf, "color: %x", color );
+            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
+
 
             // Draw a ball (actually, just a letter)
 //            sprintf(buf, "O");
@@ -823,7 +778,7 @@ int main(void) {
 
             rcc_color(0);
             rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
-//            __delay_ms(5);
+            __delay_ms(100);
 
 	}
 
