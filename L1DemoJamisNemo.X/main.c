@@ -576,8 +576,8 @@ int main(void) {
 //            color = get16bppRGBColor(frames,0,0);
 
             hsvtorgb(&r,&g,&b,frames,sat,val);
-//            color = get8bppRGBColor(r,g,b);
-            color = get16bppRGBColor(r,g,b);
+            color = get8bppRGBColor(r,g,b);
+//            color = get16bppRGBColor(r,g,b);
 
 //            blank_background();
             drawBorder(color);

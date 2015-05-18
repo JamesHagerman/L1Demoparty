@@ -116,13 +116,13 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0x6be           0xa1d  (2589)
 .const                       0x8be               0x100           0x180  (384)
-.text                        0x9be              0x1308          0x1c8c  (7308)
-_039a7de05559310e           0x1cc6               0xc68          0x129c  (4764)
-.dinit                      0x292e               0x858           0xc84  (3204)
-.text                       0x3186               0x348           0x4ec  (1260)
-.init.delay32               0x34ce                0x1c            0x2a  (42)
+.text                        0x9be              0x1304          0x1c86  (7302)
+_0387fde055593264           0x1cc2               0xc68          0x129c  (4764)
+.dinit                      0x292a               0x858           0xc84  (3204)
+.text                       0x3182               0x3ba           0x597  (1431)
+.init.delay32               0x353c                0x1c            0x2a  (42)
 
-                     Total program memory used (bytes):         0x4c5f  (19551) 7%
+                     Total program memory used (bytes):         0x4d04  (19716) 7%
 
 
 Data Memory  [Origin = 0x800, Length = 0x18000]
@@ -269,24 +269,24 @@ External Symbols in Program Memory (by address):
                   0x00194c                  _verBlind
                   0x001982                  _addParticle
                   0x001b90                  _main
-                  0x001cc6                  _SpriteMap
-                  0x003186                  _map
-                  0x0031b8                  _get16bppRGBColor
-                  0x003214                  _get8bppRGBColor
-                  0x003244                  _hsvtorgb
-                  0x003396                  _config_graphics
-                  0x0034ce                  ___delay32
+                  0x001cc2                  _SpriteMap
+                  0x003182                  _map
+                  0x0031b4                  _get16bppRGBColor
+                  0x003210                  _get8bppRGBColor
+                  0x00327c                  _hsvtorgb
+                  0x0033ce                  _config_graphics
+                  0x00353c                  ___delay32
 
 External Symbols in Program Memory (by name):
 
-                  0x001cc6                  _SpriteMap
+                  0x001cc2                  _SpriteMap
                   0x000362                  __DefaultInterrupt
                   0x0018dc                  __T1Interrupt
                   0x001914                  __T2Interrupt
                   0x0002d2                  __U1RXInterrupt
                   0x000300                  __U1TXInterrupt
                   0x000368                  ___addsf3
-                  0x0034ce                  ___delay32
+                  0x00353c                  ___delay32
                   0x000426                  ___divsf3
                   0x00071a                  ___eqsf2
                   0x0004ae                  ___fixsfsi
@@ -323,7 +323,7 @@ External Symbols in Program Memory (by name):
                   0x000a3c                  _chr_print
                   0x000cf0                  _cleanup
                   0x0009be                  _config_chr
-                  0x003396                  _config_graphics
+                  0x0033ce                  _config_graphics
                   0x0018ac                  _config_timer
                   0x000314                  _config_uart
                   0x000422                  _cosf
@@ -332,15 +332,15 @@ External Symbols in Program Memory (by name):
                   0x000f34                  _drawSpriteRotation
                   0x00079c                  _fmodf
                   0x000350                  _fputc
-                  0x0031b8                  _get16bppRGBColor
-                  0x003214                  _get8bppRGBColor
+                  0x0031b4                  _get16bppRGBColor
+                  0x003210                  _get8bppRGBColor
                   0x000b14                  _gpu_setfb
-                  0x003244                  _hsvtorgb
+                  0x00327c                  _hsvtorgb
                   0x000c28                  _ipu_decomp
                   0x00126c                  _line
                   0x000d04                  _loadAllSprites
                   0x001b90                  _main
-                  0x003186                  _map
+                  0x003182                  _map
                   0x0011ce                  _radians
                   0x00086c                  _rand
                   0x000ac6                  _rcc_color
@@ -512,29 +512,29 @@ __CONFIG1         0x02abfe          0x2
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x47de
+.debug_info       0x000000       0x4836
  *(.debug_info)
  .debug_info      0x000000       0x18ad build/default/production/main.o
  .debug_info      0x0018ad        0x37d build/default/production/_ext/1684650831/color_management.o
- .debug_info      0x001c2a       0x1cc0 build/default/production/_ext/1684650831/resolution_management.o
- .debug_info      0x0038ea        0xef4 build/default/production/_ext/1684650831/serial.o
+ .debug_info      0x001c2a       0x1d18 build/default/production/_ext/1684650831/resolution_management.o
+ .debug_info      0x003942        0xef4 build/default/production/_ext/1684650831/serial.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0x5a5
+.debug_abbrev     0x000000        0x5ae
  *(.debug_abbrev)
  .debug_abbrev    0x000000        0x295 build/default/production/main.o
  .debug_abbrev    0x000295          0x1 build/default/production/_ext/1684650831/original.o
  .debug_abbrev    0x000296         0x81 build/default/production/_ext/1684650831/color_management.o
- .debug_abbrev    0x000317        0x119 build/default/production/_ext/1684650831/resolution_management.o
- .debug_abbrev    0x000430        0x175 build/default/production/_ext/1684650831/serial.o
+ .debug_abbrev    0x000317        0x122 build/default/production/_ext/1684650831/resolution_management.o
+ .debug_abbrev    0x000439        0x175 build/default/production/_ext/1684650831/serial.o
 
-.debug_line       0x000000       0x1253
+.debug_line       0x000000       0x1283
  *(.debug_line)
  .debug_line      0x000000        0xaf5 build/default/production/main.o
  .debug_line      0x000af5         0x24 build/default/production/_ext/1684650831/original.o
- .debug_line      0x000b19        0x236 build/default/production/_ext/1684650831/color_management.o
- .debug_line      0x000d4f        0x27b build/default/production/_ext/1684650831/resolution_management.o
- .debug_line      0x000fca        0x289 build/default/production/_ext/1684650831/serial.o
+ .debug_line      0x000b19        0x24e build/default/production/_ext/1684650831/color_management.o
+ .debug_line      0x000d67        0x293 build/default/production/_ext/1684650831/resolution_management.o
+ .debug_line      0x000ffa        0x289 build/default/production/_ext/1684650831/serial.o
 
 .debug_frame      0x000000        0x270
  *(.debug_frame)
@@ -543,11 +543,11 @@ __CONFIG1         0x02abfe          0x2
  .debug_frame     0x0001f8         0x24 build/default/production/_ext/1684650831/resolution_management.o
  .debug_frame     0x00021c         0x54 build/default/production/_ext/1684650831/serial.o
 
-.debug_str        0x000000        0x1c7
+.debug_str        0x000000        0x1e2
  *(.debug_str)
  .debug_str       0x000000         0xa1 build/default/production/main.o
- .debug_str       0x0000a1         0xde build/default/production/_ext/1684650831/resolution_management.o
- .debug_str       0x00017f         0x48 build/default/production/_ext/1684650831/serial.o
+ .debug_str       0x0000a1         0xf9 build/default/production/_ext/1684650831/resolution_management.o
+ .debug_str       0x00019a         0x48 build/default/production/_ext/1684650831/serial.o
 
 .debug_loc
  *(.debug_loc)
@@ -2214,8 +2214,8 @@ FONTS               0x4ff8        0xc08
  .const             0x88be        0x100 build/default/production/main.o
                     0x88be                  _sinetable
 
-.text             0x0009be       0x1308
- .text            0x0009be       0x1308 build/default/production/main.o
+.text             0x0009be       0x1304
+ .text            0x0009be       0x1304 build/default/production/main.o
                   0x0009be                  _config_chr
                   0x000a3c                  _chr_print
                   0x000ac6                  _rcc_color
@@ -2240,24 +2240,24 @@ FONTS               0x4ff8        0xc08
                   0x001982                  _addParticle
                   0x001b90                  _main
 
-_039a7de05559310e
-                  0x001cc6        0xc68
- _039a7de05559310e
-                  0x001cc6        0xc68 build/default/production/main.o
-                  0x001cc6                  _SpriteMap
+_0387fde055593264
+                  0x001cc2        0xc68
+ _0387fde055593264
+                  0x001cc2        0xc68 build/default/production/main.o
+                  0x001cc2                  _SpriteMap
 
-.dinit            0x00292e        0x858
- .dinit           0x00292e        0x858 data_init
+.dinit            0x00292a        0x858
+ .dinit           0x00292a        0x858 data_init
 
-.text             0x003186        0x348
- .text            0x003186        0x210 build/default/production/_ext/1684650831/color_management.o
-                  0x003186                  _map
-                  0x0031b8                  _get16bppRGBColor
-                  0x003214                  _get8bppRGBColor
-                  0x003244                  _hsvtorgb
- .text            0x003396        0x138 build/default/production/_ext/1684650831/resolution_management.o
-                  0x003396                  _config_graphics
+.text             0x003182        0x3ba
+ .text            0x003182        0x24c build/default/production/_ext/1684650831/color_management.o
+                  0x003182                  _map
+                  0x0031b4                  _get16bppRGBColor
+                  0x003210                  _get8bppRGBColor
+                  0x00327c                  _hsvtorgb
+ .text            0x0033ce        0x16e build/default/production/_ext/1684650831/resolution_management.o
+                  0x0033ce                  _config_graphics
 
-.init.delay32     0x0034ce         0x1c
- .init.delay32    0x0034ce         0x1c c:/program files (x86)/microchip/xc16/v1.24/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
-                  0x0034ce                  ___delay32
+.init.delay32     0x00353c         0x1c
+ .init.delay32    0x00353c         0x1c c:/program files (x86)/microchip/xc16/v1.24/bin/bin/../../lib\libpic30-elf.a(delay32.eo)
+                  0x00353c                  ___delay32

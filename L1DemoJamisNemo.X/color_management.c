@@ -16,9 +16,9 @@ uint16_t map(uint16_t input, uint16_t input_start, uint16_t input_end, uint16_t 
 
 uint16_t get16bppRGBColor(uint16_t red, uint16_t blue, uint16_t green) {
     // Scale the range back down to our full color range first:
-    red = map(red, 0, 255, 0, 31);
-    blue = map(blue, 0, 255, 0, 63);
-    green = map(green, 0, 255, 0, 31);
+    red = map(red, 0, 255, 0, 0x1f);
+    blue = map(blue, 0, 255, 0, 0x3f);
+    green = map(green, 0, 255, 0, 0x1f);
 
     // Then shift the colors into the right places (making sure we only keep the GOOD bits)
     red = ((red << 11) & 0xf800);
@@ -30,6 +30,12 @@ uint16_t get16bppRGBColor(uint16_t red, uint16_t blue, uint16_t green) {
 }
 
 uint8_t get8bppRGBColor(uint8_t red, uint8_t blue, uint8_t green) {
+    // Scale the range back down to our full color range first:
+    red = map(red, 0, 255, 0, 0x7);
+    blue = map(blue, 0, 255, 0, 0x7);
+    green = map(green, 0, 255, 0, 0x3);
+
+    // Then shift the colors into the right places (making sure we only keep the GOOD bits)
     red = ((red << 5) & 0xe0);
     blue = ((blue << 2) & 0x1c);
     green = ((green) & 0x03);
