@@ -552,26 +552,32 @@ int main(void) {
 
         int x = 0;
         int y = 0;
-        int xSpeed = 1;
-        int ySpeed = 1;
         int xDir = 1;
         int yDir = 1;
-        int w = 2;
-        int h = 2;
+        int w = 1;
+        int h = 4;
+        int xSpeed = w;
+        int ySpeed = h;
         int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
         int yMax = ((int)VER_RES)-h; //((int)VER_RES)-6-1;
         int xOld, yOld;
 
-        uint8_t color = 0;
+        uint16_t color = 0;
         uint8_t r, g, b, hue, sat = 255, val = 255;
         while (1) {
             frames += 1;
 
+//            if (frames > 90) {
+//                frames = 80;
+//            }
+
 //            color =  frames;
-//            color = getRGBColor(0,0,frames);
+//            color = get8bppRGBColor(0,0,frames);
+//            color = get16bppRGBColor(frames,0,0);
 
             hsvtorgb(&r,&g,&b,frames,sat,val);
-            color = getRGBColor(r,g,b);
+//            color = get8bppRGBColor(r,g,b);
+            color = get16bppRGBColor(r,g,b);
 
 //            blank_background();
             drawBorder(color);
@@ -610,8 +616,16 @@ int main(void) {
 //            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
-//            sprintf(buf, "color: %x", color );
-//            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
+//            sprintf(buf, "rgb:%x, %x, %x", r, g, b );
+//            chr_print(buf, 0, ((int)VER_RES)/2);
+//
+//            sprintf(buf, "color: %x", frames );
+//            chr_print(buf, 0, 8+((int)VER_RES)/2);
+
+            
+//            uint16_t mapped = map(frames, 0, 10, 0, 100);
+//            sprintf(buf, "%i->%i", frames, mapped );
+//            chr_print(buf, 0, 8+((int)VER_RES)/2);
 
 
             // Draw a ball (actually, just a letter)
@@ -626,7 +640,7 @@ int main(void) {
 
             rcc_color(0);
             rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
-            __delay_ms(100);
+//            __delay_ms(50);
 
 	}
 

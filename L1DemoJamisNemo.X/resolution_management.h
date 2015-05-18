@@ -14,20 +14,6 @@ extern "C" {
 
 // Probably the best bet (double buffered):
 //80x480@60: 8bpp
-#define CLOCKDIV 69
-#define HOR_RES 80UL
-#define VER_RES 480UL
-#define HOR_FRONT_PORCH 32
-#define HOR_PULSE_WIDTH 16
-#define HOR_BACK_PORCH  32
-#define VER_FRONT_PORCH 10
-#define VER_PULSE_WIDTH 5
-#define VER_BACK_PORCH  10
-#define BPP 8
-
-// Other options:
-
-//80x480@60: 16bpp
 //#define CLOCKDIV 69
 //#define HOR_RES 80UL
 //#define VER_RES 480UL
@@ -37,8 +23,22 @@ extern "C" {
 //#define VER_FRONT_PORCH 10
 //#define VER_PULSE_WIDTH 5
 //#define VER_BACK_PORCH  10
-//#define BPP 16
-//#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
+//#define BPP 8
+
+// Other options:
+
+//80x480@60: 16bpp
+#define CLOCKDIV 69
+#define HOR_RES 80UL
+#define VER_RES 480UL
+#define HOR_FRONT_PORCH 32
+#define HOR_PULSE_WIDTH 16
+#define HOR_BACK_PORCH  32
+#define VER_FRONT_PORCH 10
+#define VER_PULSE_WIDTH 5
+#define VER_BACK_PORCH  10
+#define BPP 16
+#define GFX_BUFFER_SIZE 76800 // This is only for BPP = 16 @480*80
 
 // 160x480@4bpp
 //#define CLOCKDIV 47
@@ -128,7 +128,7 @@ extern "C" {
 #define PIX_W 1
     
 // Comment this out if you're using 16bpp:
-#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
+//#define GFX_BUFFER_SIZE (HOR_RES * VER_RES / (8/BPP))
 
 // Variables:
 extern uint8_t PIX_H;
