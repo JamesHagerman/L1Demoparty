@@ -132,6 +132,7 @@ extern "C" {
 
 // Variables:
 extern uint8_t PIX_H;
+extern __eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
 
 // Methods:
 void config_graphics(void);

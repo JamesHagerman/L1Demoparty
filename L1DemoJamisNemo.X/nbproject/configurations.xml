@@ -13,6 +13,10 @@
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.h</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.h</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/serial.h</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/particles.h</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/helpers.h</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/text.h</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/fb_control.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -26,6 +30,12 @@
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/serial.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/sprites.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/particles.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/music.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/helpers.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/text.c</itemPath>
+      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/fb_control.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -234,6 +244,7 @@
         <property key="UART 3" value="true"/>
         <property key="UART 4" value="true"/>
         <property key="UCNFG1" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
