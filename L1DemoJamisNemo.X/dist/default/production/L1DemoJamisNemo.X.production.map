@@ -117,7 +117,7 @@ section                    address   length (PC units)   length (bytes) (dec)
 .text                        0x200               0x6be           0xa1d  (2589)
 .const                       0x8be               0x100           0x180  (384)
 .text                        0x9be              0x1304          0x1c86  (7302)
-_0387fde055593264           0x1cc2               0xc68          0x129c  (4764)
+_0397bde055593436           0x1cc2               0xc68          0x129c  (4764)
 .dinit                      0x292a               0x858           0xc84  (3204)
 .text                       0x3182               0x3ba           0x597  (1431)
 .init.delay32               0x353c                0x1c            0x2a  (42)
@@ -2240,9 +2240,9 @@ FONTS               0x4ff8        0xc08
                   0x001982                  _addParticle
                   0x001b90                  _main
 
-_0387fde055593264
+_0397bde055593436
                   0x001cc2        0xc68
- _0387fde055593264
+ _0397bde055593436
                   0x001cc2        0xc68 build/default/production/main.o
                   0x001cc2                  _SpriteMap
 

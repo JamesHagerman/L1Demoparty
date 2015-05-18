@@ -44,6 +44,7 @@ uint8_t get8bppRGBColor(uint8_t red, uint8_t blue, uint8_t green) {
 }
 
 // Taken from: http://web.mit.edu/storborg/Public/hsvtorgb.c
+// And modified to work correctly. Integer overflows are bullshit.
 void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v) {
     uint16_t region, fpart, p, q, t;
 

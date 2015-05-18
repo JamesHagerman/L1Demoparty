@@ -5,4 +5,5 @@ fonts.h  \
 music.h  \
  sprites.h  \
 color_management.h  \
-resolution_management.h 
+resolution_management.h  \
+serial.h 

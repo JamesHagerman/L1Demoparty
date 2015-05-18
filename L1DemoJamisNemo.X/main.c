@@ -25,7 +25,7 @@
 // jamis
 #include "color_management.h"
 #include "resolution_management.h"
-//#include "serial.c"
+//#include "serial.h"
 
 
 
@@ -64,8 +64,6 @@ void config_chr(void) {
 
 int maxCharHeight = ((int)VER_RES)-8;
 void chr_print(char *c, uint16_t x, uint16_t y) {
-//    G1W1ADRL = (unsigned long)(GFXDisplayBuffer);
-//    G1W1ADRH = (unsigned long)(GFXDisplayBuffer);
 
     if (y > maxCharHeight) {
         y = maxCharHeight;

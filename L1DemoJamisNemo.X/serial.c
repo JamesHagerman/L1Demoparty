@@ -5,9 +5,11 @@
 #include <string.h>
 #include <math.h>
 //#include <float.h>
+
+#include "system.h" // declares FCY
 #include <libpic30.h>
 
-#include "system.h"
+#include "serial.h"
 
 void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt( void ) {
 
