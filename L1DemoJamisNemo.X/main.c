@@ -168,7 +168,8 @@ void jamis() {
             sprintf(buf, "qrstuvwxyz");
             chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
 
-            
+            sprintf(buf, "Font: Tallpix by xbost");
+            chr_print(buf, 0, VER_RES-21); // x, y are bounded in chr_print
 
             rcc_color(0);
             rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */

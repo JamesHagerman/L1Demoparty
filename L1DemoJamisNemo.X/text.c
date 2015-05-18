@@ -16,12 +16,14 @@
 
 void config_chr(void) {
     while(_CMDFUL) continue;
-    G1CMDL = 0xFFFF;
+    G1CMDL = 0xFFFF; // white
+//    G1CMDL = 0;  // black
     G1CMDH = CHR_FGCOLOR;
     Nop();
 
     while(_CMDFUL) continue;
-    G1CMDL = 0;
+    G1CMDL = 0;  // black
+//    G1CMDL = 0xFFFF; // white
     G1CMDH = CHR_BGCOLOR;
     Nop();
 
@@ -41,7 +43,7 @@ void config_chr(void) {
     Nop();
 }
 
-int maxCharHeight = ((int)VER_RES)-8;
+int maxCharHeight = ((int)VER_RES)-21;
 void chr_print(char *c, uint16_t x, uint16_t y) {
 
     if (y > maxCharHeight) {
@@ -61,6 +63,7 @@ void chr_print(char *c, uint16_t x, uint16_t y) {
 	while(_CMDFUL) continue;
 	G1CMDL = *c;
 	G1CMDH = CHR_PRINTCHAR;
+//        G1CMDH = CHR_PRINTCHARTRANS; // transparent
 	Nop();
 
 	c++;
@@ -76,7 +79,7 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     /****************************************
      * Font Glyph Table
      ****************************************/
-    0x06,              // width of the glyph
+    0x04,              // width of the glyph   Space is 4 pixels wide
     0x84, 0x01, 0x00,       // Character - 32, offset (0x00000184)
 
     0x02,              // width of the glyph
@@ -143,58 +146,64 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0x0F, 0x04, 0x00,       // Character - 63, offset (0x0000040F)
     0x05,              // width of the glyph
     0x24, 0x04, 0x00,       // Character - 64, offset (0x00000424)
-    0x05,              // width of the glyph
+
+
+    // Start of upper case letters
+    0x04,              // width of the glyph    A
     0x39, 0x04, 0x00,       // Character - 65, offset (0x00000439)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x4E, 0x04, 0x00,       // Character - 66, offset (0x0000044E)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x63, 0x04, 0x00,       // Character - 67, offset (0x00000463)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x78, 0x04, 0x00,       // Character - 68, offset (0x00000478)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x8D, 0x04, 0x00,       // Character - 69, offset (0x0000048D)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xA2, 0x04, 0x00,       // Character - 70, offset (0x000004A2)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xB7, 0x04, 0x00,       // Character - 71, offset (0x000004B7)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xCC, 0x04, 0x00,       // Character - 72, offset (0x000004CC)
     0x02,              // width of the glyph
     0xE1, 0x04, 0x00,       // Character - 73, offset (0x000004E1)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xF6, 0x04, 0x00,       // Character - 74, offset (0x000004F6)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x0B, 0x05, 0x00,       // Character - 75, offset (0x0000050B)
     0x04,              // width of the glyph     L
     0x20, 0x05, 0x00,       // Character - 76, offset (0x00000520)
     0x06,              // width of the glyph
     0x35, 0x05, 0x00,       // Character - 77, offset (0x00000535)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x4A, 0x05, 0x00,       // Character - 78, offset (0x0000054A)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x5F, 0x05, 0x00,       // Character - 79, offset (0x0000055F)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x74, 0x05, 0x00,       // Character - 80, offset (0x00000574)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x89, 0x05, 0x00,       // Character - 81, offset (0x00000589)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x9E, 0x05, 0x00,       // Character - 82, offset (0x0000059E)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xB3, 0x05, 0x00,       // Character - 83, offset (0x000005B3)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xC8, 0x05, 0x00,       // Character - 84, offset (0x000005C8)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xDD, 0x05, 0x00,       // Character - 85, offset (0x000005DD)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xF2, 0x05, 0x00,       // Character - 86, offset (0x000005F2)
     0x06,              // width of the glyph      w
     0x07, 0x06, 0x00,       // Character - 87, offset (0x00000607)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x1C, 0x06, 0x00,       // Character - 88, offset (0x0000061C)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x31, 0x06, 0x00,       // Character - 89, offset (0x00000631)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x46, 0x06, 0x00,       // Character - 90, offset (0x00000646)
+
+
+    //
     0x05,              // width of the glyph
     0x5B, 0x06, 0x00,       // Character - 91, offset (0x0000065B)
     0x05,              // width of the glyph
@@ -207,58 +216,62 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0xAF, 0x06, 0x00,       // Character - 95, offset (0x000006AF)
     0x03,              // width of the glyph
     0xC4, 0x06, 0x00,       // Character - 96, offset (0x000006C4)
-    0x05,              // width of the glyph
+
+    // Start of lower case
+    0x04,              // width of the glyph
     0xD9, 0x06, 0x00,       // Character - 97, offset (0x000006D9)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xEE, 0x06, 0x00,       // Character - 98, offset (0x000006EE)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x03, 0x07, 0x00,       // Character - 99, offset (0x00000703)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x18, 0x07, 0x00,       // Character - 100, offset (0x00000718)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x2D, 0x07, 0x00,       // Character - 101, offset (0x0000072D)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x42, 0x07, 0x00,       // Character - 102, offset (0x00000742)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x57, 0x07, 0x00,       // Character - 103, offset (0x00000757)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x6D, 0x07, 0x00,       // Character - 104, offset (0x0000076D)
     0x02,              // width of the glyph
     0x82, 0x07, 0x00,       // Character - 105, offset (0x00000782)
-    0x05,              // width of the glyph   j
+    0x04,              // width of the glyph   j
     0x97, 0x07, 0x00,       // Character - 106, offset (0x00000797)
-    0x05,              // width of the glyph   k
+    0x04,              // width of the glyph   k
     0xAD, 0x07, 0x00,       // Character - 107, offset (0x000007AD)
-    0x03,              // width of the glyph   l
+    0x02,              // width of the glyph   l
     0xC2, 0x07, 0x00,       // Character - 108, offset (0x000007C2)
     0x06,              // width of the glyph
     0xD7, 0x07, 0x00,       // Character - 109, offset (0x000007D7)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xEC, 0x07, 0x00,       // Character - 110, offset (0x000007EC)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x01, 0x08, 0x00,       // Character - 111, offset (0x00000801)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x16, 0x08, 0x00,       // Character - 112, offset (0x00000816)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x2C, 0x08, 0x00,       // Character - 113, offset (0x0000082C)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x42, 0x08, 0x00,       // Character - 114, offset (0x00000842)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x57, 0x08, 0x00,       // Character - 115, offset (0x00000857)
     0x03,              // width of the glyph
     0x6C, 0x08, 0x00,       // Character - 116, offset (0x0000086C)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x81, 0x08, 0x00,       // Character - 117, offset (0x00000881)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0x96, 0x08, 0x00,       // Character - 118, offset (0x00000896)
     0x06,              // width of the glyph
     0xAB, 0x08, 0x00,       // Character - 119, offset (0x000008AB)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xC0, 0x08, 0x00,       // Character - 120, offset (0x000008C0)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xD5, 0x08, 0x00,       // Character - 121, offset (0x000008D5)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph
     0xEB, 0x08, 0x00,       // Character - 122, offset (0x000008EB)
+
+
     0x05,              // width of the glyph
     0x00, 0x09, 0x00,       // Character - 123, offset (0x00000900)
     0x02,              // width of the glyph
@@ -1096,7 +1109,7 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0x00,        //
 
     /***********************************
-     * Character - 65
+     * Character - 65   A
      ***********************************/
     0x00,        //
     0x00,        //

@@ -106,6 +106,7 @@ extern "C" {
 #define CHR_BGCOLOR	     0x5100
 #define CHR_FONTBASE	    0x5200
 #define CHR_PRINTCHAR	   0x5300
+#define CHR_PRINTCHARTRANS	   0x5380
 #define CHR_TXTAREASTART	0x5800
 #define CHR_TXTAREAEND	  0x5900
 #define CHR_PRINTPOS	    0x5A00
