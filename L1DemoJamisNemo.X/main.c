@@ -35,6 +35,9 @@ _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
 _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
 _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
+
+uint8_t r, g, b, hue, sat = 255, val = 255;
+
 inline void fast_pixel(unsigned long ax, unsigned long ay) {
     //ax += (ay << 9) + (ay << 7);
     ax += ay*HOR_RES;
@@ -113,14 +116,60 @@ void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotati
 //__prog__ uint8_t *pSnoop6 = SnoopSix;
 
 
+void drawCenteredBox(uint16_t frame, uint16_t color) {
+    int ox,oy, size;
+    size = frame;
+
+    if (size > HOR_RES-10) {
+        size = HOR_RES-10;
+
+    }
+    if (size*PIX_H > VER_RES-10) {
+        size = VER_RES-10;
+    }
+
+    ox = HOR_RES/2-size/2;
+    oy = (VER_RES)/2-(size*PIX_H)/2;
+
+    rcc_color(color);
+    rcc_draw(ox, oy, size, size*PIX_H);
+}
+
+void drawWarp(uint16_t frame, uint16_t color) {
+    int i;
+    uint16_t size;
+    if (frame%2) {
+        size = frame*6;
+    } else {
+        size = frame;
+    }
+
+    if (size > 40) {
+        size = 40;
+    }
+    for (i=size; i > 0; i--) {
+        if (i%2) {
+            hsvtorgb(&r,&g,&b,i,sat,val);
+            color = get8bppRGBColor(r,g,b);
+        } else {
+            color = 0;
+        }
+        
+        drawCenteredBox(i, color);
+    }
+
+//    for(y=-radius; y<=radius; y++) {
+//        for(x=-radius; x<=radius; x++) {
+//            rcc_color(color);
+//            if(x*x+y*y <= radius*radius + radius*0.8f) fast_pixel(ox+x, oy+y*PIX_H);
+//        }
+//    }
+}
+
+
 char message[20];
 uint8_t lol=0;
-
-
-
-
 uint16_t frames = 0;
-
 void jamis() {
             // Grabbed from bldewolfs repo:
 //        blank_background();
@@ -151,8 +200,8 @@ void jamis() {
         blank_background();
 
         int next_fb = 0;
+        uint8_t aa = 1;
         uint16_t color = 0;
-        uint8_t r, g, b, hue, sat = 255, val = 255;
         while (1) {
             rcc_setdest(GFXDisplayBuffer[next_fb]);
             next_fb = !next_fb;
@@ -188,12 +237,6 @@ void jamis() {
                 y = yMin;
                 yDir *= -1;
             }
-//            rcc_color(c++);
-//            rcc_draw(100, 20, 20, 200);
-//            rcc_draw(0, 0, HOR_RES, VER_RES);
-//            rcc_draw(638, 0, 1, 200);
-//            sprintf(buf, "%i, %i %i, %i", x, y, xDir, yDir);
-//            chr_print(buf, ((int)HOR_RES)/2, ((int)VER_RES)/2);
 
             // Draw debug:
 //            sprintf(buf, "Low: %lx", (unsigned long)GFXDisplayBuffer & 0xFFFFFF ); //((unsigned long)(GFXDisplayBuffer) & 0xFFFF)
@@ -202,37 +245,48 @@ void jamis() {
 //            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
+//            drawWarp(frames, color);
+//            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6, frames%4);
+
+            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 2+!aa, 0);
+            if ( frames%4 == 0) {
+                aa = !aa;
+            }
+
             // Draw a pixel:
-            rcc_color(0); // delete last pixel position
-            rcc_draw(xOld, yOld, w, h);
+//            rcc_color(0); // delete last pixel position
+//            rcc_draw(xOld, yOld, w, h);
             rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
 
+            
+
+
             // Draw the beautiful font we cobbled together
-            sprintf(buf, "ABCDEFGHIJKLMNOP");
-            chr_print(buf, 0, 0); // x, y are bounded in chr_print
-
-            sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
-            chr_print(buf, 0, 21); // x, y are bounded in chr_print
-
-            sprintf(buf, "QRSTUVWXYZ");
-            chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
-
-            sprintf(buf, "qrstuvwxyz");
-            chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
-
-            sprintf(buf, "Now I can say things");
-            chr_print(buf, 0, 21*6); // x, y are bounded in chr_print
-            sprintf(buf, "like:");
-            chr_print(buf, 0, 21*7); // x, y are bounded in chr_print
-            sprintf(buf, "\"Kayla!");
-            chr_print(buf, 4, 21*9); // x, y are bounded in chr_print
-            sprintf(buf, "I really love you!\"");
-            chr_print(buf, 8, 21*10); // x, y are bounded in chr_print
-
-
-            sprintf(buf, "Font: Tallpix by xbost");
-            chr_print(buf, 0, VER_RES-21); // x, y are bounded in chr_print
+//            sprintf(buf, "ABCDEFGHIJKLMNOP");
+//            chr_print(buf, 0, 0); // x, y are bounded in chr_print
+//
+//            sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
+//            chr_print(buf, 0, 21); // x, y are bounded in chr_print
+//
+//            sprintf(buf, "QRSTUVWXYZ");
+//            chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
+//
+//            sprintf(buf, "qrstuvwxyz");
+//            chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+//
+//            sprintf(buf, "Now I can say things");
+//            chr_print(buf, 0, 21*6); // x, y are bounded in chr_print
+//            sprintf(buf, "like:");
+//            chr_print(buf, 0, 21*7); // x, y are bounded in chr_print
+//            sprintf(buf, "\"Kayla!");
+//            chr_print(buf, 4, 21*9); // x, y are bounded in chr_print
+//            sprintf(buf, "I really love you!\"");
+//            chr_print(buf, 8, 21*10); // x, y are bounded in chr_print
+//
+//
+//            sprintf(buf, "Font: Tallpix by xbost");
+//            chr_print(buf, 0, VER_RES-21); // x, y are bounded in chr_print
 
 //            sprintf(buf, "next_fb: %i", next_fb);
 //            chr_print(buf, 0, VER_RES-(21*3)); // x, y are bounded in chr_print
