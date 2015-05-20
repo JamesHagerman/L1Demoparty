@@ -119,7 +119,7 @@ max_fire += fire_s;
 */
 
 
-__prog__ uint8_t SpriteMap[] __attribute__((space(prog))) = {
+__prog__ uint8_t SpriteMap[] __attribute__((space(prog), section("SPRITES"))) = {
 // 16 x 16 fire animation
 0x10, // width
 0x10, // height

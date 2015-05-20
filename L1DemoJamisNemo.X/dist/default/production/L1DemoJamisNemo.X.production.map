@@ -132,7 +132,7 @@ section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200              0x10de          0x194d  (6477)
 .const                      0x12de               0x10c           0x192  (402)
-_039335a0555c4546           0x13ea               0xc68          0x129c  (4764)
+SPRITES                     0x13ea               0xc68          0x129c  (4764)
 .text                       0x2052               0x8d8           0xd44  (3396)
 .dinit                      0x292a               0x752           0xafb  (2811)
 .text                       0x307c              0x1404          0x1e06  (7686)
@@ -2427,10 +2427,8 @@ FONTS               0x52ac        0x954
                     0x92de                  _sinetable
  .const             0x93de          0xc build/default/production/main.o
 
-_039335a0555c4546
-                  0x0013ea        0xc68
- _039335a0555c4546
-                  0x0013ea        0xc68 build/default/production/_ext/1684650831/sprites.o
+SPRITES           0x0013ea        0xc68
+ SPRITES          0x0013ea        0xc68 build/default/production/_ext/1684650831/sprites.o
                   0x0013ea                  _SpriteMap
 
 .text             0x002052        0x8d8
