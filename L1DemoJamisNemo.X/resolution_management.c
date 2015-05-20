@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   resolution_management.c
  * Author: jamis
  *
@@ -38,10 +38,16 @@ void config_graphics(void) {
         //
         // I don't know what the hell is going on here. Double buffering seems to need
         // the High bits defined? No idea...
+
+        // Display buffer:
 	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+        // Work area 1
 	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+        // Work area 2
 	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
 

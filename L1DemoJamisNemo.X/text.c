@@ -62,8 +62,8 @@ void chr_print(char *c, uint16_t x, uint16_t y) {
     while(*c != NULL) {
 	while(_CMDFUL) continue;
 	G1CMDL = *c;
-	G1CMDH = CHR_PRINTCHAR;
-//        G1CMDH = CHR_PRINTCHARTRANS; // transparent
+//	G1CMDH = CHR_PRINTCHAR;
+        G1CMDH = CHR_PRINTCHARTRANS; // transparent
 	Nop();
 
 	c++;

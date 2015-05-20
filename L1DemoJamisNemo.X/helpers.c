@@ -35,10 +35,17 @@ void rcc_color(unsigned int color) {
 
 void rcc_setdest(__eds__ uint8_t *buf) {
 	while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-	G1W1ADRL = (unsigned long)(buf);
+        G1W1ADRL = (unsigned long)(buf);
 	G1W1ADRH = (unsigned long)(buf);
 	G1W2ADRL = (unsigned long)(buf);
 	G1W2ADRH = (unsigned long)(buf);
+
+//        G1DPADRL = (unsigned long)(buf) & 0xFFFF;
+//	G1DPADRH = (unsigned long)(buf) >>16 & 0xFF;
+//	G1W1ADRL = (unsigned long)(buf) & 0xFFFF;
+//	G1W1ADRH = (unsigned long)(buf) >>16 & 0xFF;
+//	G1W2ADRL = (unsigned long)(buf) & 0xFFFF;;
+//	G1W2ADRH = (unsigned long)(buf) >>16 & 0xFF;
 }
 
 void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
@@ -62,20 +69,35 @@ void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
 	Nop();
 }
 
-inline void fast_pixel(unsigned long ax, unsigned long ay) {
-	//ax += (ay << 9) + (ay << 7);
-	ax += ay*HOR_RES;
-	G1CMDL = ax;
-	G1CMDH = RCC_DESTADDR | ax>>16;
+void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src) {
+    // Does not work...
+    // Src
+    while(_CMDFUL) continue;
+    G1CMDL = (unsigned long)(src);
+    G1CMDH = RCC_SRCADDR ;// | (G1W1ADRH>>4); // not sure what the high range is
+    Nop();
 
-	G1CMDL = 0x1006; // This needs to be changed for non 80x
-	G1CMDH = RCC_RECTSIZE;
+    // dest
+    while(_CMDFUL) continue;
+    G1CMDL = (unsigned long)(dest);
+    G1CMDH = RCC_DESTADDR;// | G1W2ADRH;
+    Nop();
 
-	while(_CMDFUL) continue;
-	G1CMDL = 0x60;
-	G1CMDH = RCC_STARTCOPY;
-	Nop();
+    // select the WHOLE buffer
+    while(_CMDFUL) continue;
+    G1CMDL = (((int)HOR_RES-1)<<12) | (int)VER_RES;
+    G1CMDH = RCC_RECTSIZE | (((int)HOR_RES-1)>>8);
+    Nop();
+
+    // copy!
+    while(_CMDFUL) continue;
+    G1CMDL = 0xe0; //0xC<<3;
+    G1CMDH = RCC_STARTCOPY;
+    Nop();
+
 }
+
+
 
 void line (float x1, float y1, float x2, float y2) {
         unsigned int i;

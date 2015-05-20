@@ -18,8 +18,14 @@
 volatile int fb_ready = 0;
 
 void gpu_setfb(__eds__ uint8_t *buf) {
-	G1DPADRL = (unsigned long)(buf);
-	G1DPADRH = (unsigned long)(buf);
+//	G1DPADRL = (unsigned long)(buf) & 0xFFFF;
+//	G1DPADRH = (unsigned long)(buf) >>16 & 0xFF;
+//	G1W1ADRL = (unsigned long)(buf) & 0xFFFF;;
+//	G1W1ADRH = (unsigned long)(buf) >>16 & 0xFF;
+    G1W2ADRL = (unsigned long)(buf);
+    G1W2ADRH = (unsigned long)(buf);
+    G1DPADRL = (unsigned long)(buf);
+    G1DPADRH = (unsigned long)(buf);
 }
 
 void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {

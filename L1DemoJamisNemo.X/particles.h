@@ -14,9 +14,18 @@ extern "C" {
 
 #define MAX_PARTICLES 30
 
-
 extern int numPart;
-struct Particle;
+struct Particle
+{
+    uint16_t size;
+    uint16_t posx;
+    uint16_t posy;
+    uint16_t speedx;
+    uint16_t speedy;
+    uint16_t color;
+};
+
+extern __eds__ struct Particle p[MAX_PARTICLES];
 
 void addParticle();
 

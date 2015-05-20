@@ -5,6 +5,6 @@ color_management.h  \
  resolution_management.h  \
 music.h  \
 sprites.h  \
-particles.h  \
 helpers.h  \
-text.h 
+text.h  \
+fb_control.h 
