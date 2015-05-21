@@ -30,7 +30,7 @@ void rcc_color(unsigned int color) {
         while(_CMDFUL) continue;
 	G1CMDL = color;
 	G1CMDH = RCC_COLOR;
-        Nop();
+//        Nop();
 }
 
 void rcc_setdest(__eds__ uint8_t *buf) {
@@ -54,19 +54,19 @@ void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
 	while(_CMDFUL) continue;
 	G1CMDL = x + y*HOR_RES;
 	G1CMDH = RCC_DESTADDR | (x + y*HOR_RES)>>16;
-	Nop();
+//	Nop();
 
 	// size
 	while(_CMDFUL) continue;
 	G1CMDL = (w<<12) | h;
 	G1CMDH = RCC_RECTSIZE | (w>>4);
-	Nop();
+//	Nop();
 
 	// go!
 	while(_CMDFUL) continue;
 	G1CMDL = 0xC<<3;
 	G1CMDH = RCC_STARTCOPY;
-	Nop();
+//	Nop();
 }
 
 void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src) {
@@ -75,25 +75,25 @@ void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src) {
     while(_CMDFUL) continue;
     G1CMDL = (unsigned long)(src);
     G1CMDH = RCC_SRCADDR ;// | (G1W1ADRH>>4); // not sure what the high range is
-    Nop();
+//    Nop();
 
     // dest
     while(_CMDFUL) continue;
     G1CMDL = (unsigned long)(dest);
     G1CMDH = RCC_DESTADDR;// | G1W2ADRH;
-    Nop();
+//    Nop();
 
     // select the WHOLE buffer
     while(_CMDFUL) continue;
     G1CMDL = (((int)HOR_RES-1)<<12) | (int)VER_RES;
     G1CMDH = RCC_RECTSIZE | (((int)HOR_RES-1)>>8);
-    Nop();
+//    Nop();
 
     // copy!
     while(_CMDFUL) continue;
     G1CMDL = 0xe0; //0xC<<3;
     G1CMDH = RCC_STARTCOPY;
-    Nop();
+//    Nop();
 
 }
 
@@ -121,12 +121,12 @@ void drawLineS(float x1, float y1, float x2, float y2) {
 }
 
 void blank_background() {
-	//rcc_color(0xff);
-	rcc_color(0x0);
-	rcc_draw(0, 0, HOR_RES-1, VER_RES); // fixes weird last horizontal line issue
+    while(_CMDFUL) continue;
+    rcc_color(0);
+    rcc_draw(0, 0, HOR_RES-1, VER_RES); // fixes weird last horizontal line issue
 }
 
-void cleanup(void) { // TODO: custom colors
+void cleanup(void) {
 	// Clean right column
 	//rcc_color(0xe0); // neat effect
 	//rcc_color(0xff); // white

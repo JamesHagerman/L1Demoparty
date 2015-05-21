@@ -14,7 +14,7 @@ extern "C" {
 
 
 // Uncomment this to turn on double buffering:
-//#define DOUBLE_BUFFERED
+#define DOUBLE_BUFFERED
 
 #ifdef DOUBLE_BUFFERED
 //80x480@60: 8bpp

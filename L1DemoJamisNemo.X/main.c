@@ -35,9 +35,11 @@ uint8_t r, g, b, hue, sat = 255, val = 255;
 inline void fast_pixel(unsigned long ax, unsigned long ay) {
     //ax += (ay << 9) + (ay << 7);
     ax += ay*HOR_RES;
+    while(_CMDFUL) continue;
     G1CMDL = ax;
     G1CMDH = RCC_DESTADDR | ax>>16;
 
+    while(_CMDFUL) continue;
     G1CMDL = 0x1006; // This needs to be changed for non 80x
     G1CMDH = RCC_RECTSIZE;
 
@@ -107,8 +109,8 @@ void drawCenteredBox(uint16_t size, uint16_t color) {
         size = HOR_RES-1;
 
     }
-    if (size*PIX_H > VER_RES-10) {
-        size = VER_RES-10;
+    if (size*PIX_H > VER_RES-1) {
+        size = VER_RES-1;
     }
 
     ox = HOR_RES/2-size/2;
@@ -120,8 +122,47 @@ void drawCenteredBox(uint16_t size, uint16_t color) {
     rcc_draw(ox, oy, size, size*PIX_H);
 }
 
-void drawWarp(uint16_t frame, uint16_t color) {
-//    int i;
+void drawGround(uint16_t frame) {
+    int i, j;
+    uint16_t color;
+    uint8_t r, g, b, hue, sat = 255, val = 255;
+    int p = 40;
+
+    for (i = 50*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
+        hsvtorgb(&r,&g,&b,frame*2-(p^2),sat,val);
+//        color = get16bppRGBColor(r,g,b);
+        color = get8bppRGBColor(r,g,b);
+        rcc_color(color);
+        p -= 2;
+        if (p < 0) {
+            p = 0;
+        }
+        for (j = 0; j < HOR_RES-1; j++) {
+            fast_pixel(j, i); // i+(i*(int)VER_RES)
+        }
+    }
+}
+
+void drawWarp(uint16_t frame) {
+    int i, j;
+    uint16_t color;
+    uint8_t r, g, b, hue, sat = 255, val = 255;
+
+    for (i = 60*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
+        hsvtorgb(&r,&g,&b,frame+(i*2),sat,val);
+//        color = get16bppRGBColor(r,g,b);
+        color = get8bppRGBColor(r,g,b);
+        rcc_color(color);
+        for (j = 0; j < HOR_RES-1; j++) {
+            fast_pixel(j, i); // i+(i*(int)VER_RES)
+        }
+    }
+
+    // Build color based on frame:
+//    hsvtorgb(&r,&g,&b,frame,sat,val);
+//    color = get16bppRGBColor(r,g,b);
+//    rcc_color(color);
+
 //    uint16_t size = frame/10;
 
 //    if (size >= HOR_RES-1 || size >= VER_RES-1 || size <= 0 || size <= 0) return;
@@ -145,7 +186,7 @@ void drawWarp(uint16_t frame, uint16_t color) {
 //            color = 0;
 //        }
 //
-        drawCenteredBox(50, color);
+//        drawCenteredBox(40, color);
 //    }
 
 //    int x, y;
@@ -159,6 +200,9 @@ void drawWarp(uint16_t frame, uint16_t color) {
 //            if(x*x+y*y <= radius*radius + radius*0.8f) fast_pixel(ox+x, oy+y*PIX_H);
 //        }
 //    }
+
+        
+
 }
 
 #ifdef DOUBLE_BUFFERED
@@ -176,7 +220,8 @@ void swapWorkAreas() {
 }
 #else
 void waitForVSync() {
-    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+//    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+    while((!_CMDMPT) | _IPUBUSY | _RCCBUSY | _CHRBUSY) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
     vSync = 1;
     while(vSync) continue; // wait for vsync
 }
@@ -198,8 +243,8 @@ void jamis() {
         int ySpeed = h;//*PIX_H;
         int xMin = 0;
         int yMin = 0*PIX_H;
-        int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
-        int yMax = ((int)VER_RES)-h-(PIX_H); //((int)VER_RES)-6-1;
+        int xMax = ((int)HOR_RES)-w-1; // -1 to keep it off the right side of the screen
+        int yMax = ((int)VER_RES)-h-180;
         int xOld, yOld;
 
         uint8_t aa = 1;
@@ -217,7 +262,9 @@ void jamis() {
 #ifdef	DOUBLE_BUFFERED
             swapWorkAreas();
 #else
-//            blank_background();
+//            __delay_ms(10);
+//            blank_background(); // Clearing the buffer here means tearing for some reason
+            
 #endif
 
 //            color =  frames;
@@ -225,8 +272,8 @@ void jamis() {
 //            color = get16bppRGBColor(frames,0,0);
 
             hsvtorgb(&r,&g,&b,frames,sat,val);
-//            color = get8bppRGBColor(r,g,b);
-            color = get16bppRGBColor(r,g,b);
+            color = get8bppRGBColor(r,g,b);
+//            color = get16bppRGBColor(r,g,b);
 
 //            drawBorder(color);
             xOld = x;
@@ -258,7 +305,7 @@ void jamis() {
 //            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
-            drawWarp(frames, color);
+            
 
 //            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6, 0);
 //            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-(s[0].height*PIX_H), 0, 0);
@@ -270,20 +317,23 @@ void jamis() {
 //            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-5, 0, 0);
 //            drawSprite(HOR_RES/2, VER_RES/2, 0, 0);
 
-            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 0+!aa, 0);
-            if ( frames%4 == 0) {
-                aa = !aa;
-            }
+
+
+            drawGround(frames);
+//            drawWarp(frames);
 
             // Draw a pixel:
-//            rcc_color(0); // delete last pixel position
-//            rcc_draw(xOld, yOld, w, h);
+            rcc_color(0); // delete last pixel position
+            rcc_draw(xOld, yOld, w, h);
             rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
 //            fast_pixel(x,y);
 
-            
 
+            drawSprite((HOR_RES-24)-s[0].width/2, (VER_RES-120)-((s[0].height*PIX_H)/2), 0+!aa, 0);
+            if ( frames%4 == 0) {
+                aa = !aa;
+            }
 
             // Draw the beautiful font we cobbled together
 //            sprintf(buf, "ABCDEFGHIJKLMNOP");
@@ -308,20 +358,22 @@ void jamis() {
 //            chr_print(buf, 8, 21*10); // x, y are bounded in chr_print
 //
 //
-            sprintf(buf, "frames: %i", frames);
-            chr_print(buf, 0, VER_RES-(21*2)); // x, y are bounded in chr_print
+//            sprintf(buf, "frames: %i", frames);
+//            chr_print(buf, 0, VER_RES-(21*2)); // x, y are bounded in chr_print
 
             rcc_color(0);
             rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\
+
+
 
 #ifdef	DOUBLE_BUFFERED
             waitForBufferFlip();
 #else
             waitForVSync();
 #endif
-            
-            frames++;
 //            __delay_ms(10);
+            frames++;
+            
             
         }
 }
