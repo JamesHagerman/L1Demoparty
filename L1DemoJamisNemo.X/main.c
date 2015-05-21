@@ -137,26 +137,33 @@ void drawCenteredBox(uint16_t frame, uint16_t color) {
 
 void drawWarp(uint16_t frame, uint16_t color) {
     int i;
-    uint16_t size;
-    if (frame%2) {
-        size = frame*6;
-    } else {
-        size = frame;
-    }
+    uint16_t size = frame/10;
 
-    if (size > 40) {
-        size = 40;
-    }
-    for (i=size; i > 0; i--) {
-        if (i%2) {
-            hsvtorgb(&r,&g,&b,i,sat,val);
-            color = get8bppRGBColor(r,g,b);
-        } else {
-            color = 0;
-        }
-        
-        drawCenteredBox(i, color);
-    }
+    if (size >= HOR_RES-1 || size >= VER_RES-1 || size <= 0 || size <= 0) return;
+
+    rcc_color(color);
+    line(0,0,frame, frame/2);
+
+
+//    if (frame%2) {
+//        size = frame*6;
+//    } else {
+//        size = frame;
+//    }
+//
+//    if (size > 40) {
+//        size = 40;
+//    }
+//    for (i=size; i > 0; i--) {
+//        if (i%2) {
+//            hsvtorgb(&r,&g,&b,i,sat,val);
+//            color = get8bppRGBColor(r,g,b);
+//        } else {
+//            color = 0;
+//        }
+//
+//        drawCenteredBox(i, color);
+//    }
 
 //    for(y=-radius; y<=radius; y++) {
 //        for(x=-radius; x<=radius; x++) {
@@ -166,6 +173,20 @@ void drawWarp(uint16_t frame, uint16_t color) {
 //    }
 }
 
+#ifdef DOUBLE_BUFFERED
+int next_fb = 0;
+void waitForBufferFlip() {
+    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+    fb_ready = 1;
+    while(fb_ready) continue; // wait for vsync
+}
+
+void swapWorkAreas() {
+    rcc_setdest(GFXDisplayBuffer[next_fb]);
+    next_fb = !next_fb;
+    blank_background();
+}
+#endif
 
 char message[20];
 uint8_t lol=0;
@@ -184,28 +205,31 @@ void jamis() {
         int y = 0;
         int xDir = 1;
         int yDir = 1;
-        int w = 1;
-        int h = 1*PIX_H;
+        int w = 2;
+        int h = 2;
         int xSpeed = w;
         int ySpeed = h;//*PIX_H;
-        int xMin = 1;
-        int yMin = 1*PIX_H;
-        int xMax = ((int)HOR_RES)-w-1-1; //((int)HOR_RES)-8;
+        int xMin = 0;
+        int yMin = 0*PIX_H;
+        int xMax = ((int)HOR_RES)-w-1; //((int)HOR_RES)-8;
         int yMax = ((int)VER_RES)-h-(PIX_H); //((int)VER_RES)-6-1;
         int xOld, yOld;
 
+#ifdef DOUBLE_BUFFERED
         rcc_setdest(GFXDisplayBuffer[0]);
         blank_background();
         rcc_setdest(GFXDisplayBuffer[1]);
         blank_background();
+#endif
 
-        int next_fb = 0;
+        
         uint8_t aa = 1;
         uint16_t color = 0;
         while (1) {
-            rcc_setdest(GFXDisplayBuffer[next_fb]);
-            next_fb = !next_fb;
-            blank_background();
+
+#ifdef	DOUBLE_BUFFERED
+            swapWorkAreas();
+#endif
 
 //            color =  frames;
 //            color = get8bppRGBColor(0,0,frames);
@@ -246,18 +270,28 @@ void jamis() {
 //            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
 
 //            drawWarp(frames, color);
-//            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6, frames%4);
 
-            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 2+!aa, 0);
-            if ( frames%4 == 0) {
-                aa = !aa;
-            }
+//            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6, 0);
+//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-(s[0].height*PIX_H), 0, 0);
+//            drawSprite(HOR_RES/2, VER_RES/2-(s[0].height*PIX_H), 0, 0);
+//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2, 0, 0);
+//            drawSprite(HOR_RES/2, VER_RES/2, 0, 0);
+//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-(s[0].height*PIX_H-5), 0, 0);
+//            drawSprite(HOR_RES/2, VER_RES/2-(s[0].height*PIX_H-5), 0, 0);
+//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-5, 0, 0);
+//            drawSprite(HOR_RES/2, VER_RES/2, 0, 0);
+
+//            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 0+!aa, 0);
+//            if ( frames%4 == 0) {
+//                aa = !aa;
+//            }
 
             // Draw a pixel:
 //            rcc_color(0); // delete last pixel position
 //            rcc_draw(xOld, yOld, w, h);
             rcc_color(color); // draw new position
             rcc_draw(x, y, w, h);
+//            fast_pixel(x,y);
 
             
 
@@ -294,11 +328,12 @@ void jamis() {
             chr_print(buf, 0, VER_RES-(21*2)); // x, y are bounded in chr_print
 
             rcc_color(0);
-            rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */
+            rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\
 
-            while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-            fb_ready = 1;
-            while(fb_ready) continue; // wait for vsync
+#ifdef	DOUBLE_BUFFERED
+            waitForBufferFlip();
+#endif
+            
             frames++;
 //            __delay_ms(2000);
 
@@ -447,11 +482,13 @@ int main(void) {
 	TRISB = 0x0000;
 
         // Setup interrupts:
+#ifdef DOUBLE_BUFFERED
         _VMRGNIF = 0;
 	_HMRGNIF = 0;
 	_HMRGNIE = 1;
 	_VMRGNIE = 1;
 	_GFX1IE = 1;
+#endif
 
 	config_graphics();
 	config_chr();

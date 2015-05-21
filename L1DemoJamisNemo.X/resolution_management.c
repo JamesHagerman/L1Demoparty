@@ -20,12 +20,11 @@
 
 uint8_t PIX_H = VER_RES/HOR_RES;
 
-
-// Single buffering:
-//__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") )); // , address(0x1000)
-
-// Double buffering:
+#ifdef	DOUBLE_BUFFERED
 __eds__ uint8_t GFXDisplayBuffer[2][GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
+#else
+__eds__ uint8_t GFXDisplayBuffer[GFX_BUFFER_SIZE] __attribute__((eds, section("DISPLAY") ));
+#endif
 
 void config_graphics(void) {
 	_G1CLKSEL = 1;
@@ -39,6 +38,7 @@ void config_graphics(void) {
         // I don't know what the hell is going on here. Double buffering seems to need
         // the High bits defined? No idea...
 
+#ifdef	DOUBLE_BUFFERED
         // Display buffer:
 	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
@@ -50,6 +50,20 @@ void config_graphics(void) {
         // Work area 2
 	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+#else
+        // Display buffer:
+	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1DPADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+        // Work area 1
+	G1W1ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1W1ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+        // Work area 2
+	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
+//	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+#endif
+        
 
         G1PUW = HOR_RES;
         G1PUH = VER_RES;

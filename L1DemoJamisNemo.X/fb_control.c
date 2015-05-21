@@ -28,6 +28,7 @@ void gpu_setfb(__eds__ uint8_t *buf) {
     G1DPADRH = (unsigned long)(buf);
 }
 
+#ifdef DOUBLE_BUFFERED
 void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
 	static int lines = 0;
 	static int syncs = 0;
@@ -48,3 +49,4 @@ void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
 	}
 	_GFX1IF = 0;
 }
+#endif
