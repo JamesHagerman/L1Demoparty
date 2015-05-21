@@ -13,8 +13,8 @@ extern "C" {
 #endif
 
 
-
-#define DOUBLE_BUFFERED
+// Uncomment this to turn on double buffering:
+//#define DOUBLE_BUFFERED
 
 #ifdef DOUBLE_BUFFERED
 //80x480@60: 8bpp

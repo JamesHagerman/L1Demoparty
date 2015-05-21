@@ -16,6 +16,7 @@
 
 
 volatile int fb_ready = 0;
+volatile int vSync = 0;
 
 void gpu_setfb(__eds__ uint8_t *buf) {
 //	G1DPADRL = (unsigned long)(buf) & 0xFFFF;
@@ -48,5 +49,14 @@ void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
 		_HMRGNIF = 0;
 	}
 	_GFX1IF = 0;
+}
+#else
+void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
+    // Wait until the vertical sync
+    if(_VMRGNIF) {
+        vSync = 0;
+        _VMRGNIF = 0;
+    }
+    _GFX1IF = 0;
 }
 #endif

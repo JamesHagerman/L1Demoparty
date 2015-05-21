@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 extern volatile int fb_ready;
+extern volatile int vSync;
 
 void gpu_setfb(__eds__ uint8_t *buf);
 //void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void);
