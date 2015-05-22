@@ -108,7 +108,7 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0x80, 0x02, 0x00,       // Character - 44, offset (0x00000280)
     0x05,              // width of the glyph
     0x95, 0x02, 0x00,       // Character - 45, offset (0x00000295)
-    0x02,              // width of the glyph
+    0x02,              // width of the glyph       .
     0xAA, 0x02, 0x00,       // Character - 46, offset (0x000002AA)
     0x05,              // width of the glyph
     0xBF, 0x02, 0x00,       // Character - 47, offset (0x000002BF)
@@ -142,7 +142,7 @@ uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0xE5, 0x03, 0x00,       // Character - 61, offset (0x000003E5)
     0x05,              // width of the glyph
     0xFA, 0x03, 0x00,       // Character - 62, offset (0x000003FA)
-    0x05,              // width of the glyph
+    0x04,              // width of the glyph    ?
     0x0F, 0x04, 0x00,       // Character - 63, offset (0x0000040F)
     0x05,              // width of the glyph
     0x24, 0x04, 0x00,       // Character - 64, offset (0x00000424)

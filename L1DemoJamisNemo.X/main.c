@@ -228,6 +228,9 @@ void waitForVSync() {
 #endif
 
 uint16_t frames = 0;
+
+uint16_t storyPart = 0;
+
 void jamis() {
 
         loadAllSprites();
@@ -330,7 +333,7 @@ void jamis() {
 //            fast_pixel(x,y);
 
 
-            drawSprite((HOR_RES-24)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
+            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
 
             // Draw the beautiful font we cobbled together
 //            sprintf(buf, "ABCDEFGHIJKLMNOP");
@@ -357,6 +360,11 @@ void jamis() {
 //
 //            sprintf(buf, "frames: %i", frames);
 //            chr_print(buf, 0, VER_RES-(21*2)); // x, y are bounded in chr_print
+
+            sprintf(buf, "Hi. How 'bout");
+            chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+            sprintf(buf, "a quick story?");
+            chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 
             rcc_color(0);
             rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\

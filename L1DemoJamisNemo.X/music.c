@@ -18,9 +18,29 @@
 D[--------3-2-------\7-6-5------[
 A[---5-5-------3-5----------3---[
 */
+// OLD SONG BULLSHIT
+//unsigned short song[] = {
+//	NOTES_D5,
+//	0,
+//	NOTES_D5,
+//	0,
+//	NOTES_F5,
+//	NOTES_E5,
+//	NOTES_C5,
+//	NOTES_D5,
+//	0,
+//	NOTES_A5,
+//	0,
+//	NOTES_Ab5,
+//	0,
+//	NOTES_G5,
+//	0,
+//	NOTES_C5,
+//	};
+
 
 unsigned short song[] = {
-	NOTES_D5,
+	NOTES_D0,
 	0,
 	NOTES_D5,
 	0,
@@ -37,6 +57,7 @@ unsigned short song[] = {
 	0,
 	NOTES_C5,
 	};
+
 
 void config_timer() {
 	PR1 = 0;
@@ -70,7 +91,7 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 	static unsigned short idx = 0;
 	PR1 = song[idx];
 
-	idx++;
+//	idx++;
 	if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
 		idx = 0;
 	_T2IF = 0;
