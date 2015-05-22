@@ -330,10 +330,7 @@ void jamis() {
 //            fast_pixel(x,y);
 
 
-            drawSprite((HOR_RES-24)-s[0].width/2, (VER_RES-120)-((s[0].height*PIX_H)/2), 0+!aa, 0);
-            if ( frames%4 == 0) {
-                aa = !aa;
-            }
+            drawSprite((HOR_RES-24)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
 
             // Draw the beautiful font we cobbled together
 //            sprintf(buf, "ABCDEFGHIJKLMNOP");
