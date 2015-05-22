@@ -1,5 +1,5 @@
 PImage sprite;
-String filename = "catsprite.gif";
+String filename = "catsprite_4.gif";
 
 void setup() {
   size(100, 100);
@@ -16,11 +16,11 @@ void setup() {
   
   System.out.printf("Data: \n");
   System.out.printf("// %d x %d %s \n", w, h, filename);
-  System.out.printf("0x%x // width\n", w);
-  System.out.printf("0x%x // height\n", h);
-  System.out.printf("0x%x // bitres\n", 0x8);
-  System.out.printf("0x%x // transparent color\n", 0xe3);
-  System.out.printf("0x%x // rotate\n", 0x00);
+  System.out.printf("0x%x, // width\n", w);
+  System.out.printf("0x%x, // height\n", h);
+  System.out.printf("0x%x, // bitres\n", 0x8);
+  System.out.printf("0x%x, // transparent color\n", 0xe3);
+  System.out.printf("0x%x, // rotate\n", 0x00);
   for (int i = 0; i < pixelCount; i++) {
     color thisPixel = sprite.pixels[i];
     float r = red(thisPixel);
