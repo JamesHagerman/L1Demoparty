@@ -14,7 +14,7 @@
 #include "color_management.h"
 #include "resolution_management.h"
 
-float angle, x[8], y[8], z[8], rx[8], ry[8], rz[8], scrx[8], scry[8];
+//float angle, x[8], y[8], z[8], rx[8], ry[8], rz[8], scrx[8], scry[8];
 
 // math helpers:
 float radians(uint16_t angle) {
@@ -157,24 +157,24 @@ void verBlind(void) {
 }
 
 
-void render (float xa, float ya, float za) {
-        int i;
-        float mat[4][4];            // Determine rotation matrix
-        float xdeg=xa*3.1416f/180, ydeg=ya*3.1416f/180, zdeg=za*3.1416f/180;
-        float sx=(float)sin(xdeg), sy=(float)sin(ydeg), sz=(float)sin(zdeg);
-        float cx=(float)cos(xdeg), cy=(float)cos(ydeg), cz=(float)cos(zdeg);
-        mat[0][0]=cx*cz+sx*sy*sz, mat[1][0]=-cx*sz+cz*sx*sy, mat[2][0]=cy*sx;
-        mat[0][1]=cy*sz, mat[1][1]=cy*cz, mat[2][1]=-sy;
-        mat[0][2]=-cz*sx+cx*sy*sz, mat[1][2]=sx*sz+cx*cz*sy, mat[2][2]=cx*cy;
-        for (i=0; i<8; i++) {
-                rx[i]=x[i]*mat[0][0]+y[i]*mat[1][0]+z[i]*mat[2][0];
-                ry[i]=x[i]*mat[0][1]+y[i]*mat[1][1]+z[i]*mat[2][1];
-                rz[i]=x[i]*mat[0][2]+y[i]*mat[1][2]+z[i]*mat[2][2]+100;
-                scrx[i]=(rx[i]*10)/rz[i]+(HOR_RES/2), scry[i]=(ry[i]*60)/rz[i]+(VER_RES/2);
-        }
-        for (i=0; i<4; i++) {
-                line (scrx[i], scry[i], scrx[i+4], scry[i+4]);
-                line (scrx[i], scry[i], scrx[(i+1)%4], scry[(i+1)%4]);
-                line (scrx[i+4], scry[i+4], scrx[((i+1)%4)+4], scry[((i+1)%4)+4]);
-        }
-}
+//void render (float xa, float ya, float za) {
+//        int i;
+//        float mat[4][4];            // Determine rotation matrix
+//        float xdeg=xa*3.1416f/180, ydeg=ya*3.1416f/180, zdeg=za*3.1416f/180;
+//        float sx=(float)sin(xdeg), sy=(float)sin(ydeg), sz=(float)sin(zdeg);
+//        float cx=(float)cos(xdeg), cy=(float)cos(ydeg), cz=(float)cos(zdeg);
+//        mat[0][0]=cx*cz+sx*sy*sz, mat[1][0]=-cx*sz+cz*sx*sy, mat[2][0]=cy*sx;
+//        mat[0][1]=cy*sz, mat[1][1]=cy*cz, mat[2][1]=-sy;
+//        mat[0][2]=-cz*sx+cx*sy*sz, mat[1][2]=sx*sz+cx*cz*sy, mat[2][2]=cx*cy;
+//        for (i=0; i<8; i++) {
+//                rx[i]=x[i]*mat[0][0]+y[i]*mat[1][0]+z[i]*mat[2][0];
+//                ry[i]=x[i]*mat[0][1]+y[i]*mat[1][1]+z[i]*mat[2][1];
+//                rz[i]=x[i]*mat[0][2]+y[i]*mat[1][2]+z[i]*mat[2][2]+100;
+//                scrx[i]=(rx[i]*10)/rz[i]+(HOR_RES/2), scry[i]=(ry[i]*60)/rz[i]+(VER_RES/2);
+//        }
+//        for (i=0; i<4; i++) {
+//                line (scrx[i], scry[i], scrx[i+4], scry[i+4]);
+//                line (scrx[i], scry[i], scrx[(i+1)%4], scry[(i+1)%4]);
+//                line (scrx[i+4], scry[i+4], scrx[((i+1)%4)+4], scry[((i+1)%4)+4]);
+//        }
+//}

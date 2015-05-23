@@ -29,9 +29,8 @@ _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
 _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
 _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
-
-uint8_t r, g, b, hue, sat = 255, val = 255;
-
+//=========
+// Static inline functions:
 inline void fast_pixel(unsigned long ax, unsigned long ay) {
     //ax += (ay << 9) + (ay << 7);
     ax += ay*HOR_RES;
@@ -49,58 +48,27 @@ inline void fast_pixel(unsigned long ax, unsigned long ay) {
     Nop();
 }
 
-void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotation) {
+uint8_t r, g, b, hue, sat = 255, val = 255;
+char buf[20];
+int x = 0;
+int y = 0;
+int xDir = 1;
+int yDir = 1;
+int w;
+int h;
+int xSpeed;
+int ySpeed;
+int xMin;
+int yMin;
+int xMax;
+int yMax;
+int xOld, yOld;
 
-	unsigned int w,h;
-	uint16_t x1,y1;
-	uint8_t color;
+uint8_t aa = 1;
+uint16_t color = 0;
 
-	if (x >= HOR_RES-1 || y >= VER_RES-1 || x <= 0|| y <= 0) return;
-
-	for (h=0; h < s[id].height; h++) {
-		for (w=0; w < s[id].width; w++) {
-			color = s[id].data[w + s[id].width*h];
-			// don't draw if it matches transparency color
-			if (color == s[id].trans) continue;
-			rcc_color(color);
-//                        rcc_color(0xFC); // 8bit yellow == 0b111 111 00
-			//rcc_color(rand()); //tv screen effect
-
-			switch(rotation) {
-				//  00 deg      0,0 1,0 2,0 ... 0,1
-				//  90 deg CCW  7,0 7,1 7,2 ... 6,0
-				// 180 deg      7,7 6,7 5,7 ... 7,6
-				//  90 deg CW   0,7 0,6 0,5 ... 1,6
-				case 0: // 0 degree
-					x1 = x+w;
-					y1 = y + (h<<2) + (h<<1);//y+(PIX_H*h);
-					if (x1 >= HOR_RES-2) continue; //br
-					if (y1 >= VER_RES-PIX_H) return; //ret
-					fast_pixel(x1, y1);
-					break;
-				case 1: // 90 degree CW
-					x1 = x+(s[id].width-h-1);
-					y1 = y+(PIX_H*(w));
-					if (x1 >= HOR_RES-1 || x1 <= 0) continue;
-					if (y1 >= VER_RES-PIX_H || y1 <= 0) continue;
-					fast_pixel(x1, y1);
-					break;
-				case 2: // 180 degree CW
-					x1 = x+(s[id].width-w-1);
-					y1 = y+(PIX_H*(s[id].height-h-1));
-					if (x1 >= HOR_RES-1) continue;
-					if (y1 >= VER_RES-PIX_H) continue;
-					fast_pixel(x1, y1);
-					break;
-				case 3: // 90 degree CCW
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	//Nop();
-}
+uint16_t frames = 0;
+uint16_t storyPart = 0;
 
 void drawCenteredBox(uint16_t size, uint16_t color) {
     int ox,oy;
@@ -122,41 +90,23 @@ void drawCenteredBox(uint16_t size, uint16_t color) {
     rcc_draw(ox, oy, size, size*PIX_H);
 }
 
-void drawGround(uint16_t frame) {
-    int i, j;
-    uint16_t color;
-    uint8_t r, g, b, hue, sat = 255, val = 255;
-    int p = 40;
-
-    for (i = 50*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
-        hsvtorgb(&r,&g,&b,frame*2-(p^2),sat,val);
-//        color = get16bppRGBColor(r,g,b);
-        color = get8bppRGBColor(r,g,b);
-        rcc_color(color);
-        p -= 2;
-        if (p < 0) {
-            p = 0;
-        }
-        for (j = 0; j < HOR_RES-1; j++) {
-            fast_pixel(j, i); // i+(i*(int)VER_RES)
-        }
-    }
-}
-
 void drawWarp(uint16_t frame) {
-    int i, j;
-    uint16_t color;
-    uint8_t r, g, b, hue, sat = 255, val = 255;
-
-    for (i = 60*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
-        hsvtorgb(&r,&g,&b,frame+(i*2),sat,val);
-//        color = get16bppRGBColor(r,g,b);
-        color = get8bppRGBColor(r,g,b);
-        rcc_color(color);
-        for (j = 0; j < HOR_RES-1; j++) {
-            fast_pixel(j, i); // i+(i*(int)VER_RES)
-        }
-    }
+    // Drew a warp using a sprite. It failed. Drastic measures time?
+    drawSprite(40, 40*PIX_H, 12, 0, -1);
+    
+//    int i, j;
+//    uint16_t color;
+//    uint8_t r, g, b, hue, sat = 255, val = 255;
+//
+//    for (i = 60*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
+//        hsvtorgb(&r,&g,&b,frame+(i*2),sat,val);
+////        color = get16bppRGBColor(r,g,b);
+//        color = get8bppRGBColor(r,g,b);
+//        rcc_color(color);
+//        for (j = 0; j < HOR_RES-1; j++) {
+//            fast_pixel(j, i); // i+(i*(int)VER_RES)
+//        }
+//    }
 
     // Build color based on frame:
 //    hsvtorgb(&r,&g,&b,frame,sat,val);
@@ -205,214 +155,220 @@ void drawWarp(uint16_t frame) {
 
 }
 
-#ifdef DOUBLE_BUFFERED
-int next_fb = 0;
-void waitForBufferFlip() {
-    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-    fb_ready = 1;
-    while(fb_ready) continue; // wait for vsync
+void drawGround(uint16_t frame) {
+    int i, j;
+    uint16_t color;
+    uint8_t r, g, b, sat = 255, val = 255; //hue
+    int p = 40;
+
+    // ground
+    for (i = 50*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
+        hsvtorgb(&r,&g,&b,frame*2-(p^2),sat,val);
+//        color = get16bppRGBColor(r,g,b);
+        color = get8bppRGBColor(r,g,b);
+        rcc_color(color);
+        p -= 2;
+        if (p < 0) {
+            p = 0;
+        }
+        for (j = 0; j < HOR_RES-1; j++) {
+            fast_pixel(j, i); // i+(i*(int)VER_RES)
+        }
+    }
+
+    // cat and text
+    drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0, -1);
+    sprintf(buf, "Hi. How 'bout");
+    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+    sprintf(buf, "a quick story?");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 }
 
-void swapWorkAreas() {
-    rcc_setdest(GFXDisplayBuffer[next_fb]);
-    next_fb = !next_fb;
-    blank_background();
+void drawBoringGround(uint16_t frames) {
+    frames = 0;
+    drawGround(frames);
 }
-#else
-void waitForVSync() {
-//    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-    while((!_CMDMPT) | _IPUBUSY | _RCCBUSY | _CHRBUSY) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
-    vSync = 1;
-    while(vSync) continue; // wait for vsync
+
+void initBouncingBallLimits() {
+    w = 1;
+    h = 1*PIX_H;
+    xSpeed = w;
+    ySpeed = h;//*PIX_H;
+    xMin = 0;
+    yMin = 0*PIX_H;
+    xMax = ((int)HOR_RES)-w-1; // -1 to keep it off the right side of the screen
+    yMax = ((int)VER_RES)-h-180;
 }
-#endif
 
-uint16_t frames = 0;
+void drawIntro(uint16_t frames) {
 
-uint16_t storyPart = 0;
-
-void jamis() {
-
-        loadAllSprites();
-
-        char buf[20];
-        int x = 0;
-        int y = 0;
-        int xDir = 1;
-        int yDir = 1;
-        int w = 1;
-        int h = 1*PIX_H;
-        int xSpeed = w;
-        int ySpeed = h;//*PIX_H;
-        int xMin = 0;
-        int yMin = 0*PIX_H;
-        int xMax = ((int)HOR_RES)-w-1; // -1 to keep it off the right side of the screen
-        int yMax = ((int)VER_RES)-h-180;
-        int xOld, yOld;
-
-        uint8_t aa = 1;
-        uint16_t color = 0;
-
-#ifdef DOUBLE_BUFFERED
-        rcc_setdest(GFXDisplayBuffer[0]);
-        blank_background();
-        rcc_setdest(GFXDisplayBuffer[1]);
-        blank_background();
-#endif
-
-        while (1) {
-            
-#ifdef	DOUBLE_BUFFERED
-            swapWorkAreas();
-#else
-//            __delay_ms(10);
-//            blank_background(); // Clearing the buffer here means tearing for some reason
-            
-#endif
-
-//            color =  frames;
-//            color = get8bppRGBColor(0,0,frames);
-//            color = get16bppRGBColor(frames,0,0);
-
-            hsvtorgb(&r,&g,&b,frames,sat,val);
-            color = get8bppRGBColor(r,g,b);
+    hsvtorgb(&r,&g,&b,frames,sat,val);
+    color = get8bppRGBColor(r,g,b);
 //            color = get16bppRGBColor(r,g,b);
 
-//            drawBorder(color);
-            xOld = x;
-            yOld = y;
-            x += xDir * xSpeed;
-            y += yDir * ySpeed;
+    // Draw the bouncing pixel:
+    xOld = x;
+    yOld = y;
+    x += xDir * xSpeed;
+    y += yDir * ySpeed;
 
-            if (x > xMax) {
-                x = xMax;
-                xDir *= -1;
-            }
-            if (y > yMax) {
-                y = yMax;
-                yDir *= -1;
-            }
-            if (x <= xMin) {
-                x = xMin;
-                xDir *= -1;
-            }
-            if (y <= yMin) {
-                y = yMin;
-                yDir *= -1;
-            }
+    if (x > xMax) {
+        x = xMax;
+        xDir *= -1;
+    }
+    if (y > yMax) {
+        y = yMax;
+        yDir *= -1;
+    }
+    if (x <= xMin) {
+        x = xMin;
+        xDir *= -1;
+    }
+    if (y <= yMin) {
+        y = yMin;
+        yDir *= -1;
+    }
+    rcc_color(0); // delete last pixel position
+    rcc_draw(xOld, yOld, w, h);
+    rcc_color(color); // draw new position
+    rcc_draw(x, y, w, h);
+    fast_pixel(x,y);
 
-            // Draw debug:
-//            sprintf(buf, "Low: %lx", (unsigned long)GFXDisplayBuffer & 0xFFFFFF ); //((unsigned long)(GFXDisplayBuffer) & 0xFFFF)
-//            chr_print(buf, ((int)HOR_RES)/2, ((int)VER_RES)/2);
-//
-//            sprintf(buf, "High: %lu", (unsigned long)GFXDisplayBuffer >> 16 & 0xFF );
-//            chr_print(buf, ((int)HOR_RES)/2, 8+((int)VER_RES)/2);
+    drawSprite(1, 1*PIX_H, 4, 0,  s[4].height/2);
 
+    sprintf(buf, "INTRO GOES HERE");
+    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+    sprintf(buf, "a quick story?");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+}
+
+void drawEnding() {
+    sprintf(buf, "That's your story.");
+    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+    sprintf(buf, "Did you enjoy?");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+}
+
+inline void manageStory() {
+    if ( frames < 400 ) {
+        storyPart = 0; // intro 400
+    } else if (frames < 425) {
+        storyPart = 1; // warp 25
+    } else if (frames < 625) {
+        storyPart = 2; // dirt + aliens 200
+    } else if (frames < 925) {
+        storyPart = 3; // psych alien 300
+    } else if (frames < 1025) {
+        storyPart = 4; // credits 100
+    } else if (frames > 1100) {
+        frames = 0;
+    }
+
+    switch (storyPart) {
+        case 0:
+            drawIntro(frames);
+            break;
+        case 1:
+            drawWarp(frames);
+            break;
+        case 2:
+            drawBoringGround(frames);
+            break;
+        case 3:
+            drawGround(frames);
+            break;
+        case 4:
+            drawEnding(frames);
+            break;
+        default: drawIntro(frames);
+    }
+}
+
+void hexalien() {
+
+    while (1) {
             
+#ifdef	DOUBLE_BUFFERED
+        swapWorkAreas();
+#else
+//        blank_background(); // Clearing the buffer here means tearing for some reason
+#endif
 
-//            drawSprite(HOR_RES/2-s[6].width/2, VER_RES/2-(s[6].height*PIX_H), 6, 0);
-//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-(s[0].height*PIX_H), 0, 0);
-//            drawSprite(HOR_RES/2, VER_RES/2-(s[0].height*PIX_H), 0, 0);
-//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2, 0, 0);
-//            drawSprite(HOR_RES/2, VER_RES/2, 0, 0);
-//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-(s[0].height*PIX_H-5), 0, 0);
-//            drawSprite(HOR_RES/2, VER_RES/2-(s[0].height*PIX_H-5), 0, 0);
-//            drawSprite(HOR_RES/2-s[0].width/2, VER_RES/2-5, 0, 0);
-//            drawSprite(HOR_RES/2, VER_RES/2, 0, 0);
+        // Start drawing all the elements.
+        manageStory();
 
-
-
-//            drawGround(frames);
-//            drawWarp(frames);
-
-            // Draw a pixel:
-//            rcc_color(0); // delete last pixel position
-//            rcc_draw(xOld, yOld, w, h);
-//            rcc_color(color); // draw new position
-//            rcc_draw(x, y, w, h);
-//            fast_pixel(x,y);
-
-
-//            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
-
-            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8, 0);
-
-            // Draw the beautiful font we cobbled together
-//            sprintf(buf, "ABCDEFGHIJKLMNOP");
-//            chr_print(buf, 0, 0); // x, y are bounded in chr_print
+//        // ToDo: replace this with the CLUT. Like that will ever happen.
+//        hsvtorgb(&r,&g,&b,frames,sat,val);
+//        color = get8bppRGBColor(r,g,b);
+//        color = get16bppRGBColor(r,g,b);
 //
-//            sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
-//            chr_print(buf, 0, 21); // x, y are bounded in chr_print
+//        // Draw the beautiful font we cobbled together
+//        sprintf(buf, "ABCDEFGHIJKLMNOP");
+//        chr_print(buf, 0, 0); // x, y are bounded in chr_print
 //
-//            sprintf(buf, "QRSTUVWXYZ");
-//            chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
+//        sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
+//        chr_print(buf, 0, 21); // x, y are bounded in chr_print
 //
-//            sprintf(buf, "qrstuvwxyz");
-//            chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+//        sprintf(buf, "QRSTUVWXYZ");
+//        chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
 //
-//            sprintf(buf, "Now I can say things");
-//            chr_print(buf, 0, 21*6); // x, y are bounded in chr_print
-//            sprintf(buf, "like:");
-//            chr_print(buf, 0, 21*7); // x, y are bounded in chr_print
-//            sprintf(buf, "\"Kayla!");
-//            chr_print(buf, 4, 21*9); // x, y are bounded in chr_print
-//            sprintf(buf, "I really love you!\"");
-//            chr_print(buf, 8, 21*10); // x, y are bounded in chr_print
-//
-//
-//            sprintf(buf, "frames: %i", frames);
-//            chr_print(buf, 0, VER_RES-(21*2)); // x, y are bounded in chr_print
-
-            sprintf(buf, "Hi. How 'bout");
-            chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-            sprintf(buf, "a quick story?");
-            chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
-
-            rcc_color(0);
-            rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\
+//        sprintf(buf, "qrstuvwxyz");
+//        chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+            
+        sprintf(buf, "f:%i", frames);
+        chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
 
 
+
+        // Cleanup the right most column:
+        rcc_color(0);
+        rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\
 
 #ifdef	DOUBLE_BUFFERED
-            waitForBufferFlip();
+        waitForBufferFlip();
 #else
-            waitForVSync();
+        waitForVSync();
 #endif
-//            __delay_ms(10);
-            frames++;
-            
-            
-        }
+        frames++;    
+    }
 }
 
 int main(void) {
 
-	ANSB = 0x0000;
-	ANSC = 0x0000;
-	ANSD = 0x0000;
-	ANSF = 0x0000;
-	ANSG = 0x0000;
-	TRISB = 0x0000;
+    ANSB = 0x0000;
+    ANSC = 0x0000;
+    ANSD = 0x0000;
+    ANSF = 0x0000;
+    ANSG = 0x0000;
+    TRISB = 0x0000;
 
         // Setup interrupts:
 #ifdef DOUBLE_BUFFERED
-        _VMRGNIF = 0;
-	_HMRGNIF = 0;
-	_HMRGNIE = 1;
-	_VMRGNIE = 1;
-	_GFX1IE = 1;
+    _VMRGNIF = 0;
+    _HMRGNIF = 0;
+    _HMRGNIE = 1;
+    _VMRGNIE = 1;
+    _GFX1IE = 1;
 #else
-        _VMRGNIF = 0;
-	_VMRGNIE = 1;
-	_GFX1IE = 1;
+    _VMRGNIF = 0;
+    _VMRGNIE = 1;
+    _GFX1IE = 1;
 #endif
 
-	config_graphics();
-	config_chr();
-	config_timer();
+    config_graphics();
+    config_chr();
+    config_timer();
+    blank_background();
+    loadAllSprites();
+    initBouncingBallLimits();
 
-        blank_background();
+#ifdef DOUBLE_BUFFERED
+    rcc_setdest(GFXDisplayBuffer[0]);
+    blank_background();
+    rcc_setdest(GFXDisplayBuffer[1]);
+    blank_background();
+#endif
 
-        jamis();
-	return 0;
+    hexalien();
+    return 0;
 }

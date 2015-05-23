@@ -31,6 +31,18 @@ void gpu_setfb(__eds__ uint8_t *buf) {
 }
 
 #ifdef DOUBLE_BUFFERED
+int next_fb = 0;
+void waitForBufferFlip() {
+    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+    fb_ready = 1;
+    while(fb_ready) continue; // wait for vsync
+}
+
+void swapWorkAreas() {
+    rcc_setdest(GFXDisplayBuffer[next_fb]);
+    next_fb = !next_fb;
+    blank_background();
+}
 void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
 	static int lines = 0;
 	static int syncs = 0;
@@ -52,6 +64,12 @@ void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
 	_GFX1IF = 0;
 }
 #else
+void waitForVSync() {
+//    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+    while((!_CMDMPT) | _IPUBUSY | _RCCBUSY | _CHRBUSY) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
+    vSync = 1;
+    while(vSync) continue; // wait for vsync
+}
 void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void) {
     // Wait until the vertical sync
     if(_VMRGNIF) {
