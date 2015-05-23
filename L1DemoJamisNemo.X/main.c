@@ -250,19 +250,21 @@ void drawEnding() {
 }
 
 inline void manageStory() {
-    if ( frames < 400 ) {
-        storyPart = 0; // intro 400
-    } else if (frames < 425) {
-        storyPart = 1; // warp 25
-    } else if (frames < 625) {
-        storyPart = 2; // dirt + aliens 200
-    } else if (frames < 925) {
-        storyPart = 3; // psych alien 300
-    } else if (frames < 1025) {
-        storyPart = 4; // credits 100
-    } else if (frames > 1100) {
-        frames = 0;
-    }
+//    if ( frames < 400 ) {
+//        storyPart = 0; // intro 400
+//    } else if (frames < 425) {
+//        storyPart = 1; // warp 25
+//    } else if (frames < 625) {
+//        storyPart = 2; // dirt + aliens 200
+//    } else if (frames < 925) {
+//        storyPart = 3; // psych alien 300
+//    } else if (frames < 1025) {
+//        storyPart = 4; // credits 100
+//    } else if (frames > 1100) {
+//        frames = 0;
+//    }
+
+    storyPart = 1;
 
     switch (storyPart) {
         case 0:
