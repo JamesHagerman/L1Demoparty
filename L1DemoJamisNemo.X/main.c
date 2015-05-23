@@ -322,18 +322,20 @@ void jamis() {
 
 
 
-            drawGround(frames);
+//            drawGround(frames);
 //            drawWarp(frames);
 
             // Draw a pixel:
-            rcc_color(0); // delete last pixel position
-            rcc_draw(xOld, yOld, w, h);
-            rcc_color(color); // draw new position
-            rcc_draw(x, y, w, h);
+//            rcc_color(0); // delete last pixel position
+//            rcc_draw(xOld, yOld, w, h);
+//            rcc_color(color); // draw new position
+//            rcc_draw(x, y, w, h);
 //            fast_pixel(x,y);
 
 
-            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
+//            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
+
+            drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8, 0);
 
             // Draw the beautiful font we cobbled together
 //            sprintf(buf, "ABCDEFGHIJKLMNOP");
