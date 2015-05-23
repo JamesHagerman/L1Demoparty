@@ -126,7 +126,7 @@ void config_timer();
 
 
 // Big sine table:
-//extern const unsigned char sinetable[];
+extern const unsigned char sinetable[];
 extern const unsigned char zigzagtable[];
 
 #ifdef	__cplusplus
