@@ -12,9 +12,9 @@ void setup() {
   for (int i = 0; i < tableSize; i++ ) {
     
     // Draw our sine:
-//    float degrees = map(i, 0, tableSize, 0, 360);
-//    val = (255/2)*sin(radians(degrees-90));
-//    point(i, zeroDb - val);
+    float degrees = map(i, 0, tableSize, 0, 360);
+    val = (255/2)*sin(radians(degrees-90));
+    point(i, zeroDb - val);
 
     // Convert our height to a 0-255 range int:
 //    hexOut = round(map(val, -(255/2), (255/2), 0, 255));
