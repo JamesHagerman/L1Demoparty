@@ -18,6 +18,7 @@ void setup() {
 //    hexOut = round(map(val, -(255/2), (255/2), 0, 255)); // Convert our height to a 0-255 range int:
     
     
+    // ZigZag
 //    int iAdj = round(map(i, 0, tableSize, 0, 255));
 //    if (i <= tableSize/2) {
 //      val = 255-iAdj;
@@ -27,9 +28,26 @@ void setup() {
 //    point(i, val);
 //    hexOut = round(val);
 
+    // Saw
+//    int iAdj = round(map(i, 0, tableSize, 0, 255));
+//    point(i, iAdj);
+//    hexOut = round(iAdj);
+    
+    // PWM
+//    int iAdj = round(map(i, 0, tableSize, 0, 255));
+//    if (i <= tableSize*0.75) {
+//      val = 255;
+//    } else {
+//      val = 0;
+//    }
+//    point(i, val);
+//    hexOut = round(val);
+
+    // Noise
     int iAdj = round(map(i, 0, tableSize, 0, 255));
-    point(i, iAdj);
-    hexOut = round(iAdj);
+    val = random(0,255);
+    point(i, val);
+    hexOut = round(val);
     
     
     
