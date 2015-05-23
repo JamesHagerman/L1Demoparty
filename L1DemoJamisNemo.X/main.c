@@ -279,16 +279,16 @@ void drawIntro(uint16_t frames) {
     drawSprite(1, 1*PIX_H, 4, 0);
 
     sprintf(buf, "Hexadecimal Aliens");
-    chr_print(buf, 0, VER_RES-(21*15)); // x, y are bounded in chr_print
+    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
     sprintf(buf, "by jamisnemo");
-    chr_print(buf, 0, VER_RES-(21*14)); // x, y are bounded in chr_print
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 
 }
 
 void drawEnding() {
-    sprintf(buf, "This shit's harder");
+    sprintf(buf, "I should have "); //
     chr_print(buf, 0, VER_RES-(21*15)); // x, y are bounded in chr_print
-    sprintf(buf, "than it looks...");
+    sprintf(buf, "started sooner.");
     chr_print(buf, 0, VER_RES-(21*14)); // x, y are bounded in chr_print
 
     sprintf(buf, "Thanks to Arko,");
@@ -301,9 +301,9 @@ void drawEnding() {
     sprintf(buf, "I love this board!");
     chr_print(buf, 0, VER_RES-(21*8)); // x, y are bounded in chr_print
     sprintf(buf, "When's the next");
-    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "party!?!");
     chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+    sprintf(buf, "party!?!");
+    chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
 }
 
 //_T1Interrupt() is the T1 interrupt service routine (ISR).

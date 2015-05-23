@@ -1,5 +1,5 @@
 PImage sprite;
-String filename = "catsprite_4.gif";
+String filename = "title.gif";
 
 void setup() {
   size(100, 100);
@@ -19,7 +19,7 @@ void setup() {
   System.out.printf("0x%x, // width\n", w);
   System.out.printf("0x%x, // height\n", h);
   System.out.printf("0x%x, // bitres\n", 0x8);
-  System.out.printf("0x%x, // transparent color\n", 0xe3);
+  System.out.printf("0x%x, // transparent color\n", 0xffff);
   System.out.printf("0x%x, // rotate\n", 0x00);
   for (int i = 0; i < pixelCount; i++) {
     color thisPixel = sprite.pixels[i];
@@ -29,19 +29,19 @@ void setup() {
        
     // WITHOUT CLUT: 
     // Map the 24 bit colors of the sprite down to 8bpp
-//    int newR = round(map(r, 0, 255, 0, 7));
-//    int newG = round(map(g, 0, 255, 0, 7));
-//    int newB = round(map(b, 0, 255, 0, 3));
-//    
-//    int hexOut = (newR<<5) | (newG<<2) | newB;
+    int newR = round(map(r, 0, 255, 0, 7));
+    int newG = round(map(g, 0, 255, 0, 7));
+    int newB = round(map(b, 0, 255, 0, 3));
+    
+    int hexOut = (newR<<5) | (newG<<2) | newB;
 
     // WITH CLUT:
     // Map the 24 bit colors of the sprite down to 16 bit since the CLUT is ALWAYS 16 bit.
-    int newR = round(map(r, 0, 255, 0, 31)); //0b11111
-    int newG = round(map(g, 0, 255, 0, 63)); //0b111111
-    int newB = round(map(b, 0, 255, 0, 31)); //0b11111
-    
-    int hexOut = (newR<<11) | (newG<<5) | newB;
+//    int newR = round(map(r, 0, 255, 0, 31)); //0b11111
+//    int newG = round(map(g, 0, 255, 0, 63)); //0b111111
+//    int newB = round(map(b, 0, 255, 0, 31)); //0b11111
+//    
+//    int hexOut = (newR<<11) | (newG<<5) | newB;
         
 //    System.out.printf("pixel %s is:\t %.2f\t %.2f\t %.2f \t\t %s\t %s\t %s \t\t %x\n", i, r, g, b, newR, newG, newB, hexOut);
 //    System.out.printf("index: %s \t divisor: %s\n", i, i%w);

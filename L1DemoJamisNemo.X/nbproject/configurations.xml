@@ -8,15 +8,15 @@
       <itemPath>screens.h</itemPath>
       <itemPath>sprites.h</itemPath>
       <itemPath>music.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/testgfx.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/system.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/serial.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/particles.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/helpers.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/text.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/fb_control.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/testgfx.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/system.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.h</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -26,16 +26,16 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>main.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/original.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/color_management.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/resolution_management.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/serial.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/sprites.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/particles.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/music.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/helpers.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/text.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/pic-2015/l1DemoParty/MyDemo/L1DemoJamisNemo.X/fb_control.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c</itemPath>
+      <itemPath>/Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -54,7 +54,7 @@
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.24</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>4</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
