@@ -6,6 +6,18 @@
 Notes
 ============
 
+Microchip docs:
+
+xc16 Compiler docs (I always forget about these):
+http://ww1.microchip.com/downloads/en/DeviceDoc/50002071E.pdf
+
+Chip:
+http://ww1.microchip.com/downloads/en/DeviceDoc/39969b.pdf
+
+GFX Processor:
+http://ww1.microchip.com/downloads/en/DeviceDoc/39731a.pdf
+
+
 Video sync values:
 http://xtiming.sourceforge.net/cgi-bin/xtiming.pl
 http://www.epanorama.net/faq/vga2rgb/calc.html
