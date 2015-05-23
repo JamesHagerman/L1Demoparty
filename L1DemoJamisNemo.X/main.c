@@ -15,6 +15,7 @@
 #include "color_management.h"
 #include "resolution_management.h"
 //#include "fonts.h" // moved to text.h
+
 #include "music.h"
 #include "sprites.h"
 //#include "particles.h"
@@ -68,8 +69,7 @@ uint8_t aa = 1;
 uint16_t color = 0;
 
 uint16_t frames = 0;
-uint16_t storyPart = 0;
-
+volatile uint16_t storyPart = 0;
 void drawCenteredBox(uint16_t size, uint16_t color) {
     int ox,oy;
 
@@ -176,6 +176,39 @@ void drawWarp(uint16_t frame) {
 
 }
 
+void drawBouncingBall(uint16_t frames) {
+    hsvtorgb(&r,&g,&b,frames,sat,val);
+    color = get8bppRGBColor(r,g,b);
+
+    // Draw the bouncing pixel:
+    xOld = x;
+    yOld = y;
+    x += xDir * xSpeed;
+    y += yDir * ySpeed;
+
+    if (x > xMax) {
+        x = xMax;
+        xDir *= -1;
+    }
+    if (y > yMax) {
+        y = yMax;
+        yDir *= -1;
+    }
+    if (x <= xMin) {
+        x = xMin;
+        xDir *= -1;
+    }
+    if (y <= yMin) {
+        y = yMin;
+        yDir *= -1;
+    }
+    rcc_color(0); // delete last pixel position
+    rcc_draw(xOld, yOld, w, h);
+    rcc_color(color); // draw new position
+    rcc_draw(x, y, w, h);
+    fast_pixel(x,y);
+}
+
 void drawGround(uint16_t frame) {
     uint16_t i, j;
     uint16_t color;
@@ -210,6 +243,9 @@ void drawPsyGround(uint16_t frames) {
     chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
     sprintf(buf, "and tails...");
     chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
+
+    yMax = ((int)VER_RES)-h-180;
+    drawBouncingBall(frames);
 }
 
 void drawBoringGround(uint16_t frames) {
@@ -237,36 +273,8 @@ void initBouncingBallLimits() {
 
 void drawIntro(uint16_t frames) {
 
-    hsvtorgb(&r,&g,&b,frames,sat,val);
-    color = get8bppRGBColor(r,g,b);
-
-    // Draw the bouncing pixel:
-    xOld = x;
-    yOld = y;
-    x += xDir * xSpeed;
-    y += yDir * ySpeed;
-
-    if (x > xMax) {
-        x = xMax;
-        xDir *= -1;
-    }
-    if (y > yMax) {
-        y = yMax;
-        yDir *= -1;
-    }
-    if (x <= xMin) {
-        x = xMin;
-        xDir *= -1;
-    }
-    if (y <= yMin) {
-        y = yMin;
-        yDir *= -1;
-    }
-    rcc_color(0); // delete last pixel position
-    rcc_draw(xOld, yOld, w, h);
-    rcc_color(color); // draw new position
-    rcc_draw(x, y, w, h);
-    fast_pixel(x,y);
+    yMax = ((int)VER_RES)-h;
+    drawBouncingBall(frames);
 
     drawSprite(1, 1*PIX_H, 4, 0);
 
@@ -290,11 +298,41 @@ void drawEnding() {
     sprintf(buf, "bldewolf, and MIT");
     chr_print(buf, 0, VER_RES-(21*10)); // x, y are bounded in chr_print
 
-    sprintf(buf, "Next demoparty is ");
+    sprintf(buf, "I love this board!");
     chr_print(buf, 0, VER_RES-(21*8)); // x, y are bounded in chr_print
-    sprintf(buf, "when?!?");
+    sprintf(buf, "When's the next");
     chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+    sprintf(buf, "party!?!");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 }
+
+//_T1Interrupt() is the T1 interrupt service routine (ISR).
+void __attribute__((__interrupt__)) _T1Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
+{
+	static unsigned char idx = 0;
+
+//        if (idx%2 == 0) {
+        if (storyPart == 3) {
+            PORTB = (zigzagtable[idx]/4) << 8;
+        } else if (storyPart == 1 ) {
+            PORTB = (saw[idx]/4) << 8;
+        } else {
+            PORTB = (sinetable[idx]/4) << 8;
+        }
+//            PORTB = (saw[idx]/4) << 8;
+//        } else {
+//            PORTB = zigzagtable[idx] << 8;
+//        }
+
+//            PORTB = 1<<idx;
+
+
+	idx += 1;
+	_T1IF = 0;
+}
+
+
 
 inline void manageStory() {
     if ( frames < 700 ) {

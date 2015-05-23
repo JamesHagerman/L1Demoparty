@@ -91,22 +91,22 @@ unsigned short song[] = {
         NOTES_B3,
         NOTES_C4,
 
+        NOTES_G4,
+        NOTES_C4,
         NOTES_G3,
         NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
+        NOTES_G4,
+        NOTES_C4,
         NOTES_F3,
         NOTES_Ab3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
+        NOTES_G4,
+        NOTES_C4,
+        NOTES_F4,
+        NOTES_C4,
         NOTES_Eb3,
         NOTES_C3,
-        NOTES_Eb3,
-        NOTES_D3,
+        NOTES_D4,
+        NOTES_Eb4,
 
 	};
 
@@ -116,7 +116,7 @@ void config_timer() {
 	_T1IP = 5;	// set interrupt priority
 	_TON  = 1;	// turn on the timer
 	_T1IF = 0;	// reset interrupt flag
-	_T1IE = 0;	// turn on the timer1 interrupt
+	_T1IE = 1;	// turn on the timer1 interrupt
 
 	/* set up timer for stepping through song */
 	PR2 = 0x1d09; // reaaal sloooow
@@ -124,26 +124,9 @@ void config_timer() {
 	_T2IF = 0;
 	/* no nice macros for T2CON :( */
 	T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
-	_T2IE = 0;
+	_T2IE = 1;
 }
-//_T1Interrupt() is the T1 interrupt service routine (ISR).
-void __attribute__((__interrupt__)) _T1Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
-{
-	static unsigned char idx = 0;
 
-//        if (idx%2 == 0) {
-            PORTB = (saw[idx]/4) << 8;
-//        } else {
-//            PORTB = zigzagtable[idx] << 8;
-//        }
-
-//            PORTB = 1<<idx;
-
-	
-	idx += 1;
-	_T1IF = 0;
-}
 
 //_T2Interrupt() is the T2 interrupt service routine (ISR).
 void __attribute__((__interrupt__)) _T2Interrupt(void);

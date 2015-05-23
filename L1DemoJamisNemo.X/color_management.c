@@ -38,7 +38,7 @@ void calc_colors() {
     for (i = 0; i < 255; i++) {
         hsvtorgb(&r,&g,&b,i,sat,val);
         color = get16bppRGBColor(r,g,b); 
-//        color = 0x1c;
+
         if (i == 0) {
             clut_set(i, 0x0000); // black needs to stay black...
         } else if (i == 254) {
