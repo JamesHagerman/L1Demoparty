@@ -61,18 +61,15 @@ extern __prog__ uint8_t SpriteMap[] __attribute__((space(prog)));
 
 //=========
 // Static inline functions:
-void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotation, int8_t sweepPos) {
+void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotation) {
 
 	unsigned int w,h;
 	uint16_t x1,y1;
 	uint8_t color;
 
-	if (x >= HOR_RES-1 || y >= VER_RES-1 || x <= 0|| y <= 0) return;
-        if (sweepPos == -1) {
-            sweepPos = s[id].height;
-        }
+	if (x >= HOR_RES-1 || y >= VER_RES-1 || x < 0|| y < 0) return;
 
-	for (h=0; h < sweepPos; h++) {
+	for (h=0; h < s[id].height; h++) {
 		for (w=0; w < s[id].width; w++) {
 			color = s[id].data[w + s[id].width*h];
 			// don't draw if it matches transparency color

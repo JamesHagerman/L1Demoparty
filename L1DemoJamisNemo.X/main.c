@@ -91,22 +91,43 @@ void drawCenteredBox(uint16_t size, uint16_t color) {
 }
 
 void drawWarp(uint16_t frame) {
-    // Drew a warp using a sprite. It failed. Drastic measures time?
-    drawSprite(40, 40*PIX_H, 12, 0, -1);
-    
-//    int i, j;
+    uint16_t i, j, sizeW, sizeH;
+
+    sizeW = 1;
+    sizeH = 2*PIX_H;
+
+    if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
+
+    for (i = 0; i < VER_RES-1; i+=sizeH) { // y
+        for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
+//            hsvtorgb(&r,&g,&b,i*j,sat,val);
+//            color = get8bppRGBColor(r,g,b);
+            color = frame+i+j;
+//            rcc_color(rand());
+            rcc_color(color);
+            rcc_draw(j, i, sizeW, sizeH);
+        }
+    }
+
 //    uint16_t color;
 //    uint8_t r, g, b, hue, sat = 255, val = 255;
-//
-//    for (i = 60*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
+
+//    hsvtorgb(&r,&g,&b,frame+(i*2),sat,val);
+//    color = get8bppRGBColor(r,g,b);
+//    color = 0x1c;
+//    rcc_color(color);
+//    fast_pixel(frame%80, 0); // i+(i*(int)VER_RES)
+    
+//    for (i = 0*PIX_H; i < VER_RES-PIX_H-1; i += PIX_H) {
 //        hsvtorgb(&r,&g,&b,frame+(i*2),sat,val);
 ////        color = get16bppRGBColor(r,g,b);
 //        color = get8bppRGBColor(r,g,b);
 //        rcc_color(color);
-//        for (j = 0; j < HOR_RES-1; j++) {
+//        for (j = 0; j < HOR_RES-2; j++) {
 //            fast_pixel(j, i); // i+(i*(int)VER_RES)
 //        }
 //    }
+
 
     // Build color based on frame:
 //    hsvtorgb(&r,&g,&b,frame,sat,val);
@@ -156,7 +177,7 @@ void drawWarp(uint16_t frame) {
 }
 
 void drawGround(uint16_t frame) {
-    int i, j;
+    uint16_t i, j;
     uint16_t color;
     uint8_t r, g, b, sat = 255, val = 255; //hue
     int p = 40;
@@ -164,7 +185,6 @@ void drawGround(uint16_t frame) {
     // ground
     for (i = 50*PIX_H; i < VER_RES-PIX_H; i += PIX_H) {
         hsvtorgb(&r,&g,&b,frame*2-(p^2),sat,val);
-//        color = get16bppRGBColor(r,g,b);
         color = get8bppRGBColor(r,g,b);
         rcc_color(color);
         p -= 2;
@@ -176,17 +196,32 @@ void drawGround(uint16_t frame) {
         }
     }
 
+    
+}
+
+void drawPsyGround(uint16_t frames) {
+    drawGround(frames);
+
     // cat and text
-    drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0, -1);
-    sprintf(buf, "Hi. How 'bout");
+    drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
+    sprintf(buf, "No stories,");
     chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "a quick story?");
+    sprintf(buf, "Just rainbows, ");
     chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+    sprintf(buf, "and tails...");
+    chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
 }
 
 void drawBoringGround(uint16_t frames) {
     frames = 0;
     drawGround(frames);
+
+    // cat and text
+    drawSprite((HOR_RES-14)-s[8].width/2, (VER_RES-120)-((s[8].height*PIX_H)/2), 8+(frames%4), 0);
+    sprintf(buf, "Hi. How 'bout");
+    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
+    sprintf(buf, "a quick story?");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 }
 
 void initBouncingBallLimits() {
@@ -204,7 +239,6 @@ void drawIntro(uint16_t frames) {
 
     hsvtorgb(&r,&g,&b,frames,sat,val);
     color = get8bppRGBColor(r,g,b);
-//            color = get16bppRGBColor(r,g,b);
 
     // Draw the bouncing pixel:
     xOld = x;
@@ -234,52 +268,70 @@ void drawIntro(uint16_t frames) {
     rcc_draw(x, y, w, h);
     fast_pixel(x,y);
 
-    drawSprite(1, 1*PIX_H, 4, 0,  s[4].height/2);
+    drawSprite(1, 1*PIX_H, 4, 0);
 
-    sprintf(buf, "INTRO GOES HERE");
-    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "a quick story?");
-    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+    sprintf(buf, "Hexadecimal Aliens");
+    chr_print(buf, 0, VER_RES-(21*15)); // x, y are bounded in chr_print
+    sprintf(buf, "by jamisnemo");
+    chr_print(buf, 0, VER_RES-(21*14)); // x, y are bounded in chr_print
+
 }
 
 void drawEnding() {
-    sprintf(buf, "That's your story.");
+    sprintf(buf, "This shit's harder");
+    chr_print(buf, 0, VER_RES-(21*15)); // x, y are bounded in chr_print
+    sprintf(buf, "than it looks...");
+    chr_print(buf, 0, VER_RES-(21*14)); // x, y are bounded in chr_print
+
+    sprintf(buf, "Thanks to Arko,");
+    chr_print(buf, 0, VER_RES-(21*12)); // x, y are bounded in chr_print
+    sprintf(buf, "LayerOne, NSL,");
+    chr_print(buf, 0, VER_RES-(21*11)); // x, y are bounded in chr_print
+    sprintf(buf, "bldewolf, and MIT");
+    chr_print(buf, 0, VER_RES-(21*10)); // x, y are bounded in chr_print
+
+    sprintf(buf, "Next demoparty is ");
+    chr_print(buf, 0, VER_RES-(21*8)); // x, y are bounded in chr_print
+    sprintf(buf, "when?!?");
     chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "Did you enjoy?");
-    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 }
 
 inline void manageStory() {
-//    if ( frames < 400 ) {
-//        storyPart = 0; // intro 400
-//    } else if (frames < 425) {
-//        storyPart = 1; // warp 25
-//    } else if (frames < 625) {
-//        storyPart = 2; // dirt + aliens 200
-//    } else if (frames < 925) {
-//        storyPart = 3; // psych alien 300
-//    } else if (frames < 1025) {
-//        storyPart = 4; // credits 100
-//    } else if (frames > 1100) {
-//        frames = 0;
-//    }
+    if ( frames < 700 ) {
+        storyPart = 0; // intro 700
+    } else if (frames < 800) {
+        storyPart = 2; // dirt + aliens 100
+    } else if (frames < 1300) {
+        storyPart = 3; // psych alien 500
+    } else if (frames < 1500) {
+        storyPart = 1; // warp 200
+    } else if (frames < 2500) {
+        storyPart = 4; // credits 1000
+    } else if (frames > 2500) {
+        frames = 0;
+    }
 
-    storyPart = 1;
+//    storyPart = 1;
 
     switch (storyPart) {
         case 0:
+            _CLUTEN = 0;
             drawIntro(frames);
             break;
         case 1:
+            _CLUTEN = 1; // let 'er rip!
             drawWarp(frames);
             break;
         case 2:
+            _CLUTEN = 0; // Now ditch that shit and get back to normal colors.
             drawBoringGround(frames);
             break;
         case 3:
-            drawGround(frames);
+            _CLUTEN = 0;
+            drawPsyGround(frames);
             break;
         case 4:
+            _CLUTEN = 0;
             drawEnding(frames);
             break;
         default: drawIntro(frames);
@@ -317,14 +369,14 @@ void hexalien() {
 //        sprintf(buf, "qrstuvwxyz");
 //        chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
             
-        sprintf(buf, "f:%i", frames);
-        chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
+//        sprintf(buf, "f:%i", frames);
+//        chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
 
 
 
         // Cleanup the right most column:
         rcc_color(0);
-        rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); /* Weird things occur if the right column isn't 0 */\
+        rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); // Weird things occur if the right column isn't 0
 
 #ifdef	DOUBLE_BUFFERED
         waitForBufferFlip();
@@ -347,8 +399,8 @@ int main(void) {
         // Setup interrupts:
 #ifdef DOUBLE_BUFFERED
     _VMRGNIF = 0;
-    _HMRGNIF = 0;
-    _HMRGNIE = 1;
+//    _HMRGNIF = 0;
+//    _HMRGNIE = 1;
     _VMRGNIE = 1;
     _GFX1IE = 1;
 #else
@@ -358,6 +410,8 @@ int main(void) {
 #endif
 
     config_graphics();
+    calc_colors();
+//    config_clut(); // WE're only gonna turn on the CLUT when we REALLY need the speed.
     config_chr();
     config_timer();
     blank_background();

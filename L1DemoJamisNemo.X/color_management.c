@@ -9,38 +9,80 @@
 #include "color_management.h"
 
 
+void config_clut() {
+//    _CLUTADR = 0; // set 0 to black
+//    _CLUTRWEN = 1;
+//    G1CLUTWR = 0;
+//    while(_CLUTBUSY) continue;
+//    _CLUTADR = 1; // set 1 to blue
+//    G1CLUTWR = 0xFF;
+//    while(_CLUTBUSY) continue;
+//    _CLUTRWEN = 0;
+    _CLUTEN = 1; // let 'er rip!
+}
+void clut_set(uint8_t index, uint16_t color) {
+    _CLUTADR = index;
+    _CLUTRWEN = 1;
+    G1CLUTWR = color;
+    while(_CLUTBUSY) continue;
+    _CLUTRWEN = 0;
+}
+
+void calc_colors() {
+    //
+    // CLUT IS ALWAYS 16 BIT!!
+    //
+    uint8_t i;
+    uint16_t color = 0;
+    uint8_t r, g, b, sat = 255, val = 255; // hue
+    for (i = 0; i < 255; i++) {
+        hsvtorgb(&r,&g,&b,i,sat,val);
+        color = get16bppRGBColor(r,g,b); 
+//        color = 0x1c;
+        if (i == 0) {
+            clut_set(i, 0x0000); // black needs to stay black...
+        } else if (i == 254) {
+            clut_set(i, 0xFFFF); // white needs to stay white...
+        } else {
+            clut_set(i, color);
+        }
+        
+    }
+}
+
+
 //NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
 uint16_t map(uint16_t input, uint16_t input_start, uint16_t input_end, uint16_t output_start, uint16_t output_end) {
     return (((input - input_start) * (output_end - output_start)) / (input_end - input_start)) + output_start;
 }
 
-uint16_t get16bppRGBColor(uint16_t red, uint16_t blue, uint16_t green) {
+uint16_t get16bppRGBColor(uint16_t red, uint16_t green, uint16_t blue) {
     // Scale the range back down to our full color range first:
     red = map(red, 0, 255, 0, 0x1f);
-    blue = map(blue, 0, 255, 0, 0x3f);
-    green = map(green, 0, 255, 0, 0x1f);
+    green = map(green, 0, 255, 0, 0x3f);
+    blue = map(blue, 0, 255, 0, 0x1f);
 
     // Then shift the colors into the right places (making sure we only keep the GOOD bits)
     red = ((red << 11) & 0xf800);
-    blue = ((blue << 5) & 0x7E0);
-    green = ((green) & 0x1F);
+    green = ((green << 5) & 0x7E0);
+    blue = ((blue) & 0x1F);
 
     // Combine them into a color!
-    return red | blue | green;
+    return red | green | blue;
 }
 
-uint8_t get8bppRGBColor(uint8_t red, uint8_t blue, uint8_t green) {
+uint8_t get8bppRGBColor(uint8_t red, uint8_t green, uint8_t blue) {
     // Scale the range back down to our full color range first:
     red = map(red, 0, 255, 0, 0x7);
-    blue = map(blue, 0, 255, 0, 0x7);
-    green = map(green, 0, 255, 0, 0x3);
+    green = map(green, 0, 255, 0, 0x7);
+    blue = map(blue, 0, 255, 0, 0x3);
 
     // Then shift the colors into the right places (making sure we only keep the GOOD bits)
     red = ((red << 5) & 0xe0);
-    blue = ((blue << 2) & 0x1c);
-    green = ((green) & 0x03);
+    green = ((green << 2) & 0x1c);
+    blue = ((blue) & 0x03);
 
-    return red | blue | green;
+    return red | green | blue;
 }
 
 // Taken from: http://web.mit.edu/storborg/Public/hsvtorgb.c

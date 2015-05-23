@@ -20,10 +20,6 @@ volatile int fb_ready = 0;
 volatile int vSync = 0;
 
 void gpu_setfb(__eds__ uint8_t *buf) {
-//	G1DPADRL = (unsigned long)(buf) & 0xFFFF;
-//	G1DPADRH = (unsigned long)(buf) >>16 & 0xFF;
-//	G1W1ADRL = (unsigned long)(buf) & 0xFFFF;;
-//	G1W1ADRH = (unsigned long)(buf) >>16 & 0xFF;
     G1W2ADRL = (unsigned long)(buf);
     G1W2ADRH = (unsigned long)(buf);
     G1DPADRL = (unsigned long)(buf);
@@ -33,7 +29,8 @@ void gpu_setfb(__eds__ uint8_t *buf) {
 #ifdef DOUBLE_BUFFERED
 int next_fb = 0;
 void waitForBufferFlip() {
-    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+//    while(!_CMDMPT) continue; // Wait for GPU to finish drawing
+    while((!_CMDMPT) | _IPUBUSY | _RCCBUSY | _CHRBUSY) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
     fb_ready = 1;
     while(fb_ready) continue; // wait for vsync
 }
