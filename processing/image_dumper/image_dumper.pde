@@ -1,5 +1,5 @@
 PImage sprite;
-String filename = "warp_test.gif";
+String filename = "catsprite_4.gif";
 
 void setup() {
   size(100, 100);
