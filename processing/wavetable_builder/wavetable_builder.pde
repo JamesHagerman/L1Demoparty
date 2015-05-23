@@ -12,24 +12,27 @@ void setup() {
   for (int i = 0; i < tableSize; i++ ) {
     
     // Draw our sine:
-    float degrees = map(i, 0, tableSize, 0, 360);
-    val = (255/2)*sin(radians(degrees-90));
-    point(i, zeroDb - val);
+//    float degrees = map(i, 0, tableSize, 0, 360);
+//    val = (255/2)*sin(radians(degrees-90));
+//    point(i, zeroDb - val);
+//    hexOut = round(map(val, -(255/2), (255/2), 0, 255)); // Convert our height to a 0-255 range int:
+    
+    
+//    int iAdj = round(map(i, 0, tableSize, 0, 255));
+//    if (i <= tableSize/2) {
+//      val = 255-iAdj;
+//    } else {
+//      val = iAdj-zeroDb;
+//    }
+//    point(i, val);
+//    hexOut = round(val);
 
-    // Convert our height to a 0-255 range int:
-//    hexOut = round(map(val, -(255/2), (255/2), 0, 255));
-    
     int iAdj = round(map(i, 0, tableSize, 0, 255));
+    point(i, iAdj);
+    hexOut = round(iAdj);
     
-    if (i <= tableSize/2) {
-      val = 255-iAdj;
-    } else {
-      val = iAdj-zeroDb;
-    }
     
-    point(i, val);
     
-    hexOut = round(val);
 //    System.out.printf("%f\n", val);
     
     if (i%w == 0 && i>0) {
