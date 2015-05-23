@@ -26,13 +26,22 @@ void setup() {
     float r = red(thisPixel);
     float g = green(thisPixel);
     float b = blue(thisPixel);
-        
+       
+    // WITHOUT CLUT: 
     // Map the 24 bit colors of the sprite down to 8bpp
-    int newR = round(map(r, 0, 255, 0, 7));
-    int newG = round(map(g, 0, 255, 0, 7));
-    int newB = round(map(b, 0, 255, 0, 3));
+//    int newR = round(map(r, 0, 255, 0, 7));
+//    int newG = round(map(g, 0, 255, 0, 7));
+//    int newB = round(map(b, 0, 255, 0, 3));
+//    
+//    int hexOut = (newR<<5) | (newG<<2) | newB;
+
+    // WITH CLUT:
+    // Map the 24 bit colors of the sprite down to 16 bit since the CLUT is ALWAYS 16 bit.
+    int newR = round(map(r, 0, 255, 0, 31)); //0b11111
+    int newG = round(map(g, 0, 255, 0, 63)); //0b111111
+    int newB = round(map(b, 0, 255, 0, 31)); //0b11111
     
-    int hexOut = (newR<<5) | (newG<<2) | newB;
+    int hexOut = (newR<<11) | (newG<<5) | newB;
         
 //    System.out.printf("pixel %s is:\t %.2f\t %.2f\t %.2f \t\t %s\t %s\t %s \t\t %x\n", i, r, g, b, newR, newG, newB, hexOut);
 //    System.out.printf("index: %s \t divisor: %s\n", i, i%w);
