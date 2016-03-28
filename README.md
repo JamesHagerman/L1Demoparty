@@ -36,7 +36,8 @@ Random shit
 -----------
 
 
-
+Font:
+http://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=235
 
 
 Rules:
