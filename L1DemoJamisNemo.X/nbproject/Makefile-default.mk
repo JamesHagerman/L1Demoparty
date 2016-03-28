@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c original.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c helpers.c text.c fb_control.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1134269322/original.o ${OBJECTDIR}/_ext/1134269322/color_management.o ${OBJECTDIR}/_ext/1134269322/resolution_management.o ${OBJECTDIR}/_ext/1134269322/serial.o ${OBJECTDIR}/_ext/1134269322/sprites.o ${OBJECTDIR}/_ext/1134269322/particles.o ${OBJECTDIR}/_ext/1134269322/music.o ${OBJECTDIR}/_ext/1134269322/helpers.o ${OBJECTDIR}/_ext/1134269322/text.o ${OBJECTDIR}/_ext/1134269322/fb_control.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/_ext/1134269322/original.o.d ${OBJECTDIR}/_ext/1134269322/color_management.o.d ${OBJECTDIR}/_ext/1134269322/resolution_management.o.d ${OBJECTDIR}/_ext/1134269322/serial.o.d ${OBJECTDIR}/_ext/1134269322/sprites.o.d ${OBJECTDIR}/_ext/1134269322/particles.o.d ${OBJECTDIR}/_ext/1134269322/music.o.d ${OBJECTDIR}/_ext/1134269322/helpers.o.d ${OBJECTDIR}/_ext/1134269322/text.o.d ${OBJECTDIR}/_ext/1134269322/fb_control.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/original.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/helpers.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/original.o.d ${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/particles.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/helpers.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/fb_control.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1134269322/original.o ${OBJECTDIR}/_ext/1134269322/color_management.o ${OBJECTDIR}/_ext/1134269322/resolution_management.o ${OBJECTDIR}/_ext/1134269322/serial.o ${OBJECTDIR}/_ext/1134269322/sprites.o ${OBJECTDIR}/_ext/1134269322/particles.o ${OBJECTDIR}/_ext/1134269322/music.o ${OBJECTDIR}/_ext/1134269322/helpers.o ${OBJECTDIR}/_ext/1134269322/text.o ${OBJECTDIR}/_ext/1134269322/fb_control.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/original.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/helpers.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o
 
 # Source Files
-SOURCEFILES=main.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c
+SOURCEFILES=main.c original.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c helpers.c text.c fb_control.c
 
 
 CFLAGS=
@@ -86,156 +86,156 @@ ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/original.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/original.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/original.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c  -o ${OBJECTDIR}/_ext/1134269322/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/original.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/original.o: original.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/original.o.d 
+	@${RM} ${OBJECTDIR}/original.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  original.c  -o ${OBJECTDIR}/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/original.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/color_management.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/color_management.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/color_management.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c  -o ${OBJECTDIR}/_ext/1134269322/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/color_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/color_management.o: color_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/color_management.o.d 
+	@${RM} ${OBJECTDIR}/color_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  color_management.c  -o ${OBJECTDIR}/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/color_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/resolution_management.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/resolution_management.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/resolution_management.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c  -o ${OBJECTDIR}/_ext/1134269322/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/resolution_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/resolution_management.o: resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/resolution_management.o.d 
+	@${RM} ${OBJECTDIR}/resolution_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  resolution_management.c  -o ${OBJECTDIR}/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/resolution_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/serial.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/serial.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/serial.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c  -o ${OBJECTDIR}/_ext/1134269322/serial.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/serial.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/serial.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/serial.o.d 
+	@${RM} ${OBJECTDIR}/serial.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  serial.c  -o ${OBJECTDIR}/serial.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/serial.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/serial.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/sprites.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/sprites.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/sprites.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c  -o ${OBJECTDIR}/_ext/1134269322/sprites.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/sprites.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/sprites.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/sprites.o: sprites.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/sprites.o.d 
+	@${RM} ${OBJECTDIR}/sprites.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  sprites.c  -o ${OBJECTDIR}/sprites.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/sprites.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/sprites.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/particles.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/particles.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/particles.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c  -o ${OBJECTDIR}/_ext/1134269322/particles.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/particles.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/particles.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/particles.o: particles.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/particles.o.d 
+	@${RM} ${OBJECTDIR}/particles.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  particles.c  -o ${OBJECTDIR}/particles.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/particles.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/particles.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/music.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/music.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/music.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c  -o ${OBJECTDIR}/_ext/1134269322/music.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/music.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/music.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/music.o: music.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/music.o.d 
+	@${RM} ${OBJECTDIR}/music.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  music.c  -o ${OBJECTDIR}/music.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/music.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/music.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/helpers.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/helpers.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/helpers.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c  -o ${OBJECTDIR}/_ext/1134269322/helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/helpers.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/helpers.o: helpers.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/helpers.o.d 
+	@${RM} ${OBJECTDIR}/helpers.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  helpers.c  -o ${OBJECTDIR}/helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/helpers.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/text.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/text.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/text.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c  -o ${OBJECTDIR}/_ext/1134269322/text.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/text.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/text.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/text.o: text.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/text.o.d 
+	@${RM} ${OBJECTDIR}/text.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  text.c  -o ${OBJECTDIR}/text.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/text.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/text.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/fb_control.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/fb_control.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/fb_control.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c  -o ${OBJECTDIR}/_ext/1134269322/fb_control.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/fb_control.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/fb_control.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/fb_control.o: fb_control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/fb_control.o.d 
+	@${RM} ${OBJECTDIR}/fb_control.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  fb_control.c  -o ${OBJECTDIR}/fb_control.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/fb_control.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/fb_control.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
+	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/original.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/original.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/original.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/original.c  -o ${OBJECTDIR}/_ext/1134269322/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/original.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/original.o: original.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/original.o.d 
+	@${RM} ${OBJECTDIR}/original.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  original.c  -o ${OBJECTDIR}/original.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/original.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/original.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/color_management.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/color_management.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/color_management.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/color_management.c  -o ${OBJECTDIR}/_ext/1134269322/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/color_management.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/color_management.o: color_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/color_management.o.d 
+	@${RM} ${OBJECTDIR}/color_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  color_management.c  -o ${OBJECTDIR}/color_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/color_management.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/color_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/resolution_management.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/resolution_management.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/resolution_management.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/resolution_management.c  -o ${OBJECTDIR}/_ext/1134269322/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/resolution_management.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/resolution_management.o: resolution_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/resolution_management.o.d 
+	@${RM} ${OBJECTDIR}/resolution_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  resolution_management.c  -o ${OBJECTDIR}/resolution_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/resolution_management.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/resolution_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/serial.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/serial.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/serial.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/serial.c  -o ${OBJECTDIR}/_ext/1134269322/serial.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/serial.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/serial.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/serial.o: serial.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/serial.o.d 
+	@${RM} ${OBJECTDIR}/serial.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  serial.c  -o ${OBJECTDIR}/serial.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/serial.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/serial.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/sprites.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/sprites.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/sprites.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/sprites.c  -o ${OBJECTDIR}/_ext/1134269322/sprites.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/sprites.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/sprites.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/sprites.o: sprites.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/sprites.o.d 
+	@${RM} ${OBJECTDIR}/sprites.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  sprites.c  -o ${OBJECTDIR}/sprites.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/sprites.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/sprites.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/particles.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/particles.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/particles.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/particles.c  -o ${OBJECTDIR}/_ext/1134269322/particles.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/particles.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/particles.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/particles.o: particles.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/particles.o.d 
+	@${RM} ${OBJECTDIR}/particles.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  particles.c  -o ${OBJECTDIR}/particles.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/particles.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/particles.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/music.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/music.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/music.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/music.c  -o ${OBJECTDIR}/_ext/1134269322/music.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/music.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/music.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/music.o: music.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/music.o.d 
+	@${RM} ${OBJECTDIR}/music.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  music.c  -o ${OBJECTDIR}/music.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/music.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/music.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/helpers.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/helpers.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/helpers.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/helpers.c  -o ${OBJECTDIR}/_ext/1134269322/helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/helpers.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/helpers.o: helpers.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/helpers.o.d 
+	@${RM} ${OBJECTDIR}/helpers.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  helpers.c  -o ${OBJECTDIR}/helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/helpers.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/text.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/text.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/text.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/text.c  -o ${OBJECTDIR}/_ext/1134269322/text.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/text.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/text.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/text.o: text.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/text.o.d 
+	@${RM} ${OBJECTDIR}/text.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  text.c  -o ${OBJECTDIR}/text.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/text.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/text.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/_ext/1134269322/fb_control.o: /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1134269322" 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/fb_control.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1134269322/fb_control.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  /Users/jhagerman/dev/Circuits/PIC/L1Demoparty/L1DemoJamisNemo.X/fb_control.c  -o ${OBJECTDIR}/_ext/1134269322/fb_control.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/1134269322/fb_control.o.d"      -mno-eds-warn  -g -omf=elf -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1134269322/fb_control.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+${OBJECTDIR}/fb_control.o: fb_control.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/fb_control.o.d 
+	@${RM} ${OBJECTDIR}/fb_control.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  fb_control.c  -o ${OBJECTDIR}/fb_control.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/fb_control.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/fb_control.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
@@ -256,12 +256,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -omf=elf -mlarge-arrays  -mreserve=data@0x800:0x81B -mreserve=data@0x81C:0x81D -mreserve=data@0x81E:0x81F -mreserve=data@0x820:0x821 -mreserve=data@0x822:0x823 -mreserve=data@0x824:0x827 -mreserve=data@0x82A:0x84F   -Wl,--local-stack,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--no-handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem$(MP_EXTRA_LD_POST) 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -omf=elf -no-legacy-libc  -mlarge-arrays  -mreserve=data@0x800:0x81B -mreserve=data@0x81C:0x81D -mreserve=data@0x81E:0x81F -mreserve=data@0x820:0x821 -mreserve=data@0x822:0x823 -mreserve=data@0x824:0x827 -mreserve=data@0x82A:0x84F   -Wl,--local-stack,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_PK3=1,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--no-handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
 	
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -omf=elf -mlarge-arrays -Wl,--local-stack,--defsym=__MPLAB_BUILD=1,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--no-handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem$(MP_EXTRA_LD_POST) 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -omf=elf -no-legacy-libc  -mlarge-arrays -Wl,--local-stack,--defsym=__MPLAB_BUILD=1,$(MP_LINKER_FILE_OPTION),--stack=16,--check-sections,--data-init,--pack-data,--no-handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--report-mem,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
 	${MP_CC_DIR}/xc16-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} -a  -omf=elf  
 	
 endif

@@ -335,7 +335,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
 
 inline void manageStory() {
-    if ( frames < 700 ) {
+    if ( frames < 400 ) {
         storyPart = 0; // intro 700
     } else if (frames < 800) {
         storyPart = 2; // dirt + aliens 100
