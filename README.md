@@ -1,14 +1,25 @@
-Hexadecimal Aliens
-==================
+# CodeCrow
 
 by James Hagerman
-for the 2015 L1 Demoparty
+for the 2016 L1 Demoparty
+
+## Serial Setup
+
+The serial port is supposed to sit on `RX:RP7` and `TX:RP6` running at `9600 baud`
 
 
-Notes
------
+## Notes
 
-Microchip docs:
+
+Useful docs:
+
+Vector doc:
+file:///opt/microchip/xc16/v1.26/docs/vector_docs/PIC24FJ256DA206.html
+
+datasheet:
+http://l1demo.org/wiki/_media/pic24fj256da206.pdf
+
+More Microchip docs:
 
 xc16 Compiler docs (I always forget about these):
 http://ww1.microchip.com/downloads/en/DeviceDoc/50002071E.pdf
@@ -32,8 +43,7 @@ perl -e '$d = 1; $x = 0; while($x < 128) { printf "%s %.2fHz\n",$x,96/$d;if($x <
 
 
 
-Random shit
------------
+## Random shit
 
 
 Font:
@@ -54,7 +64,7 @@ Getting started wiki entry:
 
 Board notes:
 	MCU: PIC24FJ256DA206
-	RAM: 96k 
+	RAM: 96k
 	program memory: 256K
 	ICSP Pin one: closest to reset switch/vga port
 
@@ -97,7 +107,7 @@ I think this resolution will be interesting, and it fit the rules of the party. 
 
 320x480 @ 60Hz: 1bpp 19.2k (D), 2bpp 38.4k (D), 4bpp 76.8k
 
-
+```
 -// These settings FULLY work:
 -//80x480@60: 16bpp
 -//#define CLOCKDIV 69
@@ -159,3 +169,4 @@ I think this resolution will be interesting, and it fit the rules of the party. 
 -//#define VER_PULSE_WIDTH 2
 -//#define VER_BACK_PORCH  33
 -//#define BPP 1
+```

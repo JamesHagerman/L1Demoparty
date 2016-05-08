@@ -21,7 +21,7 @@
 //#include "particles.h"
 //#include "screens.h"
 //#include "testgfx.h"
-//#include "serial.h"
+#include "serial.h"
 #include "helpers.h"
 #include "text.h"
 #include "fb_control.h"
@@ -447,6 +447,7 @@ int main(void) {
     _GFX1IE = 1;
 #endif
 
+    config_uart();
     config_graphics();
     calc_colors();
 //    config_clut(); // WE're only gonna turn on the CLUT when we REALLY need the speed.

@@ -2,7 +2,7 @@
  * File:   resolution_management.h
  * Author: jamis
  *
- * Created on May 17, 2015, 2:37 PM
+ * Created on May 17, 2015, 2:37 PM                                                         
  */
 
 #ifndef RESOLUTION_MANAGEMENT_H
