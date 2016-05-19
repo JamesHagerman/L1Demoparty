@@ -2,11 +2,12 @@
 // by: jamisnemo
 // for: LayerOne Demoparty 2015
 //
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <string.h>
+//#include <string.h>
 #include <math.h>
 //#include <float.h>
 #include "system.h" // declares FCY
@@ -386,6 +387,26 @@ void hexalien() {
 //        blank_background(); // Clearing the buffer here means tearing for some reason
 #endif
 
+        // Manage any newly available data from the serial port:
+        if (dataAvailable) {
+//            PORTBbits.RB4 = 1;
+//            PORTBbits.RB5 = 1;
+//            __delay_ms(100);
+//            __delay_ms(100);
+//            printf("wat\r\n");
+            printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+            dataAvailable = false;
+//            rxSize = 0;
+        }
+        
+        // Blink some pins:
+//        PORTBbits.RB4 = 1;
+//        PORTBbits.RB5 = 1;
+//        __delay_ms(100);
+//        PORTBbits.RB4 = 0;
+//        PORTBbits.RB5 = 0;
+//        __delay_ms(100);
+        
         // Start drawing all the elements.
         manageStory();
 
@@ -433,6 +454,13 @@ int main(void) {
     ANSF = 0x0000;
     ANSG = 0x0000;
     TRISB = 0x0000;
+    
+    // Set pins r18 and r28 as outputs:
+    TRISBbits.TRISB4 = 0;
+    TRISBbits.TRISB5 = 0;
+    // Set initial value on those pins:
+    PORTBbits.RB4 = 0;
+    PORTBbits.RB5 = 0;
 
         // Setup interrupts:
 #ifdef DOUBLE_BUFFERED
@@ -448,6 +476,14 @@ int main(void) {
 #endif
 
     config_uart();
+    printf("Normal print \r\n");
+    
+    char readBuff[128];
+    printf("Char print, %c\r\n", readBuff[0]);
+    
+    char someString[] = "hello world\r\n";
+    printf("String print, %s\r\n", someString);
+    
     config_graphics();
     calc_colors();
 //    config_clut(); // WE're only gonna turn on the CLUT when we REALLY need the speed.
