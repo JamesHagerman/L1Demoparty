@@ -26,32 +26,32 @@ unsigned int rxSize;
 unsigned int txSize;
 bool dataAvailable = false;
 
-void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
-
-    IFS0bits.U1RXIF = 0; // Clear interrupt flag
-    
-    //Check for UART receive overrun
-    if(U1STAbits.OERR == 1) {
-        U1STAbits.OERR = 0;
-    } else {
-        // No UART receive overrun!
-        if(U1STAbits.FERR == 0) { // if no framing error detected...
-            // Read out the UART FIFO
-            while(U1STAbits.URXDA == 1) {
-                rx1Buf[rxSize] = U1RXREG;
-//                if (rx1Buf[rxSize] == '\n') {
-//                    dataAvailable = true;
-//                }
-                rxSize++;
-            }
-            dataAvailable = true;
-            
-        } else {
-            // UART framming error...
-            // grab from U1RXREG;
-        }
-    }
-}
+//void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
+//
+//    IFS0bits.U1RXIF = 0; // Clear interrupt flag
+//    
+//    //Check for UART receive overrun
+//    if(U1STAbits.OERR == 1) {
+//        U1STAbits.OERR = 0;
+//    } else {
+//        // No UART receive overrun!
+//        if(U1STAbits.FERR == 0) { // if no framing error detected...
+//            // Read out the UART FIFO
+//            while(U1STAbits.URXDA == 1) {
+//                rx1Buf[rxSize] = U1RXREG;
+////                if (rx1Buf[rxSize] == '\n') {
+////                    dataAvailable = true;
+////                }
+//                rxSize++;
+//            }
+//            dataAvailable = true;
+//            
+//        } else {
+//            // UART framming error...
+//            // grab from U1RXREG;
+//        }
+//    }
+//}
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
     IFS0bits.U1TXIF = 0; // Clear interrupt flag
@@ -79,9 +79,9 @@ void config_uart(void) {
     IPC3bits.U1TXIP2 = 1; //Set Uart TX Interrupt Priority
     IPC3bits.U1TXIP1 = 0;
     IPC3bits.U1TXIP0 = 0;
-    IPC2bits.U1RXIP2 = 1; //Set Uart RX Interrupt Priority
-    IPC2bits.U1RXIP1 = 0;
-    IPC2bits.U1RXIP0 = 0;
+//    IPC2bits.U1RXIP2 = 1; //Set Uart RX Interrupt Priority
+//    IPC2bits.U1RXIP1 = 0;
+//    IPC2bits.U1RXIP0 = 0;
     
     U1STA = 0; // Clear the UxSTA register (for tx1 and rx1 only)
     U1STAbits.URXISEL = 0; // Configure when the TX interrupt will fire
@@ -94,11 +94,11 @@ void config_uart(void) {
     
     U1STAbits.UTXEN = 1; // enable transmit
     IEC0bits.U1TXIE = 1; // enable transmit interrupt
-    IEC0bits.U1RXIE = 1; // enable receive interrupt
+//    IEC0bits.U1RXIE = 1; // enable receive interrupt
     
     // Clear the flags for both interrupts:
     IFS0bits.U1TXIF = 0; 
-    IFS0bits.U1RXIF = 0; 
+//    IFS0bits.U1RXIF = 0; 
     
     // Configure the buffer pointers:
     U1TXCharPtr = &tx1Buf[0];
@@ -109,9 +109,46 @@ void config_uart(void) {
     
 }
 
-// We don't need to override putc! Woo!
+// We don't need to override putc like we had to on XC8! Woo!
 //int putc(int ch, FILE *fd) {
 //    tx1Buf[0] = ch;
 //    U1TXREG = ch;
 //    return 0;
 //}
+
+// But, we DO have to override read() from stdio.h because it just doesn't
+// care about '\n':
+int __attribute__((__weak__, __section__(".libc"))) 
+read(int handle, void *buffer, unsigned int len)
+{
+    int i; 
+    int readChar;
+    switch (handle) {
+        case 0: // stdout
+        case 1: // stdin
+        case 2: // stderr
+            for (i = len; i; --i) {
+                while (!U1STAbits.URXDA); // wait until UART1 rx char ready
+                readChar = U1RXREG;
+                *(char*)buffer++ = readChar;
+                U1TXREG = readChar; // echo readChar back to serial out...
+                
+                // You may have to change your expected "enter key" values...
+                // carriage return = 0x0D = '\r'
+                //         newline = 0x0A = '\n'
+                if (readChar == 0x0D || readChar == 0x0A) {
+                    // These reset the terminal. I'm not sure if we need these.
+//                    U1TXREG = '\r';
+                    U1TXREG = '\n';
+                    break; // break out of the for loop...
+                }
+            }
+
+            len -= i; // Calculate how many characters we read before breaking
+            break;
+        default:
+            break;
+    }
+    
+    return len;
+}

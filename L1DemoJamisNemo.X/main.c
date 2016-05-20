@@ -484,6 +484,12 @@ int main(void) {
     char someString[] = "hello world\r\n";
     printf("String print, %s\r\n", someString);
     
+    // scanf() does not wait for input. I do not know why.
+    char someInput[128] = "";
+    printf("Enter some string: ");
+    scanf("%s", someInput);
+    printf("You entered: '%s'", someInput);
+    
     config_graphics();
     calc_colors();
 //    config_clut(); // WE're only gonna turn on the CLUT when we REALLY need the speed.
