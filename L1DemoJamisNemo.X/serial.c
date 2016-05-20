@@ -79,9 +79,9 @@ void config_uart(void) {
     IPC3bits.U1TXIP2 = 1; //Set Uart TX Interrupt Priority
     IPC3bits.U1TXIP1 = 0;
     IPC3bits.U1TXIP0 = 0;
-//    IPC2bits.U1RXIP2 = 1; //Set Uart RX Interrupt Priority
-//    IPC2bits.U1RXIP1 = 0;
-//    IPC2bits.U1RXIP0 = 0;
+    IPC2bits.U1RXIP2 = 1; //Set Uart RX Interrupt Priority
+    IPC2bits.U1RXIP1 = 0;
+    IPC2bits.U1RXIP0 = 0;
     
     U1STA = 0; // Clear the UxSTA register (for tx1 and rx1 only)
     U1STAbits.URXISEL = 0; // Configure when the TX interrupt will fire
@@ -98,7 +98,7 @@ void config_uart(void) {
     
     // Clear the flags for both interrupts:
     IFS0bits.U1TXIF = 0; 
-//    IFS0bits.U1RXIF = 0; 
+    IFS0bits.U1RXIF = 0; 
     
     // Configure the buffer pointers:
     U1TXCharPtr = &tx1Buf[0];
