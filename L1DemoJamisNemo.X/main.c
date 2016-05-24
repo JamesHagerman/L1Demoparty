@@ -5,17 +5,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <xc.h>
 //#include <string.h>
-#include <math.h>
+//#include <math.h>
 //#include <float.h>
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
 #include "color_management.h"
 #include "resolution_management.h"
-//#include "fonts.h" // moved to text.h
 
 #include "music.h"
 #include "sprites.h"
@@ -384,6 +383,7 @@ inline void manageStory() {
 }
 
 // My serial handler for the demo's keyboard input:
+// TODO: Manage some amount of command input. Single char will work for now...
 int handleSerialInput(uint16_t oldStoryPart) {
     uint16_t i, storyPart;
     if (dataAvailable) {
@@ -427,7 +427,7 @@ int handleSerialInput(uint16_t oldStoryPart) {
     return oldStoryPart;
 }
 
-void hexalien() {
+void codecrow() {
     
     while (1) {
             
@@ -451,6 +451,7 @@ void hexalien() {
         // Start drawing all the elements.
         serialStoryIndex = handleSerialInput(storyPart);
         
+        // TODO: Manage demo state somewhere...
         if (serialStoryIndex == 100) {
             manageStory();
         } else {
@@ -560,6 +561,6 @@ int main(void) {
     blank_background();
 #endif
 
-    hexalien();
+    codecrow();
     return 0;
 }

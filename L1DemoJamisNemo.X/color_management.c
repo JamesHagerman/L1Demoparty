@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <string.h>
-#include <math.h>
-//#include <float.h>
+
 #include <libpic30.h>
 #include "color_management.h"
 
