@@ -26,32 +26,32 @@ unsigned int rxSize;
 unsigned int txSize;
 bool dataAvailable = false;
 
-//void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
-//
-//    IFS0bits.U1RXIF = 0; // Clear interrupt flag
-//    
-//    //Check for UART receive overrun
-//    if(U1STAbits.OERR == 1) {
-//        U1STAbits.OERR = 0;
-//    } else {
-//        // No UART receive overrun!
-//        if(U1STAbits.FERR == 0) { // if no framing error detected...
-//            // Read out the UART FIFO
-//            while(U1STAbits.URXDA == 1) {
-//                rx1Buf[rxSize] = U1RXREG;
-////                if (rx1Buf[rxSize] == '\n') {
-////                    dataAvailable = true;
-////                }
-//                rxSize++;
-//            }
-//            dataAvailable = true;
-//            
-//        } else {
-//            // UART framming error...
-//            // grab from U1RXREG;
-//        }
-//    }
-//}
+void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
+
+    IFS0bits.U1RXIF = 0; // Clear interrupt flag
+    
+    //Check for UART receive overrun
+    if(U1STAbits.OERR == 1) {
+        U1STAbits.OERR = 0;
+    } else {
+        // No UART receive overrun!
+        if(U1STAbits.FERR == 0) { // if no framing error detected...
+            // Read out the UART FIFO
+            while(U1STAbits.URXDA == 1) {
+                rx1Buf[rxSize] = U1RXREG;
+//                if (rx1Buf[rxSize] == '\n') {
+//                    dataAvailable = true;
+//                }
+                rxSize++;
+            }
+            dataAvailable = true;
+            
+        } else {
+            // UART framming error...
+            // grab from U1RXREG;
+        }
+    }
+}
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
     IFS0bits.U1TXIF = 0; // Clear interrupt flag
@@ -94,7 +94,7 @@ void config_uart(void) {
     
     U1STAbits.UTXEN = 1; // enable transmit
     IEC0bits.U1TXIE = 1; // enable transmit interrupt
-//    IEC0bits.U1RXIE = 1; // enable receive interrupt
+    IEC0bits.U1RXIE = 1; // enable receive interrupt
     
     // Clear the flags for both interrupts:
     IFS0bits.U1TXIF = 0; 
@@ -107,6 +107,11 @@ void config_uart(void) {
     printf("\r\nUART should be working at 115200 baud now!\r\n");
     __delay_ms(100);
     
+}
+
+void reset_buffer() {
+    rx1Buf[0] = '\0';
+    rxSize = 0;
 }
 
 // We don't need to override putc like we had to on XC8! Woo!
@@ -151,4 +156,39 @@ read(int handle, void *buffer, unsigned int len)
     }
     
     return len;
+}
+
+// My serial handler for the demo's keyboard input:
+int handleSerialInput(uint16_t oldStoryPart) {
+    uint16_t i, storyPart;
+    if (dataAvailable) {
+//        PORTBbits.RB4 = 1;
+//        PORTBbits.RB5 = 1;
+//        __delay_ms(100);
+//        __delay_ms(100);
+//        printf("wat\r\n");
+        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+        dataAvailable = false;
+        
+        for (i = 0; i < rxSize; i++) {
+            char c = rx1Buf[i];
+            
+            //handle number chars:
+            if (c >= 0x30 || c <= 39) {
+                int numberValue = (int)c - 0x30;
+                storyPart = numberValue;
+            }
+        }
+        
+        printf("Found story part: %i\n", storyPart );
+
+        printf("resetting input buffer\r\n");
+        reset_buffer();
+        
+        if (oldStoryPart != storyPart) {
+            return storyPart;
+        }
+    }
+
+    return oldStoryPart;
 }

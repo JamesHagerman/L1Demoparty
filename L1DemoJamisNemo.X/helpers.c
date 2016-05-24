@@ -27,7 +27,7 @@ int realtoint(float oldval, float oldmin, float oldmax, float newmin, float newm
 
 
 void rcc_color(unsigned int color) {
-        while(_CMDFUL) continue;
+    while(_CMDFUL) continue;
 	G1CMDL = color;
 	G1CMDH = RCC_COLOR;
 //        Nop();
@@ -35,7 +35,7 @@ void rcc_color(unsigned int color) {
 
 void rcc_setdest(__eds__ uint8_t *buf) {
 	while(!_CMDMPT) continue; // Wait for GPU to finish drawing
-        G1W1ADRL = (unsigned long)(buf);
+    G1W1ADRL = (unsigned long)(buf);
 	G1W1ADRH = (unsigned long)(buf);
 	G1W2ADRL = (unsigned long)(buf);
 	G1W2ADRH = (unsigned long)(buf);
@@ -100,19 +100,19 @@ void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src) {
 
 
 void line (float x1, float y1, float x2, float y2) {
-        unsigned int i;
-        double hl=fabs(x2-x1), vl=fabs(y2-y1), length=(hl>vl)?hl:vl;
-        float deltax=(x2-x1)/(float)length, deltay=(y2-y1)/(float)length;
-        for (i=0; i<(int)length; i++) {
-                unsigned long x=(int)(x1+=deltax), y=(int)(y1+=deltay);
-                if ((x<HOR_RES)&&(y<VER_RES)) {
-                        //rcc_color(rand());
-                        rcc_color(0x3);
-                        //rcc_draw(x,y, PIX_W,PIX_H);
-                        // TODO: fix y displacement
-			fast_pixel(x,y+6);// + i*PIX_H);
-                        }
-                }
+    unsigned int i;
+    double hl=fabs(x2-x1), vl=fabs(y2-y1), length=(hl>vl)?hl:vl;
+    float deltax=(x2-x1)/(float)length, deltay=(y2-y1)/(float)length;
+    for (i=0; i<(int)length; i++) {
+        unsigned long x=(int)(x1+=deltax), y=(int)(y1+=deltay);
+        if ((x<HOR_RES)&&(y<VER_RES)) {
+            //rcc_color(rand());
+            rcc_color(0x3);
+            //rcc_draw(x,y, PIX_W,PIX_H);
+            // TODO: fix y displacement
+            fast_pixel(x,y+6);// + i*PIX_H);
+        }
+    }
 }
 
 

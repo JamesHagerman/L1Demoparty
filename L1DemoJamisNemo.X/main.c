@@ -71,6 +71,8 @@ uint16_t color = 0;
 
 uint16_t frames = 0;
 volatile uint16_t storyPart = 0;
+volatile uint16_t serialStoryIndex = 100;
+
 void drawCenteredBox(uint16_t size, uint16_t color) {
     int ox,oy;
 
@@ -311,6 +313,8 @@ void drawEnding() {
 void __attribute__((__interrupt__)) _T1Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
+    // music interrupt...
+    
 	static unsigned char idx = 0;
 
 //        if (idx%2 == 0) {
@@ -333,25 +337,13 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 	_T1IF = 0;
 }
 
-
-
-inline void manageStory() {
-    if ( frames < 400 ) {
-        storyPart = 0; // intro 700
-    } else if (frames < 800) {
-        storyPart = 2; // dirt + aliens 100
-    } else if (frames < 1300) {
-        storyPart = 3; // psych alien 500
-    } else if (frames < 1500) {
-        storyPart = 1; // warp 200
-    } else if (frames < 2500) {
-        storyPart = 4; // credits 1000
-    } else if (frames > 2500) {
+inline void manageFrames() {
+    if (frames > 2500) {
         frames = 0;
     }
+}
 
-//    storyPart = 1;
-
+inline void manageTech() {
     switch (storyPart) {
         case 0:
             _CLUTEN = 0;
@@ -377,8 +369,22 @@ inline void manageStory() {
     }
 }
 
-void hexalien() {
+inline void manageStory() {
+    if ( frames < 400 ) {
+        storyPart = 0; // intro 700
+    } else if (frames < 800) {
+        storyPart = 2; // dirt + aliens 100
+    } else if (frames < 1300) {
+        storyPart = 3; // psych alien 500
+    } else if (frames < 1500) {
+        storyPart = 1; // warp 200
+    } else if (frames < 2500) {
+        storyPart = 4; // credits 1000
+    }
+}
 
+void hexalien() {
+    
     while (1) {
             
 #ifdef	DOUBLE_BUFFERED
@@ -388,16 +394,7 @@ void hexalien() {
 #endif
 
         // Manage any newly available data from the serial port:
-        if (dataAvailable) {
-//            PORTBbits.RB4 = 1;
-//            PORTBbits.RB5 = 1;
-//            __delay_ms(100);
-//            __delay_ms(100);
-//            printf("wat\r\n");
-            printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
-            dataAvailable = false;
-//            rxSize = 0;
-        }
+        
         
         // Blink some pins:
 //        PORTBbits.RB4 = 1;
@@ -408,7 +405,21 @@ void hexalien() {
 //        __delay_ms(100);
         
         // Start drawing all the elements.
-        manageStory();
+        serialStoryIndex = handleSerialInput(storyPart);
+        
+        if (serialStoryIndex == 100) {
+            manageStory();
+        } else {
+//            printf("story part being set manually");
+            storyPart = serialStoryIndex;
+        }
+        
+        // make sure we wrap our frame count around. Not sure if we even want 
+        // this except for arbitrary looping...
+        manageFrames(); 
+        
+        // Turn on any specific tech we need
+        manageTech(); 
 
 //        // ToDo: replace this with the CLUT. Like that will ever happen.
 //        hsvtorgb(&r,&g,&b,frames,sat,val);
@@ -484,10 +495,10 @@ int main(void) {
     char someString[] = "hello world\r\n";
     printf("String print, %s\r\n", someString);
     
-    char someInput[128] = "";
-    printf("Enter some string: ");
-    scanf("%s", someInput);
-    printf("You entered: '%s'", someInput);
+//    char someInput[128] = "";
+//    printf("Enter some string: ");
+//    scanf("%s", someInput);
+//    printf("You entered: '%s'", someInput);
     
     config_graphics();
     calc_colors();

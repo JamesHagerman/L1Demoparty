@@ -21,7 +21,8 @@ extern unsigned int txSize;
 extern bool dataAvailable;
 
 void config_uart(void);
-int putc(int ch, FILE *fd);
+void reset_buffer();
+int handleSerialInput(uint16_t oldStoryPart);
 
 
 #ifdef	__cplusplus
