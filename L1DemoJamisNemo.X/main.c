@@ -70,7 +70,7 @@ uint8_t aa = 1;
 uint16_t color = 0;
 
 uint16_t frames = 0;
-volatile uint16_t storyPart = 0;
+volatile uint16_t storyPart = 100;
 volatile uint16_t serialStoryIndex = 100;
 
 void drawCenteredBox(uint16_t size, uint16_t color) {
@@ -381,6 +381,50 @@ inline void manageStory() {
     } else if (frames < 2500) {
         storyPart = 4; // credits 1000
     }
+}
+
+// My serial handler for the demo's keyboard input:
+int handleSerialInput(uint16_t oldStoryPart) {
+    uint16_t i, storyPart;
+    if (dataAvailable) {
+//        PORTBbits.RB4 = 1;
+//        PORTBbits.RB5 = 1;
+//        __delay_ms(100);
+//        __delay_ms(100);
+//        printf("wat\r\n");
+        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+        dataAvailable = false;
+        
+        for (i = 0; i < rxSize; i++) {
+            char c = rx1Buf[i];
+            
+            //handle number chars:
+            if (c >= '0' && c <= '9') {
+                uint16_t numberValue = (uint16_t)c - 0x30;
+                storyPart = numberValue;
+            } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+                printf("A letter!: '%c'\r\n", c);
+                
+                if (c == 'r') {
+                    printf("Restting frames\r\n");
+                    frames = 0;
+                }
+            } else if (c == '\n' || c == '\r') {
+                //do nothing...
+            } else {
+                printf("That char is not a number or letter: '%c'\r\n", c);
+            }
+        }
+        
+        reset_buffer();
+        
+        if (oldStoryPart != storyPart) {
+            printf("Found story part: %u\r\n", storyPart );
+            return storyPart;
+        }
+    }
+
+    return oldStoryPart;
 }
 
 void hexalien() {

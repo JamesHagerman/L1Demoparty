@@ -158,38 +158,3 @@ read(int handle, void *buffer, unsigned int len)
     
     return len;
 }
-
-// My serial handler for the demo's keyboard input:
-int handleSerialInput(uint16_t oldStoryPart) {
-    uint16_t i, storyPart;
-    if (dataAvailable) {
-//        PORTBbits.RB4 = 1;
-//        PORTBbits.RB5 = 1;
-//        __delay_ms(100);
-//        __delay_ms(100);
-//        printf("wat\r\n");
-        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
-        dataAvailable = false;
-        
-        for (i = 0; i < rxSize; i++) {
-            char c = rx1Buf[i];
-            
-            //handle number chars:
-            if (c >= 0x30 || c <= 39) {
-                int numberValue = (int)c - 0x30;
-                storyPart = numberValue;
-            }
-        }
-        
-        printf("Found story part: %i\n", storyPart );
-
-        printf("resetting input buffer\r\n");
-        reset_buffer();
-        
-        if (oldStoryPart != storyPart) {
-            return storyPart;
-        }
-    }
-
-    return oldStoryPart;
-}

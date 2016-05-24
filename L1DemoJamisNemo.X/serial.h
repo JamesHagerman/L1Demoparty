@@ -22,7 +22,6 @@ extern bool dataAvailable;
 
 void config_uart(void);
 void reset_buffer();
-int handleSerialInput(uint16_t oldStoryPart);
 
 
 #ifdef	__cplusplus
