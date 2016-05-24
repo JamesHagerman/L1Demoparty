@@ -39,12 +39,13 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
             // Read out the UART FIFO
             while(U1STAbits.URXDA == 1) {
                 rx1Buf[rxSize] = U1RXREG;
-//                if (rx1Buf[rxSize] == '\n') {
-//                    dataAvailable = true;
-//                }
+                U1TXREG = rx1Buf[rxSize];
+                if (rx1Buf[rxSize] == '\r' || rx1Buf[rxSize] == '\n') {
+                    dataAvailable = true;
+                }
                 rxSize++;
             }
-            dataAvailable = true;
+//            dataAvailable = true;
             
         } else {
             // UART framming error...
