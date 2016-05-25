@@ -85,7 +85,7 @@ void config_uart(unsigned long baudRate) {
     IPC2bits.U1RXIP1 = 0;
     IPC2bits.U1RXIP0 = 0;
     
-    U1TXREG = ""; // Ensure that we start with an empty TX buffer
+    U1TXREG = 0; // Ensure that we start with an empty TX buffer
     
     U1STA = 0; // Clear the UxSTA register (for tx1 and rx1 only)
     U1STAbits.URXISEL = 0; // Configure when the TX interrupt will fire

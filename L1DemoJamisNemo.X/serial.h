@@ -4,6 +4,7 @@
  *
  * Created on May 17, 2015, 5:36 PM
  */
+#include <stdbool.h>
 
 #ifndef SERIAL_H
 #define	SERIAL_H

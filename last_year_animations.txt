@@ -1,3 +1,35 @@
+uint8_t r, g, b, hue, sat = 255, val = 255;
+
+int x = 0;
+int y = 0;
+int xDir = 1;
+int yDir = 1;
+int w;
+int h;
+int xSpeed;
+int ySpeed;
+int xMin;
+int yMin;
+int xMax;
+int yMax;
+int xOld, yOld;
+
+uint8_t aa = 1;
+uint16_t color = 0;
+
+uint16_t frames = 0;
+
+
+
+
+
+
+
+
+
+
+
+
 
 void drawCenteredBox(uint16_t size, uint16_t color) {
     int ox,oy;

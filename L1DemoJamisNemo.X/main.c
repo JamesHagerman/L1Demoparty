@@ -9,18 +9,22 @@
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
-#include "color_management.h"
 #include "resolution_management.h"
+#include "fb_control.h"
+#include "color_management.h"
 
+#include "serial.h"
+#include "text.h"
 #include "music.h"
 #include "sprites.h"
+
+
 //#include "particles.h"
 //#include "screens.h"
 //#include "testgfx.h"
-#include "serial.h"
+
 #include "drawing_helpers.h"
-#include "text.h"
-#include "fb_control.h"
+#include "demo_management.h"
 
 _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
 _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
@@ -49,118 +53,18 @@ inline void fast_pixel(unsigned long ax, unsigned long ay) {
 // Demo method declarations:
 void drawIntro(uint16_t frames);
 
-bool ledState = true;
+
 
 char buf[20]; // Buffer for any text rendering sprintf() calls
-
-//uint8_t r, g, b, hue, sat = 255, val = 255;
-
-//int x = 0;
-//int y = 0;
-//int xDir = 1;
-//int yDir = 1;
-//int w;
-//int h;
-//int xSpeed;
-//int ySpeed;
-//int xMin;
-//int yMin;
-//int xMax;
-//int yMax;
-//int xOld, yOld;
-//
-//uint8_t aa = 1;
-//uint16_t color = 0;
-
-uint16_t frames = 0;
 volatile uint16_t storyPart = 100;
 volatile uint16_t serialStoryIndex = 100;
 
 
 // Frame/Demo management:
-void setupHardware() {
-    ANSB = 0x0000;
-    ANSC = 0x0000;
-    ANSD = 0x0000;
-    ANSF = 0x0000;
-    ANSG = 0x0000;
-    TRISB = 0x0000;
-    
-    // Set pins r18 and r28 as outputs:
-    TRISBbits.TRISB4 = 0;
-    TRISBbits.TRISB5 = 0;
-    // Set initial value on those pins:
-    PORTBbits.RB4 = 0;
-    PORTBbits.RB5 = 0;
-
-        // Setup interrupts:
-#ifdef DOUBLE_BUFFERED
-    _VMRGNIF = 0;
-//    _HMRGNIF = 0;
-//    _HMRGNIE = 1;
-    _VMRGNIE = 1;
-    _GFX1IE = 1;
-#else
-    _VMRGNIF = 0;
-    _VMRGNIE = 1;
-    _GFX1IE = 1;
-#endif
-    
-    // Call out to some other .c files to init some other functionality:
-    config_uart(115200UL);
-    config_graphics();
-    config_chr(); // config the character GPU
-    config_timer();
-    
-   
-    // Validate that both buffers start empty:
-#ifdef DOUBLE_BUFFERED
-    rcc_setdest(GFXDisplayBuffer[0]);
-    blank_background();
-    rcc_setdest(GFXDisplayBuffer[1]);
-    blank_background();
-#endif
-    
-}
-
-void frameStart() {
-#ifdef	DOUBLE_BUFFERED
-    swapWorkAreas();
-#else
-//    blank_background(); // Clearing the buffer here means tearing for some reason
-#endif
-}
-
-void frameEnd() {
-    // Cleanup the right most column:
-    rcc_color(0);
-    rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); // Weird things occur if the right column isn't 0
-
-#ifdef	DOUBLE_BUFFERED
-    waitForBufferFlip();
-#else
-    waitForVSync();
-#endif
-}
-
-inline void manageFrameReset() {
-    if (frames > 2500) {
-        frames = 0;
-    }
-}
-
 void drawFPS() {
     // TODO: Print the fps to the UART cleanly without borking our term...
     sprintf(buf, "f:%i", frames);
     chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
-}
-
-void statusLED() {
-    // Blink some pins:
-    ledState = !ledState;
-    PORTBbits.RB4 = ledState;
-    PORTBbits.RB5 = ledState;
-    __delay_ms(100);
 }
 
 // UART command parser:
@@ -169,12 +73,7 @@ int handleSerialInput(uint16_t oldStoryPart) {
     // TODO: Manage some amount of command input. Single char will work for now...
     uint16_t i, storyPart;
     if (dataAvailable) {
-//        PORTBbits.RB4 = 1;
-//        PORTBbits.RB5 = 1;
-//        __delay_ms(100);
-//        __delay_ms(100);
-//        printf("wat\r\n");
-        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+//        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
         dataAvailable = false;
         
         for (i = 0; i < rxSize; i++) {

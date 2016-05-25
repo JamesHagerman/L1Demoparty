@@ -19,8 +19,8 @@ void gpu_setfb(__eds__ uint8_t *buf);
 
 #ifdef DOUBLE_BUFFERED
 extern int next_fb;
-void waitForBufferFlip();
-void swapWorkAreas();
+extern void waitForBufferFlip();
+extern void swapWorkAreas();
 #else
 void waitForVSync();
 //void __attribute__((interrupt, auto_psv))_GFX1Interrupt(void)

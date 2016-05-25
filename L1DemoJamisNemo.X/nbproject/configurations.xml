@@ -13,9 +13,10 @@
       <itemPath>resolution_management.h</itemPath>
       <itemPath>serial.h</itemPath>
       <itemPath>particles.h</itemPath>
-      <itemPath>helpers.h</itemPath>
+      <itemPath>drawing_helpers.h</itemPath>
       <itemPath>text.h</itemPath>
       <itemPath>fb_control.h</itemPath>
+      <itemPath>demo_management.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -34,6 +35,7 @@
       <itemPath>text.c</itemPath>
       <itemPath>fb_control.c</itemPath>
       <itemPath>drawing_helpers.c</itemPath>
+      <itemPath>demo_management.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/particles.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/drawing_helpers.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/particles.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/drawing_helpers.o.d ${OBJECTDIR}/demo_management.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o
 
 # Source Files
-SOURCEFILES=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c
+SOURCEFILES=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c
 
 
 CFLAGS=
@@ -152,6 +152,13 @@ ${OBJECTDIR}/drawing_helpers.o: drawing_helpers.c  nbproject/Makefile-${CND_CONF
 	${MP_CC} $(MP_EXTRA_CC_PRE)  drawing_helpers.c  -o ${OBJECTDIR}/drawing_helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/drawing_helpers.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/drawing_helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/demo_management.o: demo_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/demo_management.o.d 
+	@${RM} ${OBJECTDIR}/demo_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  demo_management.c  -o ${OBJECTDIR}/demo_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/demo_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/demo_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -222,6 +229,13 @@ ${OBJECTDIR}/drawing_helpers.o: drawing_helpers.c  nbproject/Makefile-${CND_CONF
 	@${RM} ${OBJECTDIR}/drawing_helpers.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  drawing_helpers.c  -o ${OBJECTDIR}/drawing_helpers.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/drawing_helpers.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/drawing_helpers.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/demo_management.o: demo_management.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/demo_management.o.d 
+	@${RM} ${OBJECTDIR}/demo_management.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  demo_management.c  -o ${OBJECTDIR}/demo_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/demo_management.o.d"      -mno-eds-warn  -g -omf=elf -no-legacy-libc  -mlarge-arrays -menable-large-arrays -O0 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/demo_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
