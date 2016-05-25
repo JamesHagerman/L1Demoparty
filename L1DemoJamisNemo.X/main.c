@@ -18,13 +18,12 @@
 #include "music.h"
 #include "sprites.h"
 
+#include "drawing_helpers.h"
+#include "demo_management.h"
 
 //#include "particles.h"
 //#include "screens.h"
 //#include "testgfx.h"
-
-#include "drawing_helpers.h"
-#include "demo_management.h"
 
 _CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
 _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
@@ -52,61 +51,14 @@ inline void fast_pixel(unsigned long ax, unsigned long ay) {
 //=========
 // Demo method declarations:
 void drawIntro(uint16_t frames);
+void drawFPS();
+int handleSerialInput(uint16_t oldStoryPart);
 
-
-
+// Variable declarations:
 char buf[20]; // Buffer for any text rendering sprintf() calls
 volatile uint16_t storyPart = 100;
 volatile uint16_t serialStoryIndex = 100;
 
-
-// Frame/Demo management:
-void drawFPS() {
-    // TODO: Print the fps to the UART cleanly without borking our term...
-    sprintf(buf, "f:%i", frames);
-    chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
-}
-
-// UART command parser:
-int handleSerialInput(uint16_t oldStoryPart) {
-    // My serial handler for the demo's keyboard input:
-    // TODO: Manage some amount of command input. Single char will work for now...
-    uint16_t i, storyPart;
-    if (dataAvailable) {
-//        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
-        dataAvailable = false;
-        
-        for (i = 0; i < rxSize; i++) {
-            char c = rx1Buf[i];
-            
-            //handle number chars:
-            if (c >= '0' && c <= '9') {
-                uint16_t numberValue = (uint16_t)c - 0x30;
-                storyPart = numberValue;
-            } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-                printf("A letter!: '%c'\r\n", c);
-                
-                if (c == 'r') {
-                    printf("Restting frames\r\n");
-                    frames = 0;
-                }
-            } else if (c == '\n' || c == '\r') {
-                //do nothing...
-            } else {
-                printf("That char is not a number or letter: '%c'\r\n", c);
-            }
-        }
-        
-        reset_buffer();
-        
-        if (oldStoryPart != storyPart) {
-            printf("Found story part: %u\r\n", storyPart );
-            return storyPart;
-        }
-    }
-
-    return oldStoryPart;
-}
 
 // Story management:
 inline void playSelected() {
@@ -188,7 +140,7 @@ void drawIntro(uint16_t frames) {
 
     drawSprite(1, 1*PIX_H, 4, 0);
 
-    sprintf(buf, "Code Crow");
+    sprintf(buf, "Code Crows");
     chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
     sprintf(buf, "jamisnemo");
     chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
@@ -260,6 +212,64 @@ void codecrow() {
         frames++;    
     }
 }
+
+
+
+
+// Frame/Demo management:
+void drawFPS() {
+    // TODO: Print the fps to the UART cleanly without borking our term...
+    sprintf(buf, "f:%i", frames);
+    chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
+}
+
+int handleSerialInput(uint16_t oldStoryPart) {
+    // My serial handler for the demo's keyboard input:
+    // TODO: Manage some amount of command input. Single char will work for now...
+    uint16_t i, storyPart;
+    if (dataAvailable) {
+//        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+        dataAvailable = false;
+
+        for (i = 0; i < rxSize; i++) {
+            char c = rx1Buf[i];
+
+            //handle number chars:
+            if (c >= '0' && c <= '9') {
+                uint16_t numberValue = (uint16_t)c - 0x30;
+                storyPart = numberValue;
+            } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+                printf("A letter!: '%c'\r\n", c);
+
+                if (c == 'r') {
+                    printf("Restting frames\r\n");
+                    frames = 0;
+                }
+            } else if (c == '\n' || c == '\r') {
+                //do nothing...
+            } else {
+                printf("That char is not a number or letter: '%c'\r\n", c);
+            }
+        }
+
+        reset_buffer();
+
+        if (oldStoryPart != storyPart) {
+            printf("Found story part: %u\r\n", storyPart );
+            return storyPart;
+        }
+    }
+
+    return oldStoryPart;
+}
+
+
+
+
+
+
+
+
 
 int main(void) {
     setupHardware();
