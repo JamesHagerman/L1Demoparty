@@ -51,24 +51,26 @@ void drawIntro(uint16_t frames);
 
 bool ledState = true;
 
-uint8_t r, g, b, hue, sat = 255, val = 255;
-char buf[20];
-int x = 0;
-int y = 0;
-int xDir = 1;
-int yDir = 1;
-int w;
-int h;
-int xSpeed;
-int ySpeed;
-int xMin;
-int yMin;
-int xMax;
-int yMax;
-int xOld, yOld;
+char buf[20]; // Buffer for any text rendering sprintf() calls
 
-uint8_t aa = 1;
-uint16_t color = 0;
+//uint8_t r, g, b, hue, sat = 255, val = 255;
+
+//int x = 0;
+//int y = 0;
+//int xDir = 1;
+//int yDir = 1;
+//int w;
+//int h;
+//int xSpeed;
+//int ySpeed;
+//int xMin;
+//int yMin;
+//int xMax;
+//int yMax;
+//int xOld, yOld;
+//
+//uint8_t aa = 1;
+//uint16_t color = 0;
 
 uint16_t frames = 0;
 volatile uint16_t storyPart = 100;
@@ -282,36 +284,36 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 // Start of frame drawing methods:
 void drawIntro(uint16_t frames) {
 
-    yMax = ((int)VER_RES)-h;
+//    yMax = ((int)VER_RES)-h;
 //    drawBouncingBall(frames);
 
     drawSprite(1, 1*PIX_H, 4, 0);
 
-    sprintf(buf, "Hexadecimal Aliens");
+    sprintf(buf, "Code Crow");
     chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "by jamisnemo");
+    sprintf(buf, "jamisnemo");
     chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 
 }
 
 void textDrawingTests() {
     // ToDo: replace this with the CLUT. Like that will ever happen.
-    hsvtorgb(&r,&g,&b,frames,sat,val);
-    color = get8bppRGBColor(r,g,b);
-    color = get16bppRGBColor(r,g,b);
-
-    // Draw the beautiful font we cobbled together
-    sprintf(buf, "ABCDEFGHIJKLMNOP");
-    chr_print(buf, 0, 0); // x, y are bounded in chr_print
-
-    sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
-    chr_print(buf, 0, 21); // x, y are bounded in chr_print
-
-    sprintf(buf, "QRSTUVWXYZ");
-    chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
-
-    sprintf(buf, "qrstuvwxyz");
-    chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+//    hsvtorgb(&r,&g,&b,frames,sat,val);
+//    color = get8bppRGBColor(r,g,b);
+//    color = get16bppRGBColor(r,g,b);
+//
+//    // Draw the beautiful font we cobbled together
+//    sprintf(buf, "ABCDEFGHIJKLMNOP");
+//    chr_print(buf, 0, 0); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
+//    chr_print(buf, 0, 21); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "QRSTUVWXYZ");
+//    chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "qrstuvwxyz");
+//    chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
 }
 
 void codecrow() {
@@ -324,7 +326,7 @@ void codecrow() {
 //    initBouncingBallLimits();
     
     //    char readBuff[128];
-    char projectName[] = "Code Crow";
+    char projectName[] = "Code Crow\0";
     printf("Welcome to project: %s!\r\n", projectName);  
 //    char someInput[128] = "";
 //    printf("Enter some string: ");

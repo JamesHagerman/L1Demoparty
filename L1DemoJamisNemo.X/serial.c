@@ -59,6 +59,10 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
 }
 
 void config_uart(unsigned long baudRate) {
+    
+    // Make sure our buffers start empty:
+    reset_buffer();
+    
     // Set R7 as an input. I don't think this is needed for uart.. but let's 
     // just be sure.
     TRISBbits.TRISB7 = 1;
@@ -81,6 +85,8 @@ void config_uart(unsigned long baudRate) {
     IPC2bits.U1RXIP1 = 0;
     IPC2bits.U1RXIP0 = 0;
     
+    U1TXREG = ""; // Ensure that we start with an empty TX buffer
+    
     U1STA = 0; // Clear the UxSTA register (for tx1 and rx1 only)
     U1STAbits.URXISEL = 0; // Configure when the TX interrupt will fire
     
@@ -102,9 +108,8 @@ void config_uart(unsigned long baudRate) {
     U1TXCharPtr = &tx1Buf[0];
     U1RXCharPtr = &tx1Buf[0];
     
-    printf("\r\nUART should be working at 115200 baud now!\r\n");
     __delay_ms(100);
-    
+    printf("\n\nUART should be working at 115200 baud now!\r\n");
 }
 
 void reset_buffer() {
