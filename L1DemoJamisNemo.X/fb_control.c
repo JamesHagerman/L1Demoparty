@@ -10,7 +10,7 @@
 #include "resolution_management.h"
 
 #include "fb_control.h"
-#include "helpers.h"
+#include "drawing_helpers.h"
 
 
 volatile int fb_ready = 0;

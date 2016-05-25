@@ -58,7 +58,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
     
 }
 
-void config_uart(void) {
+void config_uart(unsigned long baudRate) {
     // Set R7 as an input. I don't think this is needed for uart.. but let's 
     // just be sure.
     TRISBbits.TRISB7 = 1;
@@ -70,7 +70,7 @@ void config_uart(void) {
     OSCCONbits.IOLOCK = 1;  // relock the peripheral Control Register Lock
 
     // Set baud rate:
-    U1BRG = (((FCY)/(4 * 115200UL)) - 1);
+    U1BRG = (((FCY)/(4 * baudRate)) - 1);
     
     // Set interrupt priorities:
     // (Honestly, not sure exactly what this is doing...)

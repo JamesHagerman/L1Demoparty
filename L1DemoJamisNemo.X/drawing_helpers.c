@@ -7,7 +7,7 @@
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
-#include "helpers.h"
+#include "drawing_helpers.h"
 
 #include "color_management.h"
 #include "resolution_management.h"

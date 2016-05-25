@@ -11,7 +11,7 @@
 
 #include "color_management.h"
 #include "resolution_management.h"
-#include "helpers.h"
+#include "drawing_helpers.h"
 
 struct Sprite s[MAX_SPRITES];
 static unsigned int shade = 0;

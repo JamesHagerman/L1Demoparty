@@ -10,7 +10,7 @@
 
 #include "color_management.h"
 #include "resolution_management.h"
-#include "helpers.h"
+#include "drawing_helpers.h"
 
 #ifndef SPRITES_H
 #define	SPRITES_H

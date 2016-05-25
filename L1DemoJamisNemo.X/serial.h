@@ -20,7 +20,7 @@ extern unsigned int rxSize;
 extern unsigned int txSize;
 extern bool dataAvailable;
 
-void config_uart(void);
+void config_uart(unsigned long baudRate);
 void reset_buffer();
 
 

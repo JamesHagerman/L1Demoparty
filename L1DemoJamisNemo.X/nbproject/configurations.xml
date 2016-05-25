@@ -31,9 +31,9 @@
       <itemPath>sprites.c</itemPath>
       <itemPath>particles.c</itemPath>
       <itemPath>music.c</itemPath>
-      <itemPath>helpers.c</itemPath>
       <itemPath>text.c</itemPath>
       <itemPath>fb_control.c</itemPath>
+      <itemPath>drawing_helpers.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
