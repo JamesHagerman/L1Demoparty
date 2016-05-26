@@ -120,7 +120,7 @@ extern "C" {
 #define NOTES_Bb8	0x08
 #define NOTES_B8	0x07
 
-extern unsigned short song[];
+extern const unsigned short song[];
 
 void config_timer();
 

@@ -28,6 +28,14 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+typedef struct {
+   uint8_t mode;
+   uint8_t currentChan;
+   uint8_t cursorPos;
+   bool cursorState;
+} STORY_STATE;
+extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern bool ledState;

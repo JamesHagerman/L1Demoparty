@@ -97,26 +97,45 @@ void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src) {
 
 
 
-void line (float x1, float y1, float x2, float y2) {
+void line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+    uint16_t sizeW = 1;
+    uint16_t sizeH = 1*PIX_H;
+ 
+    int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
+    int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
+    int err = (dx>dy ? dx : -dy)/2, e2;
+
+    for(;;){
+//        setPixel(x0,y0);
+        rcc_draw(x0, y0, sizeW, sizeH);
+        if (x0==x1 && y0==y1) break;
+        e2 = err;
+        if (e2 >-dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
+    }
+
+}
+
+void lineFloat(float x1, float y1, float x2, float y2) {
+    //TODO: WHAT THE HELL ARE YOU DOING WITH FLOATS!?!?!?
     unsigned int i;
+    uint16_t sizeW = 1;
+    uint16_t sizeH = 2*PIX_H;
     double hl=fabs(x2-x1), vl=fabs(y2-y1), length=(hl>vl)?hl:vl;
     float deltax=(x2-x1)/(float)length, deltay=(y2-y1)/(float)length;
     for (i=0; i<(int)length; i++) {
         unsigned long x=(int)(x1+=deltax), y=(int)(y1+=deltay);
         if ((x<HOR_RES)&&(y<VER_RES)) {
             //rcc_color(rand());
-            rcc_color(0x3);
-            //rcc_draw(x,y, PIX_W,PIX_H);
+//            rcc_color(0x3);
+            rcc_draw(x, y, sizeW, sizeH);
+//            rcc_draw(x,y, PIX_W,PIX_H);
             // TODO: fix y displacement
-            fast_pixel(x,y+6);// + i*PIX_H);
+//            fast_pixel(x,y+6);// + i*PIX_H);
         }
     }
 }
 
-
-void drawLineS(float x1, float y1, float x2, float y2) {
-	return;
-}
 
 void blank_background() {
     while(_CMDFUL) continue;

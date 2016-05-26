@@ -24,8 +24,9 @@ void rcc_setdest(__eds__ uint8_t *buf);
 void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src);
 extern inline void fast_pixel(unsigned long ax, unsigned long ay);
-void line (float x1, float y1, float x2, float y2);
-void drawLineS(float x1, float y1, float x2, float y2);
+
+void line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+void lineFloat(float x1, float y1, float x2, float y2);
 
 void blank_background();
 void cleanup(void);

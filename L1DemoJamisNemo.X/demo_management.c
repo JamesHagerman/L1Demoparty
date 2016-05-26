@@ -1,8 +1,27 @@
 #include "demo_management.h"
 
+STORY_STATE story_state;
+
 uint16_t frames = 0;
 bool ledState = true;
 
+// State management methods:
+void switchStory(uint16_t story) {
+    
+}
+//
+//void drawCurrentStory
+//
+
+
+void manageFrameReset() {
+    if (frames > 2500) {
+        frames = 0;
+    }
+}
+
+
+// Demo hardware helpers:
 void setupHardware() {
     ANSB = 0x0000;
     ANSC = 0x0000;
@@ -18,18 +37,16 @@ void setupHardware() {
     PORTBbits.RB4 = 0;
     PORTBbits.RB5 = 0;
 
-        // Setup interrupts:
-#ifdef DOUBLE_BUFFERED
-    _VMRGNIF = 0;
-//    _HMRGNIF = 0;
-//    _HMRGNIE = 1;
-    _VMRGNIE = 1;
-    _GFX1IE = 1;
-#else
-    _VMRGNIF = 0;
-    _VMRGNIE = 1;
-    _GFX1IE = 1;
-#endif
+    // Setup interrupts:
+    
+    _VMRGNIE = 1; // enable the vertical sync interrupt
+    _HMRGNIE = 1; // enable the horizontal sync interrupt
+    _VMRGNIF = 0; // clear the vertical sync interrupt flag
+    _HMRGNIF = 0; // clear the horizontal sync interrupt flag
+    
+    _GFX1IE = 1; // enable the master GFX interrupt
+    _GFX1IF = 0; // clear the master GFX Interrupt flag
+    _GFX1IP = 0b111; // Set the master GFX interrupt priority to the highest possible
     
     // Call out to some other .c files to init some other functionality:
     config_uart(115200UL);
@@ -67,14 +84,6 @@ void frameEnd() {
     waitForVSync();
 #endif
 }
-
-void manageFrameReset() {
-    if (frames > 2500) {
-        frames = 0;
-    }
-}
-
-
 
 void statusLED() {
     // Blink some pins:

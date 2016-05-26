@@ -1,6 +1,7 @@
 // Code Crow
 // by: jamisnemo
 // for: LayerOne Demoparty 2016
+// chip: PIC24FJ256DA206
 //
 #include <stdbool.h>
 #include <stdint.h>
@@ -30,6 +31,18 @@ _CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
 _CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
 
 //=========
+// Demo method declarations:
+void drawIntro(uint16_t frames);
+void drawFPS();
+int handleSerialInput(uint16_t oldStoryPart);
+
+// Variable declarations:
+char projectName[] = "Code Crow";
+char buf[20]; // Buffer for any text rendering sprintf() calls
+volatile uint16_t storyPart = 0;
+volatile uint16_t serialStoryIndex = 100;
+
+//=========
 // Static inline functions:
 inline void fast_pixel(unsigned long ax, unsigned long ay) {
     //ax += (ay << 9) + (ay << 7);
@@ -47,18 +60,6 @@ inline void fast_pixel(unsigned long ax, unsigned long ay) {
     G1CMDH = RCC_STARTCOPY;
     Nop();
 }
-
-//=========
-// Demo method declarations:
-void drawIntro(uint16_t frames);
-void drawFPS();
-int handleSerialInput(uint16_t oldStoryPart);
-
-// Variable declarations:
-char buf[20]; // Buffer for any text rendering sprintf() calls
-volatile uint16_t storyPart = 100;
-volatile uint16_t serialStoryIndex = 100;
-
 
 // Story management:
 inline void playSelected() {
@@ -111,8 +112,6 @@ void __attribute__((__interrupt__)) _T1Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
 	static unsigned char idx = 0;
-
-//        if (idx%2 == 0) {
         if (storyPart == 3) {
             PORTB = (zigzagtable[idx]/4) << 8;
         } else if (storyPart == 1 ) {
@@ -120,12 +119,6 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         } else {
             PORTB = (sinetable[idx]/4) << 8;
         }
-//            PORTB = (saw[idx]/4) << 8;
-//        } else {
-//            PORTB = zigzagtable[idx] << 8;
-//        }
-
-//            PORTB = 1<<idx;
 	idx += 1;
 	_T1IF = 0;
 }
@@ -133,17 +126,70 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
 //================================
 // Start of frame drawing methods:
-void drawIntro(uint16_t frames) {
+uint16_t maxX = 474; // 480-PIX_H
+
+// for drawIntro()
+uint16_t color = 0;
+volatile int c = 0;
+int speed = 1;
+int dir = 1;
+int xPosition = 0;
+
+
+
+void initDemo() {
+    // Calculate some stuff
+    maxX = 480-PIX_H; // validate that the maxX size is correct.
+    
+    blank_background();
+    loadAllSprites();
+    calc_colors();
+    _CLUTEN = 0; // WE're only gonna turn on the CLUT when we REALLY need the speed.
+}
+
+void initIntro() {
+    
+}
+void drawIntro(uint16_t frame) {
 
 //    yMax = ((int)VER_RES)-h;
-//    drawBouncingBall(frames);
+//    drawBouncingBall(frame);
 
-    drawSprite(1, 1*PIX_H, 4, 0);
+//    drawSprite(1, 1*PIX_H, 4, 0);
+    
+    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
+        dir = dir * -1;
+    }
+    xPosition = xPosition + (speed * dir);
+    
+    rcc_color(0x3);
+    
+//    line(30, 0*6, 10, maxX);
+//    line(45, 0*6, 25, maxX);
+//    printf("x: %i, dir: %i\r\n", xPosition, dir);
+    
+    uint16_t i, j, sizeW, sizeH, vertOffset;
+    sizeW = 1;
+    sizeH = 1*PIX_H;
+    vertOffset = VER_RES/4;
 
-    sprintf(buf, "Code Crows");
-    chr_print(buf, 0, VER_RES-(21*7)); // x, y are bounded in chr_print
-    sprintf(buf, "jamisnemo");
-    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+    if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
+
+    for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
+        for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
+//            hsvtorgb(&r,&g,&b,i*j,sat,val);
+//            color = get8bppRGBColor(r,g,b);
+            color = frame+i+j;
+//            rcc_color(rand());
+            rcc_color(color);
+            rcc_draw(j, i + vertOffset, sizeW, sizeH);
+        }
+    }
+
+//    sprintf(buf, "Code Crow");
+//    chr_print(buf, 10*4, VER_RES-(21*9)); // x, y are bounded in chr_print
+//    sprintf(buf, "jamisnemo");
+//    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
 
 }
 
@@ -169,16 +215,10 @@ void textDrawingTests() {
 
 void codecrow() {
     // Start of the 2016 demo!!!!!!!!!!!!!!!
+    initDemo();
     
-    blank_background();
-    loadAllSprites();
-    calc_colors();
-//    config_clut(); // WE're only gonna turn on the CLUT when we REALLY need the speed.
-//    initBouncingBallLimits();
+    printf("Welcome to project: %s!\r\n", projectName); 
     
-    //    char readBuff[128];
-    char projectName[] = "Code Crow\0";
-    printf("Welcome to project: %s!\r\n", projectName);  
 //    char someInput[128] = "";
 //    printf("Enter some string: ");
 //    scanf("%s", someInput);
@@ -205,7 +245,7 @@ void codecrow() {
         }
 
         // Switch to, and draw our selected frame:
-        playSelected(); 
+        playSelected();  
 
         // End frame drawing
         frameEnd();
@@ -262,12 +302,6 @@ int handleSerialInput(uint16_t oldStoryPart) {
 
     return oldStoryPart;
 }
-
-
-
-
-
-
 
 
 

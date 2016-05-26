@@ -36,92 +36,93 @@ A[---5-5-------3-5----------3---[
 //	};
 
 
-unsigned short song[] = {
+const unsigned short song[] = {
 	NOTES_Eb3,
-        NOTES_C3,
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_Db3,
-        NOTES_F3,
+    NOTES_C3,
+    NOTES_Eb3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_Db3,
+    NOTES_F3,
 
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_Ab3,
+    NOTES_Eb3,
+    NOTES_C3,
+    NOTES_Eb3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_Ab3,
 
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_F3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_B3,
-        NOTES_C4,
+    NOTES_Eb3,
+    NOTES_C3,
+    NOTES_Eb3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_B3,
+    NOTES_C4,
 
-        NOTES_G4,
-        NOTES_C4,
-        NOTES_G3,
-        NOTES_C3,
-        NOTES_G4,
-        NOTES_C4,
-        NOTES_F3,
-        NOTES_Ab3,
-        NOTES_G4,
-        NOTES_C4,
-        NOTES_F4,
-        NOTES_C4,
-        NOTES_Eb3,
-        NOTES_C3,
-        NOTES_D4,
-        NOTES_Eb4,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_G2,
+    NOTES_C2,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_F2,
+    NOTES_Ab2,
+    NOTES_G3,
+    NOTES_C3,
+    NOTES_F3,
+    NOTES_C3,
+    NOTES_Eb2,
+    NOTES_C2,
+    NOTES_D3,
+    NOTES_Eb2,
 
-	};
+};
 
 
 void config_timer() {
 	PR1 = 0;
+    _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8, 
 	_T1IP = 5;	// set interrupt priority
 	_TON  = 1;	// turn on the timer
 	_T1IF = 0;	// reset interrupt flag
 	_T1IE = 1;	// turn on the timer1 interrupt
 
 	/* set up timer for stepping through song */
-	PR2 = 0x1d09; // reaaal sloooow
-	_T2IP = 6;
-	_T2IF = 0;
+	PR2 = 0x1d09; // slower: 0x3d09
+	_T2IP = 6; // interrupt priority
+	_T2IF = 0; // reset flag
 	/* no nice macros for T2CON :( */
 	T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
-	_T2IE = 1;
+	_T2IE = 1; // enable the timer2 interrupt
 }
 
 
@@ -131,6 +132,7 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
 	static unsigned short idx = 0;
 	PR1 = song[idx];
+//    PR1 = 0x9f;
 
 	idx++;
 	if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
