@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-
+#include "system.h" // declares FCY
 #include <libpic30.h>
 #include "color_management.h"
 
@@ -26,26 +26,29 @@ void clut_set(uint8_t index, uint16_t color) {
     _CLUTRWEN = 0;
 }
 
-void calc_colors() {
+void calc_colors(int startingIndex) {
     //
-    // CLUT IS ALWAYS 16 BIT!!
+    // CLUT ONLY HAS 255 ADDRESSES!
+    // CLUT ALWAYS HOLDS 16 BIT COLORS!!
     //
-    uint8_t i;
+    uint16_t i;
     uint16_t color = 0;
     uint8_t r, g, b, sat = 255, val = 255; // hue
-    for (i = 0; i < 255; i++) {
+    printf("Setting up CLUT:\r\n");
+    
+    
+    // Only build CLUT rainbow for colors we WANT to use:
+    for (i = startingIndex; i <= 254; i++) {
         hsvtorgb(&r,&g,&b,i,sat,val);
         color = get16bppRGBColor(r,g,b); 
-
-        if (i == 0) {
-            clut_set(i, 0x0000); // black needs to stay black...
-        } else if (i == 254) {
-            clut_set(i, 0xFFFF); // white needs to stay white...
-        } else {
-            clut_set(i, color);
-        }
-        
+        printf("%i: %u ", i, color);
+        __delay_ms(1); // let uart catch up...
+        clut_set(i, color);
     }
+    
+    clut_set(  0, 0x0000); // black needs to stay black...
+    clut_set(255, 0xFFFF); // white needs to stay white...
+    printf("\r\nDone!\r\n");
 }
 
 

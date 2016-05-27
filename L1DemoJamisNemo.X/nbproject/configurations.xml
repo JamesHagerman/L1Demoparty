@@ -110,7 +110,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="0"/>
+        <property key="optimization-level" value="1"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value=""/>
@@ -194,7 +194,7 @@
         <property key="oXC16glb-macros" value=""/>
         <property key="output-file-format" value="elf"/>
         <property key="relaxed-math" value="false"/>
-        <property key="save-temps" value="false"/>
+        <property key="save-temps" value="true"/>
         <appendMe value="-mlarge-arrays"/>
       </C30Global>
       <PICkit3PlatformTool>
@@ -245,7 +245,6 @@
         <property key="UART 3" value="true"/>
         <property key="UART 4" value="true"/>
         <property key="UCNFG1" value="true"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

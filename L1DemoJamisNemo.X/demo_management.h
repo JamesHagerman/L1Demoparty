@@ -34,6 +34,7 @@ typedef struct {
    uint8_t currentChan;
    uint8_t cursorPos;
    bool cursorState;
+   bool clutState;
 } STORY_STATE;
 extern STORY_STATE story_state;
 

@@ -16,7 +16,7 @@
 
 void config_chr(void) {
     while(_CMDFUL) continue;
-    G1CMDL = 0xFFFF; // white
+    G1CMDL = 0xFF; // white
 //    G1CMDL = 0;  // black
     G1CMDH = CHR_FGCOLOR;
     Nop();
@@ -43,16 +43,19 @@ void config_chr(void) {
     Nop();
 }
 
+// Characters are 21 REAL pixels tall, and 6 REAL pixels MAXIMUM wide.
 int maxCharHeight = ((int)VER_RES)-21;
 void chr_print(char *c, uint16_t x, uint16_t y) {
 
     if (y > maxCharHeight) {
         y = maxCharHeight;
     }
-    int maxCharWidth = ((int)HOR_RES) - (6 * strlen(c)) - 1; // dumb math. bad at \n's
-    if (x > maxCharWidth) {
-        x = maxCharWidth;
-    }
+    
+    // No, we really can't do this like this. It depends on the drawable width:
+//    int maxCharWidth = ((int)HOR_RES) - (6 * strlen(c)) - 1; // dumb math. bad at \n's
+//    if (x > maxCharWidth) {
+//        x = maxCharWidth;
+//    }
 
     while(_CMDFUL) continue;
     G1CMDL = x<<12 | y;
@@ -60,13 +63,13 @@ void chr_print(char *c, uint16_t x, uint16_t y) {
     Nop();
 
     while(*c != NULL) {
-	while(_CMDFUL) continue;
-	G1CMDL = *c;
-	G1CMDH = CHR_PRINTCHAR;
-//        G1CMDH = CHR_PRINTCHARTRANS; // transparent
-	Nop();
+        while(_CMDFUL) continue;
+        G1CMDL = *c;
+//    	G1CMDH = CHR_PRINTCHAR;
+        G1CMDH = CHR_PRINTCHARTRANS; // transparent
+        Nop();
 
-	c++;
+        c++;
     }
 }
 

@@ -24,11 +24,12 @@ int realtoint(float oldval, float oldmin, float oldmax, float newmin, float newm
 }
 
 
-void rcc_color(unsigned int color) {
+void rcc_color(uint16_t color) {
     while(_CMDFUL) continue;
 	G1CMDL = color;
 	G1CMDH = RCC_COLOR;
-//        Nop();
+    Nop();
+    while(_RCCBUSY) continue;
 }
 
 void rcc_setdest(__eds__ uint8_t *buf) {
@@ -62,7 +63,12 @@ void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
 
 	// go!
 	while(_CMDFUL) continue;
-	G1CMDL = 0xC<<3;
+    // This sets ROP. make sure this is the right type... 
+	G1CMDL = 0xC<<3 | //0xC = source
+            0b001<<6; // Set the OPER to 0b000 to enforce SOLID setting of colors:
+    
+    //TODO: Actually, validate all this shit.
+    
 	G1CMDH = RCC_STARTCOPY;
 //	Nop();
 }

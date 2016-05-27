@@ -12,11 +12,22 @@
 #include "fb_control.h"
 #include "drawing_helpers.h"
 
-
+// volatile means "this may change outside of the scope"
+// This tells the compiler to NOT make infinite loops, a la,
+// while(fb_ready){}
+// This is useful for when interrupts will change the variable at
+// some point later on.
 volatile int fb_ready = 0;
 volatile int vSync = 0;
 
 void gpu_setfb(__eds__ uint8_t *buf) {
+    // TEST THIS SHIT to fix the black and white weirdness. also maybe Display Data Stagge
+    
+//    VALIDATE THAT THE WORK AREAS CAN BE DEFINED SEPARATE FROM THE GRAPHICS BUFFER!!
+    
+//    G1W1ADRL = (unsigned long)(buf);
+//    G1W1ADRH = (unsigned long)(buf);
+    
     G1W2ADRL = (unsigned long)(buf);
     G1W2ADRH = (unsigned long)(buf);
     G1DPADRL = (unsigned long)(buf);
@@ -27,7 +38,7 @@ void gpu_setfb(__eds__ uint8_t *buf) {
 int next_fb = 0;
 void waitForBufferFlip() {
     // Wait for GPUs to all finish drawing
-    while((!_CMDMPT) && _PUBUSY) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
+    while((!_CMDMPT) | _RCCIF | _CHRIF | _IPUIF) continue; // Wait for IPU, RCC, and CHR GPUs to finish drawing
     fb_ready = 1;
     while(fb_ready) continue; // wait for vsync interrupt
 }

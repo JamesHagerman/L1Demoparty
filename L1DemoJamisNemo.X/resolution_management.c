@@ -47,6 +47,23 @@ void config_graphics(void) {
         // Work area 2
 	G1W2ADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;
 	G1W2ADRH = (unsigned long)(GFXDisplayBuffer) >>16 & 0xFF;
+
+
+//#define GFX_SetDisplayArea(a) {
+//    _displayAreaBaseAddr = (DWORD)a;
+//	G1DPADRL = ((DWORD_VAL)((DWORD)(a))).word.LW;
+//	G1DPADRH = ((DWORD_VAL)((DWORD)(a))).word.HW;
+//}
+//#define GFX_SetWorkArea1(a)   {
+//	G1W1ADRL = ((DWORD_VAL)((DWORD)(a))).word.LW;
+//	G1W1ADRH = ((DWORD_VAL)((DWORD)(a))).word.HW;
+//}
+//#define GFX_SetWorkArea2(a)   {
+//	G1W2ADRL = ((DWORD_VAL)((DWORD)(a))).word.LW;
+//	G1W2ADRH = ((DWORD_VAL)((DWORD)(a))).word.HW;
+//}
+
+
 #else
         // Display buffer:
 	G1DPADRL = (unsigned long)(GFXDisplayBuffer) & 0xFFFF;

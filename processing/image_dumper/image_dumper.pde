@@ -1,9 +1,26 @@
 PImage sprite;
-String filename = "title.gif";
+String imageFilename = "crowCLUT3.bmp";
+String paletteFilename = "birdpallet.pal";
+
+String[] loadPalette(String filename) {
+  String toRet[] = {};
+  byte b[] = loadBytes(filename); 
+  
+  for (int i = 0, j=0; i < b.length; i+=3, j++) {
+    int aColor = ( (b[i]&0xff)<<16 ) | ( (b[i+1]&0xff)<<8) | b[i+2]&0xff ;
+    toRet = append(toRet, hex(aColor, 6));
+    //System.out.printf("%d: 0x%s\n", j, hex(aColor, 6));
+  }
+  return toRet;
+}
+
 
 void setup() {
   size(100, 100);
-  sprite = loadImage(filename);
+  
+  String palette[] = loadPalette(paletteFilename);
+  
+  sprite = loadImage(imageFilename);
   sprite.loadPixels();
   
   int w = sprite.width;
@@ -15,25 +32,44 @@ void setup() {
   
   
   System.out.printf("Data: \n");
-  System.out.printf("// %d x %d %s \n", w, h, filename);
+  System.out.printf("// %d x %d %s \n", w, h, imageFilename);
   System.out.printf("0x%x, // width\n", w);
   System.out.printf("0x%x, // height\n", h);
   System.out.printf("0x%x, // bitres\n", 0x8);
-  System.out.printf("0x%x, // transparent color\n", 0xffff);
+  System.out.printf("0x%x, // transparent color\n", 0xa);
   System.out.printf("0x%x, // rotate\n", 0x00);
   for (int i = 0; i < pixelCount; i++) {
     color thisPixel = sprite.pixels[i];
-    float r = red(thisPixel);
-    float g = green(thisPixel);
-    float b = blue(thisPixel);
-       
+    //float r = red(thisPixel);
+    //float g = green(thisPixel);
+    //float b = blue(thisPixel);
+
+    // PALETTE LOOKUP:
+    int r = (thisPixel) >> 16 & 0xFF;
+    int g = (thisPixel) >> 8 & 0xFF;
+    int b = (thisPixel) & 0xFF;
+
+    int hexOut = 0;
+    String toFind = hex(  ((r & 0xff)<<16) | ((g & 0xff)<<8) | b&0xff, 6);
+    
+    //System.out.printf("Looking for: %s\n", toFind);
+    for (int j = 0; j < palette.length; j++ ) { 
+      if ( toFind.equals(palette[j]) ) {
+          //System.out.printf(" Found at: %d, %s\n", j, palette[j]);
+          hexOut = j;
+          break;
+      }
+    }
+    
+    
+    
     // WITHOUT CLUT: 
     // Map the 24 bit colors of the sprite down to 8bpp
-    int newR = round(map(r, 0, 255, 0, 7));
-    int newG = round(map(g, 0, 255, 0, 7));
-    int newB = round(map(b, 0, 255, 0, 3));
+    //int newR = round(map(r, 0, 255, 0, 7));
+    //int newG = round(map(g, 0, 255, 0, 7));
+    //int newB = round(map(b, 0, 255, 0, 3));
     
-    int hexOut = (newR<<5) | (newG<<2) | newB;
+    //int hexOut = (newR<<5) | (newG<<2) | newB;
 
     // WITH CLUT:
     // Map the 24 bit colors of the sprite down to 16 bit since the CLUT is ALWAYS 16 bit.

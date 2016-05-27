@@ -4,9 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/drawing_helpers.c</file>
-            <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/demo_management.c</file>
+            <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/text.c</file>
             <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/main.c</file>
+            <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/demo_management.c</file>
+            <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/color_management.c</file>
             <file>file:/home/jamis/dev/Circuits_MPUs/LayerOne/L1Demoparty/L1DemoJamisNemo.X/demo_management.h</file>
         </group>
     </open-files>
