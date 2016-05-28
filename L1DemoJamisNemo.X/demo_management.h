@@ -29,11 +29,11 @@
 extern "C" {
 #endif
     
-#define SCENE_COUNT 1
+#define SCENE_COUNT 2
   
 typedef struct {
-    uint8_t sceneStartFrame;
-    uint16_t scceneLength;
+    uint16_t sceneStartFrame;
+    uint16_t sceneLength;
     int (*sceneInit)();
     int (*sceneDraw)(uint16_t frame);
     char sceneName[21];
@@ -46,6 +46,7 @@ typedef struct {
 //   uint8_t cursorPos;
     uint8_t currentScene;
     bool storyPlaying;
+//    bool uartForceStop; //todo: make a way for the uart to halt this thing.
     bool storyEnded;
     bool clutState;
     SCENE scenes[SCENE_COUNT];
@@ -57,6 +58,7 @@ extern bool ledState;
 
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
+void checkSceneFinished();
 void manageFrameReset();
 
 void checkForJumper();

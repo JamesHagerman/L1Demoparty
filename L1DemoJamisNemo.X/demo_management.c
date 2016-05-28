@@ -8,16 +8,25 @@ bool ledState = true;
 
 // StoryState management methods:
 void switchScene(uint8_t nextScene) {
-    if (nextScene) {
-        printf("%u is an invalid scene...\n", nextScene);
-        return;
+    if (nextScene > SCENE_COUNT-1) {
+        printf("%u is an invalid scene... \n", nextScene);
+        
+        // Reset after we reach the end of the last scene:
+        frames = 0;
+        story_state.currentScene = 0;
+//        return;
     }
     if (nextScene != story_state.currentScene) {
         story_state.currentScene = nextScene;
     } else {
         printf("Reiniting scene %u\n", nextScene);
     }
-    (*story_state.scenes[nextScene].sceneInit)(); // Init this scene
+    
+    // Set the starting time so we know when to switch to the next scene:
+    story_state.scenes[nextScene].sceneStartFrame = frames;
+    
+    // Init this scene by envoking its init function pointer:
+    (*story_state.scenes[nextScene].sceneInit)(); 
 }
 
 void drawCurrentScene() {
@@ -25,9 +34,20 @@ void drawCurrentScene() {
     (*story_state.scenes[id].sceneDraw)(frames); // Draw this scene
 }
 
+void checkSceneFinished() {
+    // This will check the sceneStartFrame against the frames counter and switch
+    // to the next scene if it's time:
+    uint8_t id = story_state.currentScene;
+    if (frames > story_state.scenes[id].sceneStartFrame + story_state.scenes[id].sceneLength) {
+        id++;
+        printf("Switching to scene: %i\n", id);
+        switchScene(id);
+    }
+}
 
 void manageFrameReset() {
     if (frames > 2500) {
+        printf("Resetting frames counter to 0...\n");
         frames = 0;
     }
 }
@@ -39,7 +59,7 @@ void manageFrameReset() {
 // Demo hardware helpers:
 void checkForJumper() {
     bool jumperOn = ! PORTBbits.RB4; // high = not connected. low = jumper!
-    if (jumperOn) {
+    if (jumperOn ) {
         story_state.storyPlaying = true;
     } else {
         story_state.storyPlaying = false;

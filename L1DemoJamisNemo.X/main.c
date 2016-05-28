@@ -59,12 +59,11 @@
 // Demo method declarations:
 void drawIntro(uint16_t frames);
 void drawFPS();
-int handleSerialInput(uint16_t oldStoryPart);
+int handleSerialInput();
 
 // Variable declarations:
 char projectName[] = "Code Crow";
 char buf[20]; // Buffer for any text rendering sprintf() calls
-volatile uint8_t storyPart = 0;
 volatile uint8_t serialStoryIndex = 100;
 
 //=========
@@ -86,49 +85,6 @@ inline void fast_pixel(unsigned long ax, unsigned long ay) {
     Nop();
 }
 
-// Story management:
-inline void playSelected() {
-    switch (storyPart) {
-        case 0:
-            _CLUTEN = 1;
-            drawIntro(frames);
-            break;
-        case 1:
-            _CLUTEN = 1; // let 'er rip!
-//            drawWarp(frames);
-            break;
-        case 2:
-            _CLUTEN = 0; // Now ditch that shit and get back to normal colors.
-//            drawBoringGround(frames);
-            break;
-        case 3:
-            _CLUTEN = 0;
-//            drawPsyGround(frames);
-            break;
-        case 4:
-            _CLUTEN = 0;
-//            drawEnding(frames);
-            break;
-        default: 
-//            drawIntro(frames);
-            break;
-    }
-}
-
-inline void manageStory() {
-    if ( frames < 400 ) {
-        storyPart = 0; // intro 700
-    } else if (frames < 800) {
-        storyPart = 2; // dirt + aliens 100
-    } else if (frames < 1300) {
-        storyPart = 3; // psych alien 500
-    } else if (frames < 1500) {
-        storyPart = 1; // warp 200
-    } else if (frames < 2500) {
-        storyPart = 4; // credits 1000
-    }
-}
-
 //================================
 // Start of music playing methods:
 //_T1Interrupt() is the T1 interrupt service routine (ISR).
@@ -136,13 +92,13 @@ void __attribute__((__interrupt__)) _T1Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
 	static unsigned char idx = 0;
-        if (storyPart == 3) {
-            PORTB = (zigzagtable[idx]/4) << 8;
-        } else if (storyPart == 1 ) {
-            PORTB = (saw[idx]/4) << 8;
-        } else {
-            PORTB = (sinetable[idx]/4) << 8;
-        }
+    if (story_state.currentScene == 3) {
+        PORTB = (zigzagtable[idx]/4) << 8;
+    } else if (story_state.currentScene == 1 ) {
+        PORTB = (saw[idx]/4) << 8;
+    } else {
+        PORTB = (sinetable[idx]/4) << 8;
+    }
 	idx += 1;
 	_T1IF = 0;
 }
@@ -155,9 +111,8 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 // START OF SCENES
 
 uint16_t maxY = 474; // 480-PIX_H
-volatile int c = 0; // A char for the uart
 
-// Start drawIntro scene:
+// Start Intro scene:
 uint8_t color = 0;
 // This should be one greater than the index of the last color we care about in
 // the palette for the Crow sprite:
@@ -178,6 +133,7 @@ void initIntro() {
     currentSpriteIndex = currentSpriteOffset;
     // Setup colors for bird sprite using palette (manually!?! kids these days...)
     // clut_set(0) is black
+    _CLUTEN = 0; // disable CLUT before we swap colors
     clut_set(1, 0x4208); // gray
     clut_set(2, 0x9a60); // orange
     clut_set(3, 0xb800); // red
@@ -276,7 +232,59 @@ void drawIntro(uint16_t frame) {
     }
 
 }
-// end drawIntro scene
+// End of Intro scene
+
+// Start Credits scene:
+void initCredits() {
+    int sceneId = story_state.currentScene;
+    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
+
+    _CLUTEN = 1; // enable the CLUT for this scene
+}
+void drawCredits(uint16_t frame) {
+    
+    uint16_t i, j, sizeW, sizeH, vertOffset;
+    sizeW = 1;
+    sizeH = 1*PIX_H;
+    vertOffset = VER_RES/4;
+    
+    uint8_t colorScrollSpeed = 25;
+
+    // Safety third:
+    if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
+
+    
+//    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
+    
+//    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
+//        dir = dir * -1;
+//    }
+//    xPosition = xPosition + (speed * dir);
+//    
+//    rcc_color(0x3);
+//    line(0, vertOffset*PIX_H, HOR_RES-1, vertOffset*PIX_H);
+//    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
+//    printf("x: %i, dir: %i\r\n", xPosition, dir);
+    
+    
+    // We have to calculate horizontal movement manually here. No way to 
+    // detect the drawable width of a string of text at this point.
+
+    sprintf(buf, "Never enough time...");
+    chr_print(buf, 0, VER_RES-(21*4)); // x, y are bounded in chr_print
+    
+    sprintf(buf, "Thank you Arko ");
+    chr_print(buf, 0, VER_RES-(21*12)); // x, y are bounded in chr_print
+    sprintf(buf, "and everyone at NSL ");
+    chr_print(buf, 0, VER_RES-(21*11)); // x, y are bounded in chr_print
+    sprintf(buf, "that make");
+    chr_print(buf, 0, VER_RES-(21*10)); // x, y are bounded in chr_print
+    sprintf(buf, "LayerOne happen!");
+    chr_print(buf, 0, VER_RES-(21*9)); // x, y are bounded in chr_print
+    
+}
+// End of Credits scene
+
 
 // END OF SCENES
 // END OF SCENES
@@ -284,7 +292,9 @@ void drawIntro(uint16_t frame) {
 
 
 void loadScenes() {
-    story_state.scenes[0] = (SCENE) {0, 1000, &initIntro, &drawIntro, "Intro"};
+    // Don't forget to change SCENE_COUNT
+    story_state.scenes[0] = (SCENE) {0, 200, &initIntro, &drawIntro, "Intro"};
+    story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, "Credits"};
 }
 void initDemo() {
     printf("Initing demo...\r\n");
@@ -321,32 +331,27 @@ void codecrow() {
 
         // Make sure we reset our frame count to zero after some time. Not sure 
         // if we even want this except for arbitrary looping...
-        manageFrameReset(); 
+        manageFrameReset(); // TODO: Swap this for the demo manager stuff...
 
         // Manage any newly available data from the serial port:
-        serialStoryIndex = handleSerialInput(storyPart);
+        serialStoryIndex = handleSerialInput();
 
-        // TODO: Manage demo state somewhere...
-        if (serialStoryIndex == 100) {
-            manageStory();
-        } else {
-//                printf("story part being set manually");
-            storyPart = serialStoryIndex;
-        }
-
-        // Switch to, and draw our selected frame:
+        // Draw the current Scene:
         drawCurrentScene();
         
         // Play only if we've got that jumper on r28
         checkForJumper();
         if (story_state.storyPlaying == true) {
             frames++;
+            checkSceneFinished();
         } else {
             sprintf(buf, "Please jump R28 to");
             chr_print(buf, 2, VER_RES-(21*4)); // x, y are bounded in chr_print
             sprintf(buf, "to Ground...");
             chr_print(buf, 22, VER_RES-(21*3)); // x, y are bounded in chr_print
         }
+        
+        drawFPS(); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();
@@ -359,14 +364,17 @@ void codecrow() {
 // Frame/Demo management:
 void drawFPS() {
     // TODO: Print the fps to the UART cleanly without borking our term...
-    sprintf(buf, "f:%i", frames);
+    sprintf(buf, "f:%i s:%i", frames, 
+            story_state.scenes[story_state.currentScene].sceneStartFrame + 
+            story_state.scenes[story_state.currentScene].sceneLength);
     chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
 }
 
-int handleSerialInput(uint16_t oldStoryPart) {
+int handleSerialInput() {
     // My serial handler for the demo's keyboard input:
     // TODO: Manage some amount of command input. Single char will work for now...
-    uint16_t i, storyPart = 200;
+    int toRet = -1;
+    uint16_t i;
     if (dataAvailable) {
 //        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
         dataAvailable = false;
@@ -377,10 +385,9 @@ int handleSerialInput(uint16_t oldStoryPart) {
             //handle number chars:
             if (c >= '0' && c <= '9') {
                 uint16_t numberValue = (uint16_t)c - 0x30;
-                storyPart = numberValue;
+                toRet = numberValue;
             } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
                 printf("A letter!: '%c'\r\n", c);
-
                 if (c == 'r') {
                     printf("Restting frames\r\n");
                     frames = 0;
@@ -396,14 +403,9 @@ int handleSerialInput(uint16_t oldStoryPart) {
         }
 
         reset_buffer();
-
-        if (oldStoryPart != storyPart) {
-            printf("Found story part: %u\r\n", storyPart );
-            return storyPart;
-        }
     }
 
-    return oldStoryPart;
+    return toRet;
 }
 
 

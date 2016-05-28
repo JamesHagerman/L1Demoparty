@@ -41,8 +41,8 @@ void calc_colors(int startingIndex) {
     for (i = startingIndex; i <= 254; i++) {
         hsvtorgb(&r,&g,&b,i,sat,val);
         color = get16bppRGBColor(r,g,b); 
-        printf("%i: %u ", i, color);
-        __delay_ms(1); // let uart catch up...
+//        printf("%i: %u ", i, color);
+//        __delay_ms(1); // let uart catch up...
         clut_set(i, color);
     }
     
