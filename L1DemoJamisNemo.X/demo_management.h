@@ -29,13 +29,14 @@
 extern "C" {
 #endif
     
-#define SCENE_COUNT 2
+#define SCENE_COUNT 3
   
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
     int (*sceneInit)();
     int (*sceneDraw)(uint16_t frame);
+    unsigned char (*audioBuilder)(unsigned char t);
     char sceneName[21];
 } SCENE;
 //extern SCENE scene;

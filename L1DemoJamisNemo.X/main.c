@@ -92,15 +92,17 @@ void __attribute__((__interrupt__)) _T1Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
 	static unsigned char idx = 0;
-    if (story_state.currentScene == 3) {
-        PORTB = (zigzagtable[idx]/4) << 8;
-    } else if (story_state.currentScene == 1 ) {
-        PORTB = (saw[idx]/4) << 8;
+    if (story_state.currentScene == 0) {
+        PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
+        
+//    } else if (story_state.currentScene == 1 ) {
+//        PORTB = ((zigzagtable[idx]/4)&0xf) << 12 | ((sinetable[idx]/4)&0xf) << 8;
     } else {
         PORTB = (sinetable[idx]/4) << 8;
     }
+    
     if (frames != 0) {
-        idx += 1;
+        idx -= 1;
     }
 	_T1IF = 0;
 }
@@ -146,14 +148,11 @@ void initIntro() {
     _CLUTEN = 1; // enable the CLUT for this scene
 }
 void drawIntro(uint16_t frame) {
-    
     uint16_t i, j, sizeW, sizeH, vertOffset;
     sizeW = 1;
     sizeH = 1*PIX_H;
     vertOffset = VER_RES/4;
     
-    colorScrollSpeed++;
-
     // Safety third:
     if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
 
@@ -171,6 +170,7 @@ void drawIntro(uint16_t frame) {
         currentSpriteIndex = currentSpriteOffset; // sleep state
         
     } else {
+        colorScrollSpeed++;
         // Draw warp! Finally! A Warp! FUCK yeah!!
         for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
             for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
@@ -235,14 +235,32 @@ void drawIntro(uint16_t frame) {
     }
 
 }
+unsigned char audioIntro(unsigned char t) {
+    return t;
+}
 // End of Intro scene
 
 // Start of road scene
 void initRoad() {
-    
+    int sceneId = story_state.currentScene;
+    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
+    // Setup bird sprite offsets:
+    currentSpriteIndex = currentSpriteOffset;
+    // Setup colors for bird sprite using palette (manually!?! kids these days...)
+    // clut_set(0) is black
+//    _CLUTEN = 0; // disable CLUT before we swap colors
+//    clut_set(1, 0x4208); // gray
+//    clut_set(2, 0x9a60); // orange
+//    clut_set(3, 0xb800); // red
+//    clut_set(4, 0x2124); // dark gray: #232323: 35, 35, 35
+//    calc_colors(clutStart); // Build a rainbow starting with CLUT index 4
+//    _CLUTEN = 1; // enable the CLUT for this scene
 }
 void drawRoad() {
-    
+    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
+}
+unsigned char audioRoad(unsigned char t) {
+    return t/2;
 }
 // End of road scene
 
@@ -273,6 +291,9 @@ void drawCredits(uint16_t frame) {
     chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
     
 }
+unsigned char audioCredits(unsigned char t) {
+    return t & t>>8;
+}
 // End of Credits scene
 
 
@@ -280,12 +301,13 @@ void drawCredits(uint16_t frame) {
 // END OF SCENES
 // END OF SCENES
 
-
 void loadScenes() {
     // Don't forget to change SCENE_COUNT
-    story_state.scenes[0] = (SCENE) {0, 400, &initIntro, &drawIntro, "Intro"};
-    story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, "Credits"};
+    story_state.scenes[0] = (SCENE) {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
+//    story_state.scenes[1] = (SCENE) {0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
+    story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
 }
+
 void initDemo() {
     printf("Initing demo...\r\n");
     // Calculate some stuff
@@ -304,6 +326,7 @@ void initDemo() {
     story_state.currentScene = 0;
     switchScene(0);
 }
+
 void codecrow() {
     // Start of the 2016 demo!!!!!!!!!!!!!!!
     printf("Welcome to project: %s!\r\n", projectName); 
@@ -347,9 +370,6 @@ void codecrow() {
         frameEnd();
     }
 }
-
-
-
 
 // Frame/Demo management:
 void drawFPS() {
@@ -397,8 +417,6 @@ int handleSerialInput() {
 
     return toRet;
 }
-
-
 
 int main(void) {
     setupHardware();

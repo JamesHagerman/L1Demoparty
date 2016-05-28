@@ -117,7 +117,7 @@ void config_timer() {
 	_T1IE = 1;	// turn on the timer1 interrupt
 
 	/* set up timer for stepping through song */
-	PR2 = 0x1d09; // slower: 0x3d09
+	PR2 = 0xf0; // slower: 0x3d09
 	_T2IP = 6; // interrupt priority
 	_T2IF = 0; // reset flag
 	/* no nice macros for T2CON :( */
@@ -131,10 +131,16 @@ void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
 	static unsigned short idx = 0;
-	PR1 = song[idx];
-//    PR1 = 0x9f;
+    static uint8_t sineDump = 0;
+    static uint8_t rampDump = 0;
+//	PR1 = song[idx];
+
+    PR1 = NOTES_C2 + sinetable[sineDump]/2 + sinetable[rampDump];
+//    PR1 = c;
 
 	idx++;
+    sineDump+=4;
+    rampDump++;
 	if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
 		idx = 0;
 	_T2IF = 0;
