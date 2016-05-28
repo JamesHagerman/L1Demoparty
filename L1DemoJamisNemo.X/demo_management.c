@@ -1,17 +1,29 @@
 #include "demo_management.h"
 
+//SCENE scene;
 STORY_STATE story_state;
 
 uint16_t frames = 0;
 bool ledState = true;
 
-// State management methods:
-void switchStory(uint16_t story) {
-    
+// StoryState management methods:
+void switchScene(uint8_t nextScene) {
+    if (nextScene) {
+        printf("%u is an invalid scene...\n", nextScene);
+        return;
+    }
+    if (nextScene != story_state.currentScene) {
+        story_state.currentScene = nextScene;
+    } else {
+        printf("Reiniting scene %u\n", nextScene);
+    }
+    (*story_state.scenes[nextScene].sceneInit)(); // Init this scene
 }
-//
-//void drawCurrentStory
-//
+
+void drawCurrentScene() {
+    uint8_t id = story_state.currentScene;
+    (*story_state.scenes[id].sceneDraw)(frames); // Draw this scene
+}
 
 
 void manageFrameReset() {
@@ -21,7 +33,18 @@ void manageFrameReset() {
 }
 
 
+// Scene management methods:
+
+
 // Demo hardware helpers:
+void checkForJumper() {
+    bool jumperOn = ! PORTBbits.RB4; // high = not connected. low = jumper!
+    if (jumperOn) {
+        story_state.storyPlaying = true;
+    } else {
+        story_state.storyPlaying = false;
+    }
+}
 void setupHardware() {
     ANSB = 0x0000;
     ANSC = 0x0000;
@@ -30,12 +53,11 @@ void setupHardware() {
     ANSG = 0x0000;
     TRISB = 0x0000;
     
-    // Set pins r18 and r28 as outputs:
-    TRISBbits.TRISB4 = 0;
-    TRISBbits.TRISB5 = 0;
+    // Set pins r18 and r28 operation state:
+    TRISBbits.TRISB4 = 1; // B4 = r28 = input
+    TRISBbits.TRISB5 = 0; // B5 = r18 = output
     // Set initial value on those pins:
-    PORTBbits.RB4 = 0;
-    PORTBbits.RB5 = 0;
+    LATBbits.LATB5 = 0;
 
     // Setup interrupts:
     
@@ -88,7 +110,6 @@ void frameEnd() {
 void statusLED() {
     // Blink some pins:
     ledState = !ledState;
-    PORTBbits.RB4 = ledState;
     PORTBbits.RB5 = ledState;
     __delay_ms(100);
 }

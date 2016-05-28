@@ -26,9 +26,34 @@
 //#include "screens.h"
 //#include "testgfx.h"
 
-_CONFIG1(FWDTEN_OFF & GWRP_OFF & GCP_OFF & JTAGEN_OFF)
-_CONFIG2(POSCMOD_HS & FCKSM_CSDCMD & FNOSC_PRIPLL & PLL96MHZ_ON & PLLDIV_DIV2)
-_CONFIG3(ALTPMP_ALTPMPEN & SOSCSEL_EC)
+// CONFIG3
+#pragma config WPFP = WPFP255           // Write Protection Flash Page Segment Boundary (Highest Page (same as page 170))
+#pragma config SOSCSEL = EC             // Secondary Oscillator Power Mode Select (External clock (SCLKI) or Digital I/O mode()
+#pragma config WUTSEL = LEG             // Voltage Regulator Wake-up Time Select (Default regulator start-up time is used)
+#pragma config ALTPMP = ALTPMPEN        // Alternate PMP Pin Mapping (EPMP pins are in alternate location mode)
+#pragma config WPDIS = WPDIS            // Segment Write Protection Disable (Segmented code protection is disabled)
+#pragma config WPCFG = WPCFGDIS         // Write Protect Configuration Page Select (Last page (at the top of program memory) and Flash Configuration Words are not write-protected)
+#pragma config WPEND = WPENDMEM         // Segment Write Protection End Page Select (Protected code segment upper boundary is at the last page of program memory; the lower boundary is the code page specified by WPFP)
+
+// CONFIG2
+#pragma config POSCMOD = HS             // Primary Oscillator Select (HS Oscillator mode is selected)
+#pragma config IOL1WAY = ON             // IOLOCK One-Way Set Enable (The IOLOCK bit (OSCCON<6>) can be set once, provided the unlock sequence has been completed. Once set, the Peripheral Pin Select registers cannot be written to a second time.)
+#pragma config OSCIOFNC = OFF           // OSCO Pin Configuration (OSCO/CLKO/RC15 functions as CLKO (FOSC/2))
+#pragma config FCKSM = CSDCMD           // Clock Switching and Fail-Safe Clock Monitor (Clock switching and Fail-Safe Clock Monitor are disabled)
+#pragma config FNOSC = PRIPLL           // Initial Oscillator Select (Primary Oscillator with PLL module (XTPLL, HSPLL, ECPLL))
+#pragma config PLL96MHZ = ON            // 96MHz PLL Startup Select (96 MHz PLL is enabled automatically on start-up)
+#pragma config PLLDIV = DIV2            // 96 MHz PLL Prescaler Select (Oscillator input is divided by 2 (8 MHz input))
+#pragma config IESO = ON                // Internal External Switchover (IESO mode (Two-Speed Start-up) is enabled)
+
+// CONFIG1
+#pragma config WDTPS = PS32768          // Watchdog Timer Postscaler (1:32,768)
+#pragma config FWPSA = PR128            // WDT Prescaler (Prescaler ratio of 1:128)
+#pragma config WINDIS = OFF             // Windowed WDT (Standard Watchdog Timer enabled,(Windowed-mode is disabled))
+#pragma config FWDTEN = OFF             // Watchdog Timer (Watchdog Timer is disabled)
+#pragma config ICS = PGx1               // Emulator Pin Placement Select bits (Emulator functions are shared with PGEC1/PGED1)
+#pragma config GWRP = OFF               // General Segment Write Protect (Writes to program memory are allowed)
+#pragma config GCP = OFF                // General Segment Code Protect (Code protection is disabled)
+#pragma config JTAGEN = OFF             // JTAG Port Enable (JTAG port is disabled)
 
 //=========
 // Demo method declarations:
@@ -39,8 +64,8 @@ int handleSerialInput(uint16_t oldStoryPart);
 // Variable declarations:
 char projectName[] = "Code Crow";
 char buf[20]; // Buffer for any text rendering sprintf() calls
-volatile uint16_t storyPart = 0;
-volatile uint16_t serialStoryIndex = 100;
+volatile uint8_t storyPart = 0;
+volatile uint8_t serialStoryIndex = 100;
 
 //=========
 // Static inline functions:
@@ -104,7 +129,6 @@ inline void manageStory() {
     }
 }
 
-
 //================================
 // Start of music playing methods:
 //_T1Interrupt() is the T1 interrupt service routine (ISR).
@@ -126,31 +150,28 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
 //================================
 // Start of frame drawing methods:
+// START OF SCENES
+// START OF SCENES
+// START OF SCENES
+
 uint16_t maxY = 474; // 480-PIX_H
 
-// for drawIntro()
+// Start drawIntro scene:
 uint8_t color = 0;
 volatile int c = 0;
 int speed = 1;
 int dir = 1;
 int xPosition = 0;
 uint8_t rotAngle = 0;
+
 int currentSpriteIndex = 0;
 int currentSpriteOffset = 1;
-int currentSpriteFrameCount = 3;
-
-
-
-void initDemo() {
-    printf("Initing demo...\r\n");
-    // Calculate some stuff
-    maxY = 480-PIX_H; // validate that the maxX size is correct.
-    
-    blank_background();
-    loadAllSprites();
-    
-    // TODO: Move this to initIntro();
-    
+int currentSpriteFrameCount = 2;
+int spriteStepTimeout = 0;
+int spriteStepTrigger = 10;
+void initIntro() {
+    int sceneId = story_state.currentScene;
+    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
     // Setup bird sprite offsets:
     currentSpriteIndex = currentSpriteOffset;
     // Setup colors for bird sprite
@@ -158,10 +179,7 @@ void initDemo() {
     clut_set(2, 0x9a60);
     clut_set(3, 0xb800);
     calc_colors(4); // Build a rainbow starting with CLUT index 4
-}
-
-void initIntro() {
-    
+    _CLUTEN = 1; // enable the CLUT for this scene
 }
 void drawIntro(uint16_t frame) {
     
@@ -169,7 +187,6 @@ void drawIntro(uint16_t frame) {
     sizeW = 1;
     sizeH = 1*PIX_H;
     vertOffset = VER_RES/4;
-    uint8_t r, g, b, sat = 255, val = 255; // hue
     
     uint8_t colorScrollSpeed = 25;
 
@@ -177,8 +194,6 @@ void drawIntro(uint16_t frame) {
 
     for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
         for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
-//            hsvtorgb(&r,&g,&b,i*j,sat,val);
-//            color = get8bppRGBColor(r,g,b);
 //            color = i + j;
             
             color = (uint8_t)(frame * colorScrollSpeed) +
@@ -201,14 +216,29 @@ void drawIntro(uint16_t frame) {
         }
     }
     
+    // Manage Crow:
 //    rotAngle++;
-    if (rotAngle > 2) {
-        rotAngle = 0;
+//    if (rotAngle > 2) {
+//        rotAngle = 0;
+//    }
+    if (frame == 0 ) {
+        spriteStepTimeout++;
+        if (spriteStepTimeout > spriteStepTrigger) {
+            currentSpriteIndex++;
+            spriteStepTimeout = 0;
+        }
+        if ( currentSpriteIndex >= currentSpriteOffset + currentSpriteFrameCount) {
+            currentSpriteIndex = currentSpriteOffset;
+        }
+    } else {
+        spriteStepTimeout++;
+        if (spriteStepTimeout > spriteStepTrigger + 30) {
+            currentSpriteIndex = currentSpriteOffset; // head down state
+        } else {
+            currentSpriteIndex = currentSpriteFrameCount + 1; // caw state
+        }
     }
-    currentSpriteIndex++;
-    if ( currentSpriteIndex >= currentSpriteOffset + currentSpriteFrameCount) {
-        currentSpriteIndex = currentSpriteOffset;
-    }
+    
     drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
     
 //    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
@@ -222,42 +252,46 @@ void drawIntro(uint16_t frame) {
 //    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
 //    printf("x: %i, dir: %i\r\n", xPosition, dir);
     
-    
-
     // We have to calculate horizontal movement manually here. No way to 
     // detect the drawable width of a string of text at this point.
     sprintf(buf, "Code Crow");
-    chr_print(buf, 0, (11*9)); // x, y are bounded in chr_print
+    chr_print(buf, 0, (21*5)-4); // x, y are bounded in chr_print
     sprintf(buf, "jamisnemo");
     chr_print(buf, HOR_RES-38, VER_RES-(21*6)); // x, y are bounded in chr_print
 
 }
+// end drawIntro scene
 
-void textDrawingTests() {
-    // ToDo: replace this with the CLUT. Like that will ever happen.
-//    hsvtorgb(&r,&g,&b,frames,sat,val);
-//    color = get8bppRGBColor(r,g,b);
-//    color = get16bppRGBColor(r,g,b);
-//
-//    // Draw the beautiful font we cobbled together
-//    sprintf(buf, "ABCDEFGHIJKLMNOP");
-//    chr_print(buf, 0, 0); // x, y are bounded in chr_print
-//
-//    sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
-//    chr_print(buf, 0, 21); // x, y are bounded in chr_print
-//
-//    sprintf(buf, "QRSTUVWXYZ");
-//    chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
-//
-//    sprintf(buf, "qrstuvwxyz");
-//    chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+// END OF SCENES
+// END OF SCENES
+// END OF SCENES
+
+
+void loadScenes() {
+    story_state.scenes[0] = (SCENE) {0, 1000, &initIntro, &drawIntro, "Intro"};
 }
-
+void initDemo() {
+    printf("Initing demo...\r\n");
+    // Calculate some stuff
+    maxY = 480-PIX_H; // validate that the maxX size is correct.
+    
+    blank_background();
+    loadAllSprites();
+    
+    // Build the scenes:
+    loadScenes();
+    
+    // Pause the demo until the UART or GPIO starts it:
+    story_state.storyPlaying = false;
+    
+    // Start on the first scene:
+    story_state.currentScene = 0;
+    switchScene(0);
+}
 void codecrow() {
     // Start of the 2016 demo!!!!!!!!!!!!!!!
-    initDemo();
-    
     printf("Welcome to project: %s!\r\n", projectName); 
+    initDemo();
     
 //    char someInput[128] = "";
 //    printf("Enter some string: ");
@@ -268,28 +302,38 @@ void codecrow() {
     while (1) {
         frameStart();
         // Start frame drawing:
-        
+
         // Make sure we reset our frame count to zero after some time. Not sure 
         // if we even want this except for arbitrary looping...
         manageFrameReset(); 
-        
+
         // Manage any newly available data from the serial port:
         serialStoryIndex = handleSerialInput(storyPart);
-        
+
         // TODO: Manage demo state somewhere...
         if (serialStoryIndex == 100) {
             manageStory();
         } else {
-//            printf("story part being set manually");
+//                printf("story part being set manually");
             storyPart = serialStoryIndex;
         }
 
         // Switch to, and draw our selected frame:
-        playSelected();  
+        drawCurrentScene();
+        
+        // Play only if we've got that jumper on r28
+        checkForJumper();
+        if (story_state.storyPlaying == true) {
+            frames++;
+        } else {
+            sprintf(buf, "Please jump R28 to");
+            chr_print(buf, 2, VER_RES-(21*4)); // x, y are bounded in chr_print
+            sprintf(buf, "to Ground!");
+            chr_print(buf, 22, VER_RES-(21*3)); // x, y are bounded in chr_print
+        }
 
         // End frame drawing
         frameEnd();
-        frames++;    
     }
 }
 
@@ -306,7 +350,7 @@ void drawFPS() {
 int handleSerialInput(uint16_t oldStoryPart) {
     // My serial handler for the demo's keyboard input:
     // TODO: Manage some amount of command input. Single char will work for now...
-    uint16_t i, storyPart;
+    uint16_t i, storyPart = 200;
     if (dataAvailable) {
 //        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
         dataAvailable = false;

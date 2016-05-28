@@ -23,6 +23,26 @@ uint16_t frames = 0;
 
 
 
+void textDrawingTests() {
+    // ToDo: replace this with the CLUT. Like that will ever happen.
+//    hsvtorgb(&r,&g,&b,frames,sat,val);
+//    color = get8bppRGBColor(r,g,b);
+//    color = get16bppRGBColor(r,g,b);
+//
+//    // Draw the beautiful font we cobbled together
+//    sprintf(buf, "ABCDEFGHIJKLMNOP");
+//    chr_print(buf, 0, 0); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "abcdefghijklmnop"); // klmnopqrstuvwxyz
+//    chr_print(buf, 0, 21); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "QRSTUVWXYZ");
+//    chr_print(buf, 0, 21*2); // x, y are bounded in chr_print
+//
+//    sprintf(buf, "qrstuvwxyz");
+//    chr_print(buf, 0, 21*3); // x, y are bounded in chr_print
+}
+
 
 
 

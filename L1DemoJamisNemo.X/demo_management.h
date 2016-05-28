@@ -29,26 +29,41 @@
 extern "C" {
 #endif
     
+#define SCENE_COUNT 1
+  
 typedef struct {
-   uint8_t mode;
-   uint8_t currentChan;
-   uint8_t cursorPos;
-   bool cursorState;
-   bool clutState;
+    uint8_t sceneStartFrame;
+    uint16_t scceneLength;
+    int (*sceneInit)();
+    int (*sceneDraw)(uint16_t frame);
+    char sceneName[21];
+} SCENE;
+//extern SCENE scene;
+
+typedef struct {
+//   uint8_t mode;
+//   uint8_t currentChan;
+//   uint8_t cursorPos;
+    uint8_t currentScene;
+    bool storyPlaying;
+    bool storyEnded;
+    bool clutState;
+    SCENE scenes[SCENE_COUNT];
 } STORY_STATE;
 extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern bool ledState;
 
+void switchScene(uint8_t nextScene);
+void drawCurrentScene();
+void manageFrameReset();
+
+void checkForJumper();
 void setupHardware();
 void frameStart();
 void frameEnd();
-void manageFrameReset();
-void drawFPS();
 void statusLED();
-
-
 
 #ifdef	__cplusplus
 }
