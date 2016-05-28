@@ -99,7 +99,9 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     } else {
         PORTB = (sinetable[idx]/4) << 8;
     }
-	idx += 1;
+    if (frames != 0) {
+        idx += 1;
+    }
 	_T1IF = 0;
 }
 
@@ -126,6 +128,8 @@ int currentSpriteOffset = 1;
 int currentSpriteFrameCount = 3;
 int spriteStepTimeout = 0;
 int spriteStepTrigger = 10;
+
+uint8_t colorScrollSpeed = 0;
 void initIntro() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
@@ -148,7 +152,7 @@ void drawIntro(uint16_t frame) {
     sizeH = 1*PIX_H;
     vertOffset = VER_RES/4;
     
-    uint8_t colorScrollSpeed = 25;
+    colorScrollSpeed++;
 
     // Safety third:
     if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
@@ -226,12 +230,22 @@ void drawIntro(uint16_t frame) {
         // detect the drawable width of a string of text at this point.
         sprintf(buf, "Code Crow");
         chr_print(buf, 0, (21*5)-4); // x, y are bounded in chr_print
-        sprintf(buf, "jamisnemo");
-        chr_print(buf, HOR_RES-38, VER_RES-(21*6)); // x, y are bounded in chr_print
+        sprintf(buf, "by:jamisnemo");
+        chr_print(buf, HOR_RES-48, VER_RES-(21*6)); // x, y are bounded in chr_print
     }
 
 }
 // End of Intro scene
+
+// Start of road scene
+void initRoad() {
+    
+}
+void drawRoad() {
+    
+}
+// End of road scene
+
 
 // Start Credits scene:
 void initCredits() {
