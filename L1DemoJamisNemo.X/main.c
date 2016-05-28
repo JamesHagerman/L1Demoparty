@@ -215,12 +215,11 @@ void drawIntro(uint16_t frame) {
 //        dir = dir * -1;
 //    }
 //    xPosition = xPosition + (speed * dir);
-//    
+
 //    rcc_color(0x3);
-//    line(0, vertOffset*PIX_H, HOR_RES-1, vertOffset*PIX_H);
+//    line(0, 0*PIX_H, HOR_RES-1, 0*PIX_H);
 //    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
 //    printf("x: %i, dir: %i\r\n", xPosition, dir);
-    
     
     if (frame != 0 ) {
         // We have to calculate horizontal movement manually here. No way to 
@@ -239,48 +238,25 @@ void initCredits() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
 
-    _CLUTEN = 1; // enable the CLUT for this scene
+    _CLUTEN = 0; // enable the CLUT for this scene
 }
 void drawCredits(uint16_t frame) {
-    
-    uint16_t i, j, sizeW, sizeH, vertOffset;
-    sizeW = 1;
-    sizeH = 1*PIX_H;
-    vertOffset = VER_RES/4;
-    
-    uint8_t colorScrollSpeed = 25;
+   
+    drawSprite((HOR_RES-32)/2, 4*PIX_H, 8, 0);
 
-    // Safety third:
-    if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
-
-    
-//    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-    
-//    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
-//        dir = dir * -1;
-//    }
-//    xPosition = xPosition + (speed * dir);
-//    
-//    rcc_color(0x3);
-//    line(0, vertOffset*PIX_H, HOR_RES-1, vertOffset*PIX_H);
-//    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
-//    printf("x: %i, dir: %i\r\n", xPosition, dir);
-    
-    
-    // We have to calculate horizontal movement manually here. No way to 
-    // detect the drawable width of a string of text at this point.
-
-    sprintf(buf, "Never enough time...");
-    chr_print(buf, 0, VER_RES-(21*4)); // x, y are bounded in chr_print
-    
     sprintf(buf, "Thank you Arko ");
     chr_print(buf, 0, VER_RES-(21*12)); // x, y are bounded in chr_print
     sprintf(buf, "and everyone at NSL ");
     chr_print(buf, 0, VER_RES-(21*11)); // x, y are bounded in chr_print
-    sprintf(buf, "that make");
+    sprintf(buf, "that helps make");
     chr_print(buf, 0, VER_RES-(21*10)); // x, y are bounded in chr_print
     sprintf(buf, "LayerOne happen!");
     chr_print(buf, 0, VER_RES-(21*9)); // x, y are bounded in chr_print
+    
+    sprintf(buf, "Never enough time...");
+    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
+    sprintf(buf, "Was it good for you?");
+    chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
     
 }
 // End of Credits scene
@@ -293,7 +269,7 @@ void drawCredits(uint16_t frame) {
 
 void loadScenes() {
     // Don't forget to change SCENE_COUNT
-    story_state.scenes[0] = (SCENE) {0, 200, &initIntro, &drawIntro, "Intro"};
+    story_state.scenes[0] = (SCENE) {0, 400, &initIntro, &drawIntro, "Intro"};
     story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, "Credits"};
 }
 void initDemo() {
@@ -346,12 +322,12 @@ void codecrow() {
             checkSceneFinished();
         } else {
             sprintf(buf, "Please jump R28 to");
-            chr_print(buf, 2, VER_RES-(21*4)); // x, y are bounded in chr_print
+            chr_print(buf, 2, VER_RES-(21*3)); // x, y are bounded in chr_print
             sprintf(buf, "to Ground...");
-            chr_print(buf, 22, VER_RES-(21*3)); // x, y are bounded in chr_print
+            chr_print(buf, 22, VER_RES-(21*2)); // x, y are bounded in chr_print
         }
         
-        drawFPS(); // actually draws frames counter value
+//        drawFPS(); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();

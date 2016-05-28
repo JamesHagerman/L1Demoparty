@@ -112,7 +112,6 @@ void line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     int err = (dx>dy ? dx : -dy)/2, e2;
 
     for(;;){
-//        setPixel(x0,y0);
         rcc_draw(x0, y0, sizeW, sizeH);
         if (x0==x1 && y0==y1) break;
         e2 = err;

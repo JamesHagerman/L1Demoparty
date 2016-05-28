@@ -1,5 +1,5 @@
 PImage sprite;
-String imageFilename = "crowCLUT3.bmp";
+String imageFilename = "l1_logo.bmp";
 String paletteFilename = "birdpallet.pal";
 
 String[] loadPalette(String filename) {
@@ -40,36 +40,37 @@ void setup() {
   System.out.printf("0x%x, // rotate\n", 0x00);
   for (int i = 0; i < pixelCount; i++) {
     color thisPixel = sprite.pixels[i];
-    //float r = red(thisPixel);
-    //float g = green(thisPixel);
-    //float b = blue(thisPixel);
+    
 
     // PALETTE LOOKUP:
-    int r = (thisPixel) >> 16 & 0xFF;
-    int g = (thisPixel) >> 8 & 0xFF;
-    int b = (thisPixel) & 0xFF;
+    //int r = (thisPixel) >> 16 & 0xFF;
+    //int g = (thisPixel) >> 8 & 0xFF;
+    //int b = (thisPixel) & 0xFF;
 
-    int hexOut = 0;
-    String toFind = hex(  ((r & 0xff)<<16) | ((g & 0xff)<<8) | b&0xff, 6);
+    //int hexOut = 0;
+    //String toFind = hex(  ((r & 0xff)<<16) | ((g & 0xff)<<8) | b&0xff, 6);
     
-    //System.out.printf("Looking for: %s\n", toFind);
-    for (int j = 0; j < palette.length; j++ ) { 
-      if ( toFind.equals(palette[j]) ) {
-          //System.out.printf(" Found at: %d, %s\n", j, palette[j]);
-          hexOut = j;
-          break;
-      }
-    }
+    ////System.out.printf("Looking for: %s\n", toFind);
+    //for (int j = 0; j < palette.length; j++ ) { 
+    //  if ( toFind.equals(palette[j]) ) {
+    //      //System.out.printf(" Found at: %d, %s\n", j, palette[j]);
+    //      hexOut = j;
+    //      break;
+    //  }
+    //}
     
     
     
     // WITHOUT CLUT: 
+    float r = red(thisPixel);
+    float g = green(thisPixel);
+    float b = blue(thisPixel);
     // Map the 24 bit colors of the sprite down to 8bpp
-    //int newR = round(map(r, 0, 255, 0, 7));
-    //int newG = round(map(g, 0, 255, 0, 7));
-    //int newB = round(map(b, 0, 255, 0, 3));
+    int newR = round(map(r, 0, 255, 0, 7));
+    int newG = round(map(g, 0, 255, 0, 7));
+    int newB = round(map(b, 0, 255, 0, 3));
     
-    //int hexOut = (newR<<5) | (newG<<2) | newB;
+    int hexOut = (newR<<5) | (newG<<2) | newB;
 
     // WITH CLUT:
     // Map the 24 bit colors of the sprite down to 16 bit since the CLUT is ALWAYS 16 bit.
