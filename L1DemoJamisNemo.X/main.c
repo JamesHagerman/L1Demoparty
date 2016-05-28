@@ -155,18 +155,20 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 // START OF SCENES
 
 uint16_t maxY = 474; // 480-PIX_H
+volatile int c = 0; // A char for the uart
 
 // Start drawIntro scene:
 uint8_t color = 0;
-volatile int c = 0;
+// This should be one greater than the index of the last color we care about in
+// the palette for the Crow sprite:
+uint8_t clutStart = 5;
 int speed = 1;
 int dir = 1;
 int xPosition = 0;
 uint8_t rotAngle = 0;
-
 int currentSpriteIndex = 0;
 int currentSpriteOffset = 1;
-int currentSpriteFrameCount = 2;
+int currentSpriteFrameCount = 3;
 int spriteStepTimeout = 0;
 int spriteStepTrigger = 10;
 void initIntro() {
@@ -174,11 +176,13 @@ void initIntro() {
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
     // Setup bird sprite offsets:
     currentSpriteIndex = currentSpriteOffset;
-    // Setup colors for bird sprite
-    clut_set(1, 0x4208);
-    clut_set(2, 0x9a60);
-    clut_set(3, 0xb800);
-    calc_colors(4); // Build a rainbow starting with CLUT index 4
+    // Setup colors for bird sprite using palette (manually!?! kids these days...)
+    // clut_set(0) is black
+    clut_set(1, 0x4208); // gray
+    clut_set(2, 0x9a60); // orange
+    clut_set(3, 0xb800); // red
+    clut_set(4, 0x2124); // dark gray: #232323: 35, 35, 35
+    calc_colors(clutStart); // Build a rainbow starting with CLUT index 4
     _CLUTEN = 1; // enable the CLUT for this scene
 }
 void drawIntro(uint16_t frame) {
@@ -190,74 +194,86 @@ void drawIntro(uint16_t frame) {
     
     uint8_t colorScrollSpeed = 25;
 
+    // Safety third:
     if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
 
-    for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
-        for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
-//            color = i + j;
-            
-            color = (uint8_t)(frame * colorScrollSpeed) +
-                    sinetable[(uint8_t)i] + 
-                    sinetable[(uint8_t)j*3];
-            
-            if (color == 0 ) {
-                color = 1;
-            }else if (color == 0xff) {
-                color = 0xfe;
-            }
-            
-            // This is a hack to drop our defined colors from the lookup.
-            if (color < 4) {
-                color = 4;
-            }
-            
-            rcc_color(color);
-            rcc_draw(j, i + vertOffset, sizeW, sizeH);            
-        }
-    }
-    
-    // Manage Crow:
-//    rotAngle++;
-//    if (rotAngle > 2) {
-//        rotAngle = 0;
-//    }
     if (frame == 0 ) {
-        spriteStepTimeout++;
-        if (spriteStepTimeout > spriteStepTrigger) {
-            currentSpriteIndex++;
-            spriteStepTimeout = 0;
+        // Draw background:
+        for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
+            for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
+                color = 0x4; // dark gray background
+                rcc_color(color);
+                rcc_draw(j, i + vertOffset, sizeW, sizeH);            
+            }
         }
-        if ( currentSpriteIndex >= currentSpriteOffset + currentSpriteFrameCount) {
-            currentSpriteIndex = currentSpriteOffset;
-        }
+        
+        // Manage Crow:
+        currentSpriteIndex = currentSpriteOffset; // sleep state
+        
     } else {
+        // Draw warp! Finally! A Warp! FUCK yeah!!
+        for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
+            for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
+    //            color = i + j;
+
+                color = (uint8_t)(frame * colorScrollSpeed) +
+                        sinetable[(uint8_t)i] + 
+                        sinetable[(uint8_t)j*3];
+
+                if (color == 0 ) {
+                    color = 1;
+                }else if (color == 0xff) {
+                    color = 0xfe;
+                }
+
+                // This is a hack to drop our defined colors from the lookup.
+                if (color < clutStart) {
+                    color = clutStart;
+                }
+
+                rcc_color(color);
+                rcc_draw(j, i + vertOffset, sizeW, sizeH);            
+            }
+        }
+        
+        // Manage Crow:
         spriteStepTimeout++;
         if (spriteStepTimeout > spriteStepTrigger + 30) {
-            currentSpriteIndex = currentSpriteOffset; // head down state
+            currentSpriteIndex = currentSpriteOffset + 1; // awake state
         } else {
-            currentSpriteIndex = currentSpriteFrameCount + 1; // caw state
+            currentSpriteIndex = currentSpriteOffset + 2; // caw state
         }
+//        spriteStepTimeout++;
+//        if (spriteStepTimeout > spriteStepTrigger) {
+//            currentSpriteIndex++;
+//            spriteStepTimeout = 0;
+//        }
+//        if ( currentSpriteIndex >= currentSpriteOffset + currentSpriteFrameCount
+//                || currentSpriteIndex == currentSpriteOffset) {
+//            currentSpriteIndex = currentSpriteOffset + 1;
+//        }
     }
-    
     drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
     
 //    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
 //        dir = dir * -1;
 //    }
 //    xPosition = xPosition + (speed * dir);
-    
-    rcc_color(0x3);
-    
+//    
+//    rcc_color(0x3);
 //    line(0, vertOffset*PIX_H, HOR_RES-1, vertOffset*PIX_H);
 //    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
 //    printf("x: %i, dir: %i\r\n", xPosition, dir);
     
-    // We have to calculate horizontal movement manually here. No way to 
-    // detect the drawable width of a string of text at this point.
-    sprintf(buf, "Code Crow");
-    chr_print(buf, 0, (21*5)-4); // x, y are bounded in chr_print
-    sprintf(buf, "jamisnemo");
-    chr_print(buf, HOR_RES-38, VER_RES-(21*6)); // x, y are bounded in chr_print
+    
+    if (frame != 0 ) {
+        // We have to calculate horizontal movement manually here. No way to 
+        // detect the drawable width of a string of text at this point.
+        sprintf(buf, "Code Crow");
+        chr_print(buf, 0, (21*5)-4); // x, y are bounded in chr_print
+        sprintf(buf, "jamisnemo");
+        chr_print(buf, HOR_RES-38, VER_RES-(21*6)); // x, y are bounded in chr_print
+    }
 
 }
 // end drawIntro scene
@@ -328,7 +344,7 @@ void codecrow() {
         } else {
             sprintf(buf, "Please jump R28 to");
             chr_print(buf, 2, VER_RES-(21*4)); // x, y are bounded in chr_print
-            sprintf(buf, "to Ground!");
+            sprintf(buf, "to Ground...");
             chr_print(buf, 22, VER_RES-(21*3)); // x, y are bounded in chr_print
         }
 
