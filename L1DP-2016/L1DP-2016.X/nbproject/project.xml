@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://www.netbeans.org/ns/project/1">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://www.netbeans.org/ns/project/1">
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>L1DemoJamisNemo</name>
+            <name>L1DP-2016</name>
             <creation-uuid>5c428e8b-58de-493c-88f4-95e24dd6b18b</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
