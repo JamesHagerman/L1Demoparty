@@ -41,11 +41,13 @@ The plan was to have somewhat more than a story and cool effects... but I just l
 
 So there are holes... but I feel like a got a lot working in such a short time!
 
-## Processing Scripts
+## Processing Scripts (possibly also C++, sorry)
 
 I've written 4 scripts (Processing, sorry, it what I had at the time, deal with it.) to help build demos. They may or may not be useful to you.
 
 You'll have to reverse engineer them somewhat... I know I have to every damn year!
+
+The `paletteLoader` script is actually C++. It reads the binary `.pal` file format... or at least I think it does...
 
 ## `docs` folder
 
