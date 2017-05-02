@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=L1DemoJamisNemo.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=l1demojamisnemo.x/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/L1DP-2015.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=L1DP-2015.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=l1dp-2015.x/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/l1demojamisnemo.x/bin
+makeDirectory ${TMPDIR}/l1dp-2015.x/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/l1demojamisnemo.x.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/l1dp-2015.x.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/l1demojamisnemo.x.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/l1dp-2015.x.tar *
 checkReturnCode
 
 # Cleanup
