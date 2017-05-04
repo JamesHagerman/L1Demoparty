@@ -109,20 +109,21 @@ const unsigned short song[] = {
 
 
 void config_timer() {
-	PR1 = 0;
-    _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8, 
-	_T1IP = 5;	// set interrupt priority
-	_TON  = 1;	// turn on the timer
-	_T1IF = 0;	// reset interrupt flag
-	_T1IE = 1;	// turn on the timer1 interrupt
+    // Setup the timer to step through the wavetable:
+    PR1 = 0;
+    _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8,
+    _T1IP = 5;	// set interrupt priority
+    _TON  = 1;	// turn on the timer
+    _T1IF = 0;	// reset interrupt flag
+    _T1IE = 1;	// turn on the timer1 interrupt
 
-	/* set up timer for stepping through song */
-	PR2 = 0xf0; // slower: 0x3d09
-	_T2IP = 6; // interrupt priority
-	_T2IF = 0; // reset flag
-	/* no nice macros for T2CON :( */
-	T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
-	_T2IE = 1; // enable the timer2 interrupt
+    // Set up timer for stepping through song:
+    PR2 = 0xf0; // slower: 0x3d09
+    _T2IP = 6; // interrupt priority
+    _T2IF = 0; // reset flag
+    /* no nice macros for T2CON :( */
+    T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
+    _T2IE = 1; // enable the timer2 interrupt
 }
 
 
@@ -130,20 +131,24 @@ void config_timer() {
 void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
-	static unsigned short idx = 0;
+    // This interrupt is for stepping through the song.
+    // The interrupt for stepping through the wave table is in main.c so it can
+    // have access to PORTB
+
+    static unsigned short idx = 0;
     static uint8_t sineDump = 0;
     static uint8_t rampDump = 0;
-//	PR1 = song[idx];
+//    PR1 = song[idx];
 
     PR1 = NOTES_C2 + sinetable[sineDump]/2 + sinetable[rampDump];
 //    PR1 = c;
 
-	idx++;
+    idx++;
     sineDump+=4;
     rampDump++;
-	if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
-		idx = 0;
-	_T2IF = 0;
+    if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
+            idx = 0;
+    _T2IF = 0;
 }
 
 

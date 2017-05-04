@@ -27,11 +27,11 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=L1DP-2017.X
 
 # Active Configuration
-DEFAULTCONF=default
+DEFAULTCONF=default_optimizations_on
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=default 
+ALLCONFS=default_optimizations_on no_optimizations 
 
 
 # build
@@ -45,13 +45,15 @@ ALLCONFS=default
 
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default_optimizations_on clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=no_optimizations clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default_optimizations_on build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=no_optimizations build
 
 
 
