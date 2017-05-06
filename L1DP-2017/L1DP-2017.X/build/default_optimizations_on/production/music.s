@@ -73,7 +73,7 @@ __T1Interrupt:
 	.set ___BP___,50
 	bra	nz,.L3
 .LSM15:
-	mov	#_idx.8457,w4
+	mov	#_idx.8458,w4
 	mov.b	[w4],w4
 	ze	w4,w4
 	asr	w4,#15,w5
@@ -95,7 +95,7 @@ __T1Interrupt:
 	bra	.L4
 .L3:
 .LSM16:
-	mov	#_idx.8457,w4
+	mov	#_idx.8458,w4
 	mov.b	[w4],w4
 	ze	w4,w4
 	mov	#_sinetable,w5
@@ -112,7 +112,7 @@ __T1Interrupt:
 	.set ___BP___,39
 	bra	z,.L5
 .LSM18:
-	dec.b	_idx.8457
+	dec.b	_idx.8458
 .L5:
 .LSM19:
 	bclr.b	_IFS0bits,#3
@@ -138,9 +138,9 @@ __T2Interrupt:
 	mov	#__const_psvpage,w0
 	mov	w0,_DSRPAG
 .LSM22:
-	mov	#_sineDump.8464,w6
+	mov	#_sineDump.8465,w6
 	mov.b	[w6],w6
-	mov	#_rampDump.8465,w5
+	mov	#_rampDump.8466,w5
 	mov.b	[w5],w5
 	ze	w5,w7
 	mov	#_sinetable,w4
@@ -156,18 +156,18 @@ __T2Interrupt:
 	add	w7,w4,w4
 	mov	w4,_PR1
 .LSM23:
-	mov	_idx.8463,w4
+	mov	_idx.8464,w4
 	inc	w4,w4
-	mov	w4,_idx.8463
+	mov	w4,_idx.8464
 .LSM24:
 	add.b	w6,#4,w6
 	mov.b	w6,w7
-	mov	#_sineDump.8464,w0
+	mov	#_sineDump.8465,w0
 	mov.b	w7,[w0]
 .LSM25:
 	inc.b	w5,w5
 	mov.b	w5,w6
-	mov	#_rampDump.8465,w0
+	mov	#_rampDump.8466,w0
 	mov.b	w6,[w0]
 .LSM26:
 	mov	#64,w5
@@ -175,7 +175,7 @@ __T2Interrupt:
 	.set ___BP___,62
 	bra	nz,.L7
 .LSM27:
-	clr	_idx.8463
+	clr	_idx.8464
 .L7:
 .LSM28:
 	bclr.b	_IFS0bits,#7
@@ -1779,22 +1779,22 @@ _noise:
 	.byte -100
 	.byte 110
 	.section	.nbss,bss,near
-	.type	_rampDump.8465,@object
-	.size	_rampDump.8465, 1
-_rampDump.8465:
+	.type	_rampDump.8466,@object
+	.size	_rampDump.8466, 1
+_rampDump.8466:
 	.skip	1
-	.type	_sineDump.8464,@object
-	.size	_sineDump.8464, 1
-_sineDump.8464:
+	.type	_sineDump.8465,@object
+	.size	_sineDump.8465, 1
+_sineDump.8465:
 	.skip	1
 	.align	2
-	.type	_idx.8463,@object
-	.size	_idx.8463, 2
-_idx.8463:
+	.type	_idx.8464,@object
+	.size	_idx.8464, 2
+_idx.8464:
 	.skip	2
-	.type	_idx.8457,@object
-	.size	_idx.8457, 1
-_idx.8457:
+	.type	_idx.8458,@object
+	.size	_idx.8458, 1
+_idx.8458:
 	.skip	1
 	.section	.debug_frame,info
 .Lframe0:
@@ -1841,7 +1841,7 @@ _idx.8457:
 	.section	.text,code
 .Letext0:
 	.section	.debug_info,info
-	.4byte	0xd24
+	.4byte	0xd3a
 	.2byte	0x2
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
@@ -2883,10 +2883,10 @@ _idx.8457:
 	.byte	0x29
 	.4byte	0x84b
 	.uleb128 0xe
-	.byte	0x64
+	.byte	0xa6
 	.byte	0x5
 	.byte	0x2c
-	.4byte	0x99a
+	.4byte	0x9b0
 	.uleb128 0xc
 	.asciz	"currentScene"
 	.byte	0x5
@@ -2899,7 +2899,7 @@ _idx.8457:
 	.asciz	"storyPlaying"
 	.byte	0x5
 	.byte	0x31
-	.4byte	0x99a
+	.4byte	0x9b0
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x1
@@ -2907,7 +2907,7 @@ _idx.8457:
 	.asciz	"storyEnded"
 	.byte	0x5
 	.byte	0x33
-	.4byte	0x99a
+	.4byte	0x9b0
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x2
@@ -2915,7 +2915,7 @@ _idx.8457:
 	.asciz	"clutState"
 	.byte	0x5
 	.byte	0x34
-	.4byte	0x99a
+	.4byte	0x9b0
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x3
@@ -2923,10 +2923,18 @@ _idx.8457:
 	.asciz	"scenes"
 	.byte	0x5
 	.byte	0x35
-	.4byte	0x9a3
+	.4byte	0x9b9
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x4
+	.uleb128 0xc
+	.asciz	"sceneCount"
+	.byte	0x5
+	.byte	0x36
+	.4byte	0xf8
+	.byte	0x3
+	.byte	0x23
+	.uleb128 0xa4
 	.byte	0x0
 	.uleb128 0x2
 	.byte	0x1
@@ -2934,15 +2942,15 @@ _idx.8457:
 	.asciz	"_Bool"
 	.uleb128 0x15
 	.4byte	0x91c
-	.4byte	0x9b3
+	.4byte	0x9c9
 	.uleb128 0x16
 	.4byte	0x138
-	.byte	0x2
+	.byte	0x4
 	.byte	0x0
 	.uleb128 0x3
 	.asciz	"STORY_STATE"
 	.byte	0x5
-	.byte	0x36
+	.byte	0x37
 	.4byte	0x929
 	.uleb128 0x17
 	.byte	0x1
@@ -2963,7 +2971,7 @@ _idx.8457:
 	.4byte	.LFE2
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xa13
+	.4byte	0xa29
 	.uleb128 0x19
 	.asciz	"idx"
 	.byte	0x1
@@ -2971,7 +2979,7 @@ _idx.8457:
 	.4byte	0x107
 	.byte	0x5
 	.byte	0x3
-	.4byte	_idx.8457
+	.4byte	_idx.8458
 	.byte	0x0
 	.uleb128 0x18
 	.byte	0x1
@@ -2983,7 +2991,7 @@ _idx.8457:
 	.4byte	.LFE3
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xa71
+	.4byte	0xa87
 	.uleb128 0x19
 	.asciz	"idx"
 	.byte	0x1
@@ -2991,7 +2999,7 @@ _idx.8457:
 	.4byte	0x167
 	.byte	0x5
 	.byte	0x3
-	.4byte	_idx.8463
+	.4byte	_idx.8464
 	.uleb128 0x19
 	.asciz	"sineDump"
 	.byte	0x1
@@ -2999,7 +3007,7 @@ _idx.8457:
 	.4byte	0xf8
 	.byte	0x5
 	.byte	0x3
-	.4byte	_sineDump.8464
+	.4byte	_sineDump.8465
 	.uleb128 0x19
 	.asciz	"rampDump"
 	.byte	0x1
@@ -3007,13 +3015,13 @@ _idx.8457:
 	.4byte	0xf8
 	.byte	0x5
 	.byte	0x3
-	.4byte	_rampDump.8465
+	.4byte	_rampDump.8466
 	.byte	0x0
 	.uleb128 0x1a
 	.4byte	.LASF0
 	.byte	0x3
 	.2byte	0x1bf
-	.4byte	0xa7f
+	.4byte	0xa95
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3022,7 +3030,7 @@ _idx.8457:
 	.4byte	.LASF1
 	.byte	0x3
 	.2byte	0x232
-	.4byte	0xa92
+	.4byte	0xaa8
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3031,7 +3039,7 @@ _idx.8457:
 	.4byte	.LASF2
 	.byte	0x3
 	.2byte	0x2b3
-	.4byte	0xaa5
+	.4byte	0xabb
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3040,7 +3048,7 @@ _idx.8457:
 	.4byte	.LASF3
 	.byte	0x3
 	.2byte	0x2d1
-	.4byte	0xab8
+	.4byte	0xace
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3049,7 +3057,7 @@ _idx.8457:
 	.asciz	"PR1"
 	.byte	0x3
 	.2byte	0x547
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3058,7 +3066,7 @@ _idx.8457:
 	.4byte	.LASF4
 	.byte	0x3
 	.2byte	0x55f
-	.4byte	0xade
+	.4byte	0xaf4
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1b
@@ -3067,26 +3075,26 @@ _idx.8457:
 	.asciz	"PR2"
 	.byte	0x3
 	.2byte	0x568
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"T2CON"
 	.byte	0x3
 	.2byte	0x56c
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"PORTB"
 	.byte	0x3
 	.2byte	0xdad
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x15
 	.4byte	0x167
-	.4byte	0xb21
+	.4byte	0xb37
 	.uleb128 0x16
 	.4byte	0x138
 	.byte	0x3f
@@ -3095,14 +3103,14 @@ _idx.8457:
 	.asciz	"song"
 	.byte	0x6
 	.byte	0x7b
-	.4byte	0xb2f
+	.4byte	0xb45
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
-	.4byte	0xb11
+	.4byte	0xb27
 	.uleb128 0x15
 	.4byte	0x107
-	.4byte	0xb44
+	.4byte	0xb5a
 	.uleb128 0x16
 	.4byte	0x138
 	.byte	0xff
@@ -3111,14 +3119,14 @@ _idx.8457:
 	.4byte	.LASF5
 	.byte	0x6
 	.byte	0x80
-	.4byte	0xb51
+	.4byte	0xb67
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
-	.4byte	0xb34
+	.4byte	0xb4a
 	.uleb128 0x15
 	.4byte	0x107
-	.4byte	0xb66
+	.4byte	0xb7c
 	.uleb128 0x16
 	.4byte	0x138
 	.byte	0xf7
@@ -3127,11 +3135,11 @@ _idx.8457:
 	.4byte	.LASF6
 	.byte	0x6
 	.byte	0x81
-	.4byte	0xb73
+	.4byte	0xb89
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x1d
 	.asciz	"PIX_H"
 	.byte	0x7
@@ -3141,7 +3149,7 @@ _idx.8457:
 	.byte	0x1
 	.uleb128 0x15
 	.4byte	0x7d2
-	.4byte	0xb97
+	.4byte	0xbad
 	.uleb128 0x16
 	.4byte	0x138
 	.byte	0x8
@@ -3150,20 +3158,20 @@ _idx.8457:
 	.asciz	"s"
 	.byte	0x4
 	.byte	0x34
-	.4byte	0xb87
+	.4byte	0xb9d
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1f
 	.4byte	.LASF7
 	.byte	0x5
-	.byte	0x37
-	.4byte	0x9b3
+	.byte	0x38
+	.4byte	0x9c9
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
 	.asciz	"frames"
 	.byte	0x5
-	.byte	0x39
+	.byte	0x3a
 	.4byte	0x118
 	.byte	0x1
 	.byte	0x1
@@ -3171,142 +3179,142 @@ _idx.8457:
 	.4byte	.LASF0
 	.byte	0x3
 	.2byte	0x1bf
-	.4byte	0xa7f
+	.4byte	0xa95
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1a
 	.4byte	.LASF1
 	.byte	0x3
 	.2byte	0x232
-	.4byte	0xa92
+	.4byte	0xaa8
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1a
 	.4byte	.LASF2
 	.byte	0x3
 	.2byte	0x2b3
-	.4byte	0xaa5
+	.4byte	0xabb
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1a
 	.4byte	.LASF3
 	.byte	0x3
 	.2byte	0x2d1
-	.4byte	0xab8
+	.4byte	0xace
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"PR1"
 	.byte	0x3
 	.2byte	0x547
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1a
 	.4byte	.LASF4
 	.byte	0x3
 	.2byte	0x55f
-	.4byte	0xade
+	.4byte	0xaf4
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"PR2"
 	.byte	0x3
 	.2byte	0x568
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"T2CON"
 	.byte	0x3
 	.2byte	0x56c
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.asciz	"PORTB"
 	.byte	0x3
 	.2byte	0xdad
-	.4byte	0xacb
+	.4byte	0xae1
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x20
 	.asciz	"song"
 	.byte	0x1
 	.byte	0x28
-	.4byte	0xc54
+	.4byte	0xc6a
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_song
 	.uleb128 0x1e
-	.4byte	0xb11
+	.4byte	0xb27
 	.uleb128 0x21
 	.4byte	.LASF5
 	.byte	0x1
 	.byte	0xac
-	.4byte	0xc6b
+	.4byte	0xc81
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_sinetable
 	.uleb128 0x1e
-	.4byte	0xb34
+	.4byte	0xb4a
 	.uleb128 0x21
 	.4byte	.LASF6
 	.byte	0x1
 	.byte	0xd0
-	.4byte	0xc82
+	.4byte	0xc98
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_zigzagtable
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x20
 	.asciz	"saw"
 	.byte	0x1
 	.byte	0xf2
-	.4byte	0xc99
+	.4byte	0xcaf
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_saw
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x22
 	.asciz	"pulse50"
 	.byte	0x1
 	.2byte	0x114
-	.4byte	0xcb5
+	.4byte	0xccb
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_pulse50
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x22
 	.asciz	"pulse75"
 	.byte	0x1
 	.2byte	0x136
-	.4byte	0xcd1
+	.4byte	0xce7
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_pulse75
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x22
 	.asciz	"noise"
 	.byte	0x1
 	.2byte	0x158
-	.4byte	0xceb
+	.4byte	0xd01
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	_noise
 	.uleb128 0x1e
-	.4byte	0xb56
+	.4byte	0xb6c
 	.uleb128 0x1d
 	.asciz	"PIX_H"
 	.byte	0x7
@@ -3318,20 +3326,20 @@ _idx.8457:
 	.asciz	"s"
 	.byte	0x4
 	.byte	0x34
-	.4byte	0xb87
+	.4byte	0xb9d
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1f
 	.4byte	.LASF7
 	.byte	0x5
-	.byte	0x37
-	.4byte	0x9b3
+	.byte	0x38
+	.4byte	0x9c9
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
 	.asciz	"frames"
 	.byte	0x5
-	.byte	0x39
+	.byte	0x3a
 	.4byte	0x118
 	.byte	0x1
 	.byte	0x1
@@ -3786,33 +3794,33 @@ _idx.8457:
 	.4byte	0x92
 	.2byte	0x2
 	.4byte	.Ldebug_info0
-	.4byte	0xd28
-	.4byte	0x9c6
+	.4byte	0xd3e
+	.4byte	0x9dc
 	.asciz	"config_timer"
-	.4byte	0x9e1
+	.4byte	0x9f7
 	.asciz	"_T1Interrupt"
-	.4byte	0xa13
+	.4byte	0xa29
 	.asciz	"_T2Interrupt"
-	.4byte	0xc41
+	.4byte	0xc57
 	.asciz	"song"
-	.4byte	0xc59
+	.4byte	0xc6f
 	.asciz	"sinetable"
-	.4byte	0xc70
+	.4byte	0xc86
 	.asciz	"zigzagtable"
-	.4byte	0xc87
+	.4byte	0xc9d
 	.asciz	"saw"
-	.4byte	0xc9e
+	.4byte	0xcb4
 	.asciz	"pulse50"
-	.4byte	0xcba
+	.4byte	0xcd0
 	.asciz	"pulse75"
-	.4byte	0xcd6
+	.4byte	0xcec
 	.asciz	"noise"
 	.4byte	0x0
 	.section	.debug_pubtypes,info
 	.4byte	0xdf
 	.2byte	0x2
 	.4byte	.Ldebug_info0
-	.4byte	0xd28
+	.4byte	0xd3e
 	.4byte	0xf8
 	.asciz	"uint8_t"
 	.4byte	0x118
@@ -3841,7 +3849,7 @@ _idx.8457:
 	.asciz	"Sprite"
 	.4byte	0x91c
 	.asciz	"SCENE"
-	.4byte	0x9b3
+	.4byte	0x9c9
 	.asciz	"STORY_STATE"
 	.4byte	0x0
 	.section	.debug_aranges,info

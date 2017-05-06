@@ -29,7 +29,7 @@
 extern "C" {
 #endif
     
-#define SCENE_COUNT 3
+#define MAX_SCENES 5
   
 typedef struct {
     uint16_t sceneStartFrame;
@@ -50,17 +50,18 @@ typedef struct {
 //    bool uartForceStop; //todo: make a way for the uart to halt this thing.
     bool storyEnded;
     bool clutState;
-    SCENE scenes[SCENE_COUNT];
+    SCENE scenes[MAX_SCENES];
+    uint8_t sceneCount;
 } STORY_STATE;
 extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern bool ledState;
 
+void addScene();
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
-void manageFrameReset();
 
 void drawFPS(char* sprintBuffer);
 

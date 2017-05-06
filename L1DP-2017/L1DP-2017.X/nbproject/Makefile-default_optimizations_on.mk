@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/particles.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/drawing_helpers.o.d ${OBJECTDIR}/demo_management.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/_ext/957542531/credits.o ${OBJECTDIR}/_ext/957542531/intro.o ${OBJECTDIR}/_ext/957542531/road.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/particles.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/drawing_helpers.o.d ${OBJECTDIR}/demo_management.o.d ${OBJECTDIR}/_ext/957542531/credits.o.d ${OBJECTDIR}/_ext/957542531/intro.o.d ${OBJECTDIR}/_ext/957542531/road.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/color_management.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/particles.o ${OBJECTDIR}/music.o ${OBJECTDIR}/text.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/_ext/957542531/credits.o ${OBJECTDIR}/_ext/957542531/intro.o ${OBJECTDIR}/_ext/957542531/road.o
 
 # Source Files
-SOURCEFILES=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c
+SOURCEFILES=main.c color_management.c resolution_management.c serial.c sprites.c particles.c music.c text.c fb_control.c drawing_helpers.c demo_management.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c
 
 
 CFLAGS=
@@ -159,6 +159,27 @@ ${OBJECTDIR}/demo_management.o: demo_management.c  nbproject/Makefile-${CND_CONF
 	${MP_CC} $(MP_EXTRA_CC_PRE)  demo_management.c  -o ${OBJECTDIR}/demo_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/demo_management.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/demo_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/_ext/957542531/credits.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/credits.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/credits.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c  -o ${OBJECTDIR}/_ext/957542531/credits.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/credits.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/credits.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/957542531/intro.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/intro.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/intro.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c  -o ${OBJECTDIR}/_ext/957542531/intro.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/intro.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/intro.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/957542531/road.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/road.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/road.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c  -o ${OBJECTDIR}/_ext/957542531/road.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/road.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/road.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -236,6 +257,27 @@ ${OBJECTDIR}/demo_management.o: demo_management.c  nbproject/Makefile-${CND_CONF
 	@${RM} ${OBJECTDIR}/demo_management.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  demo_management.c  -o ${OBJECTDIR}/demo_management.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/demo_management.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/demo_management.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/957542531/credits.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/credits.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/credits.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c  -o ${OBJECTDIR}/_ext/957542531/credits.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/credits.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/credits.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/957542531/intro.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/intro.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/intro.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c  -o ${OBJECTDIR}/_ext/957542531/intro.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/intro.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/intro.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/957542531/road.o: C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/957542531" 
+	@${RM} ${OBJECTDIR}/_ext/957542531/road.o.d 
+	@${RM} ${OBJECTDIR}/_ext/957542531/road.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c  -o ${OBJECTDIR}/_ext/957542531/road.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/_ext/957542531/road.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -mlarge-arrays -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/_ext/957542531/road.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 

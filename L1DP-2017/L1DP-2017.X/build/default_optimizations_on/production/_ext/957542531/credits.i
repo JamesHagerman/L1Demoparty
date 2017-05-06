@@ -1,15 +1,8 @@
-# 1 "demo_management.c"
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c"
 # 1 "C:\\Users\\jamis\\Desktop\\my_root\\Development\\Circuits\\PIC\\L1Demoparty\\L1DP-2017\\L1DP-2017.X//"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "demo_management.c"
-# 1 "demo_management.h" 1
-
-
-
-
-
-
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c"
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
 # 13 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 3 4
 typedef signed char int8_t;
@@ -193,7 +186,7 @@ typedef long long int intmax_t;
 
 
 typedef unsigned long long int uintmax_t;
-# 8 "demo_management.h" 2
+# 2 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
 # 28 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 3 4
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stddef.h" 1 3 4
@@ -290,7 +283,7 @@ extern int vsscanf(const char *, const char *, va_list);
 # 391 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 3 4
 extern int sprintf(char *, const char *, ...);
 extern int printf(const char *, ...);
-# 9 "demo_management.h" 2
+# 3 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdlib.h" 1 3 4
 # 24 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdlib.h" 3 4
 typedef struct {
@@ -373,7 +366,7 @@ extern char * ltoa(char * buf, long val, int base);
 
 
 extern char * ultoa(char * buf, unsigned long val, int base);
-# 10 "demo_management.h" 2
+# 4 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
 # 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
@@ -7587,7 +7580,7 @@ extern __attribute__((space(prog))) unsigned int _CONFIG2;
 # 25253 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 3 4
 extern __attribute__((space(prog))) unsigned int _CONFIG1;
 # 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
-# 11 "demo_management.h" 2
+# 5 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 1 3 4
 # 38 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 3 4
 float acosf(float);
@@ -7651,10 +7644,10 @@ long double fmodl(long double, long double);
 # 138 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 3 4
 unsigned long __udiv3216(unsigned long, unsigned int);
          long __div3216(long, int);
-# 12 "demo_management.h" 2
+# 6 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 
-# 1 "system.h" 1
-# 14 "demo_management.h" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 8 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/libpic30.h" 1 3 4
 # 23 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/libpic30.h" 3 4
 extern int __attach_input_file(const char *f);
@@ -7730,70 +7723,34 @@ void _write_flash24(_prog_addressT dst, long *src);
 void _write_flash_word16(_prog_addressT dst, int dat);
 # 542 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/libpic30.h" 3 4
 void _write_flash_word24(_prog_addressT dst, long dat);
-# 15 "demo_management.h" 2
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
 
-# 1 "serial.h" 1
-
-
-
-
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/resolution_management.h" 1
+# 141 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/resolution_management.h"
+extern uint8_t PIX_H;
 
 
-# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdbool.h" 1 3 4
-# 8 "serial.h" 2
-# 20 "serial.h"
-extern unsigned int rxSizeU1;
-extern unsigned int txSizeU1;
-extern unsigned char rxBufU1[128];
-extern unsigned char txBufU1[128];
-extern _Bool dataAvailableU1;
+extern __eds__ uint8_t GFXDisplayBuffer[2][(80UL * 480UL / (8/8))] __attribute__((eds, section("DISPLAY") ));
 
 
 
-extern unsigned int rxSizeU2;
-extern unsigned int txSizeU2;
-extern unsigned char rxBufU2[128];
-extern unsigned char txBufU2[128];
-extern _Bool dataAvailableU2;
-
-void config_uart(unsigned long baudRate);
-void reset_buffer();
-# 17 "demo_management.h" 2
-# 1 "text.h" 1
-# 15 "text.h"
-extern int maxCharHeight;
-
-void config_chr(void);
-void chr_print(char *c, uint16_t x, uint16_t y);
-
-extern uint8_t FontStart[] __attribute__((space(eds), section("FONTS") ));
-# 18 "demo_management.h" 2
-# 1 "music.h" 1
-# 123 "music.h"
-extern const unsigned short song[];
-
-void config_timer();
 
 
-extern const unsigned char sinetable[];
-extern const unsigned char zigzagtable[];
-extern const unsigned char saw[];
-extern const unsigned char pulse50[];
-extern const unsigned char pulse75[];
-extern const unsigned char noise[];
-# 19 "demo_management.h" 2
-# 1 "sprites.h" 1
+
+void config_graphics(void);
+# 11 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 1
 
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
-# 3 "sprites.h" 2
+# 3 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
-# 4 "sprites.h" 2
+# 4 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
 # 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
 # 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
-# 6 "sprites.h" 2
+# 6 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/string.h" 1 3 4
 # 14 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/string.h" 3 4
 extern void * memcpy(void *, const void *, size_t);
@@ -7819,14 +7776,14 @@ extern char * strerror(int);
 extern size_t strlen(const char *);
 extern char * strchr(const char *, int);
 extern char * strrchr(const char *, int);
-# 7 "sprites.h" 2
+# 7 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 
-# 1 "system.h" 1
-# 9 "sprites.h" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 
 
-# 1 "color_management.h" 1
-# 16 "color_management.h"
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/color_management.h" 1
+# 16 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/color_management.h"
 void config_clut();
 void clut_set(uint8_t index, uint16_t color);
 void calc_colors();
@@ -7835,23 +7792,10 @@ uint16_t map(uint16_t input, uint16_t input_start, uint16_t input_end, uint16_t 
 uint16_t get16bppRGBColor(uint16_t red, uint16_t blue, uint16_t green);
 uint8_t get8bppRGBColor(uint8_t red, uint8_t blue, uint8_t green);
 void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v);
-# 12 "sprites.h" 2
-# 1 "resolution_management.h" 1
-# 141 "resolution_management.h"
-extern uint8_t PIX_H;
+# 12 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
 
-
-extern __eds__ uint8_t GFXDisplayBuffer[2][(80UL * 480UL / (8/8))] __attribute__((eds, section("DISPLAY") ));
-
-
-
-
-
-
-void config_graphics(void);
-# 13 "sprites.h" 2
-# 1 "drawing_helpers.h" 1
-# 19 "drawing_helpers.h"
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/drawing_helpers.h" 1
+# 19 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/drawing_helpers.h"
 float radians(uint16_t angle);
 int realtoint(float oldval, float oldmin, float oldmax, float newmin, float newmax);
 
@@ -7871,8 +7815,8 @@ void drawBorder(uint16_t c);
 void verBlind(void);
 
 void render (float xa, float ya, float za);
-# 14 "sprites.h" 2
-# 44 "sprites.h"
+# 14 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+# 44 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h"
 struct Sprite {
   uint8_t width;
   uint8_t height;
@@ -7943,12 +7887,102 @@ void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotati
  }
 
 }
-# 20 "demo_management.h" 2
+# 12 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 1
 
 
 
-# 1 "fb_control.h" 1
-# 15 "fb_control.h"
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 14 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/serial.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdbool.h" 1 3 4
+# 8 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/serial.h" 2
+# 20 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/serial.h"
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[128];
+extern unsigned char txBufU1[128];
+extern _Bool dataAvailableU1;
+
+
+
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[128];
+extern unsigned char txBufU2[128];
+extern _Bool dataAvailableU2;
+
+void config_uart(unsigned long baudRate);
+void reset_buffer();
+# 17 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/text.h" 1
+# 15 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/text.h"
+extern int maxCharHeight;
+
+void config_chr(void);
+void chr_print(char *c, uint16_t x, uint16_t y);
+
+extern uint8_t FontStart[] __attribute__((space(eds), section("FONTS") ));
+# 18 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/music.h" 1
+# 123 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/music.h"
+extern const unsigned short song[];
+
+void config_timer();
+
+
+extern const unsigned char sinetable[];
+extern const unsigned char zigzagtable[];
+extern const unsigned char saw[];
+extern const unsigned char pulse50[];
+extern const unsigned char pulse75[];
+extern const unsigned char noise[];
+# 19 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+# 20 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/fb_control.h" 1
+# 15 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/fb_control.h"
 extern volatile int fb_ready;
 extern volatile int vSync;
 void gpu_setfb(__eds__ uint8_t *buf);
@@ -7958,8 +7992,8 @@ void gpu_setfb(__eds__ uint8_t *buf);
 extern int next_fb;
 extern void waitForBufferFlip();
 extern void swapWorkAreas();
-# 24 "demo_management.h" 2
-# 34 "demo_management.h"
+# 24 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 34 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h"
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
@@ -7999,152 +8033,88 @@ void setupHardware();
 void frameStart();
 void frameEnd();
 void statusLED();
-# 2 "demo_management.c" 2
+# 13 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.h" 1
 
 
 
-STORY_STATE story_state;
-uint16_t frames = 0;
-_Bool ledState = 1;
 
 
-void addScene(SCENE newScene) {
-    if (story_state.sceneCount+1 <= 5) {
-        story_state.sceneCount++;
-        story_state.scenes[story_state.sceneCount] = newScene;
-    } else {
-        printf("Oops! Trying to add too many scenes!\n");
-    }
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 14 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/serial.h" 1
+# 17 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+
+
+# 1 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/system.h" 1
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/sprites.h" 2
+# 20 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/demo_management.h" 2
+# 9 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.h" 2
+# 17 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.h"
+extern SCENE creditsScene;
+static char creditsText[];
+
+void initCredits();
+void drawCredits(uint16_t frame);
+unsigned char audioCredits(unsigned char t);
+# 14 "C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c" 2
+
+
+SCENE creditsScene = {0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
+static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n"
+            "Thank you Arko\n"
+            "and everyone at NSL\n"
+            "that helps make\n"
+            "LayerOne happen!\n"
+            "\n"
+            "Never enough time.\n"
+            "Was it good for u?";
+void initCredits() {
+    int sceneId = story_state.currentScene;
+    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
+    G1CLUTbits.CLUTEN = 0;
 }
-void switchScene(uint8_t nextScene) {
-    if (nextScene > story_state.sceneCount - 1) {
-        printf("%u is an invalid scene... \n", nextScene);
-
-
-        frames = 0;
-        story_state.currentScene = 0;
-
-    }
-    if (nextScene != story_state.currentScene) {
-        story_state.currentScene = nextScene;
-    } else {
-        printf("Reiniting scene %u\n", nextScene);
-    }
-
-
-    story_state.scenes[nextScene].sceneStartFrame = frames;
-
-
-    (*story_state.scenes[nextScene].sceneInit)();
+void drawCredits(uint16_t frame) {
+    drawSprite((80UL -32)/2, 4*PIX_H, 8, 0);
+    chr_print(creditsText, 0, 0);
 }
-
-void drawCurrentScene() {
-    uint8_t id = story_state.currentScene;
-    (*story_state.scenes[id].sceneDraw)(frames);
-}
-
-void checkSceneFinished() {
-
-
-    uint8_t id = story_state.currentScene;
-    if (frames > story_state.scenes[id].sceneStartFrame + story_state.scenes[id].sceneLength) {
-        id++;
-        printf("Switching to scene: %i\n", id);
-        switchScene(id);
-    }
-
-
-
-
-    if (frames > 2500) {
-        printf("Scene ran too long. Resetting frames counter to 0...\n");
-        frames = 0;
-    }
-}
-
-
-void drawFPS(char* sprintBuffer) {
-
-    sprintf(sprintBuffer, "f:%i s:%i", frames,
-            story_state.scenes[story_state.currentScene].sceneStartFrame +
-            story_state.scenes[story_state.currentScene].sceneLength);
-    chr_print(sprintBuffer, 0, 480UL -(21*1));
-}
-
-
-void checkForJumper() {
-    _Bool jumperOn = ! PORTBbits.RB4;
-    if (jumperOn ) {
-        story_state.storyPlaying = 1;
-    } else {
-        story_state.storyPlaying = 0;
-    }
-}
-void setupHardware() {
-    ANSB = 0x0000;
-    ANSC = 0x0000;
-    ANSD = 0x0000;
-    ANSF = 0x0000;
-    ANSG = 0x0000;
-    TRISB = 0x0000;
-
-
-    TRISBbits.TRISB4 = 1;
-    TRISBbits.TRISB5 = 0;
-
-    LATBbits.LATB5 = 0;
-
-
-
-    G1IEbits.VMRGNIE = 1;
-    G1IEbits.HMRGNIE = 1;
-    G1IRbits.VMRGNIF = 0;
-    G1IRbits.HMRGNIF = 0;
-
-    IEC6bits.GFX1IE = 1;
-    IFS6bits.GFX1IF = 0;
-    IPC25bits.GFX1IP = 0b111;
-
-
-    config_uart(115200UL);
-    config_graphics();
-    config_chr();
-    config_timer();
-
-
-
-
-    rcc_setdest(GFXDisplayBuffer[0]);
-    blank_background();
-    rcc_setdest(GFXDisplayBuffer[1]);
-    blank_background();
-
-
-}
-
-void frameStart() {
-
-    swapWorkAreas();
-
-
-
-}
-
-void frameEnd() {
-
-    rcc_color(0);
-    rcc_draw((int)80UL -1, 0, 1, (int)480UL);
-
-
-    waitForBufferFlip();
-
-
-
-}
-
-void statusLED() {
-
-    ledState = !ledState;
-    PORTBbits.RB5 = ledState;
-    { __delay32( (unsigned long) (((unsigned long long) 100)*(16000000UL)/1000ULL)); };
+unsigned char audioCredits(unsigned char t) {
+    return t & t>>8;
 }

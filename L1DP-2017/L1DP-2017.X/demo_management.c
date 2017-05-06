@@ -1,14 +1,22 @@
 #include "demo_management.h"
 
+#define MAX_SCENE_LENGTH 2500 // in frames
 //SCENE scene;
 STORY_STATE story_state;
-
 uint16_t frames = 0;
 bool ledState = true;
 
 // StoryState management methods:
+void addScene(SCENE newScene) {
+    if (story_state.sceneCount+1 <= MAX_SCENES) {
+        story_state.sceneCount++;
+        story_state.scenes[story_state.sceneCount] = newScene;
+    } else {
+        printf("Oops! Trying to add too many scenes!\n");
+    }
+}
 void switchScene(uint8_t nextScene) {
-    if (nextScene > SCENE_COUNT-1) {
+    if (nextScene > story_state.sceneCount - 1) {
         printf("%u is an invalid scene... \n", nextScene);
         
         // Reset after we reach the end of the last scene:
@@ -43,15 +51,15 @@ void checkSceneFinished() {
         printf("Switching to scene: %i\n", id);
         switchScene(id);
     }
-}
 
-void manageFrameReset() {
-    if (frames > 2500) {
-        printf("Resetting frames counter to 0...\n");
+    // Make sure we reset our frame count to zero after some time. We probably
+    // don't want very long scenes. And if we do, we'll just stop calling the
+    // checkSceneFinished() method in some other, more stable way.
+    if (frames > MAX_SCENE_LENGTH) {
+        printf("Scene ran too long. Resetting frames counter to 0...\n");
         frames = 0;
     }
 }
-
 
 // Scene management methods:
 void drawFPS(char* sprintBuffer) {

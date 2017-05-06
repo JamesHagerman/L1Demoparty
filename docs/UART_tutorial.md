@@ -52,11 +52,11 @@ Once you unzip that, you'll be able to look inside the new `pic30` directory for
 
 Those files, along with the notes in section `2.13.2 Customizing STDIO` (as well as actually understanding how the UART peripheral on your micro works at a low level) SHOULD be enough for you to patch together NEW versions of those methods that will work correctly with your UART.
 
-## Working putc() method for printf()
+### Working putc() method for printf()
 
 THIS they seem to have gotten right in XC16! We don't have to override it to get it to work. XC8 required you too, so this was nice break get after a bunch of other work!
 
-## Working read() method for scanf()
+### Working read() method for scanf()
 
 Here you go! The code you're looking for! Honestly, this could probably be cleaned up to be more generic about which UART peripheral is enabled...
 
@@ -96,3 +96,19 @@ read(int handle, void *buffer, unsigned int len)
     return len;
 }
 ```
+
+
+## Baud rate calculation
+
+The baudrate of the serial port can be calculated using something like this:
+
+```
+unsigned long baudRate = 115200UL;
+U1BRG = (((FCY)/(4 * baudRate)) - 1);
+```
+
+This is handled via the config_uart(unsigned long baudRate) method in the 2016 and later serial.c source code.
+
+## Pins
+
+The serial port sits on `TX:RP6` and `RX:RP7`running at `115200 baud`. Hook up ground, and those two to a FTDI or other USB serial adapter and you should see output!

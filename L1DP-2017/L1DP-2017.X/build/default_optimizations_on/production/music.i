@@ -7998,17 +7998,18 @@ typedef struct {
 
     _Bool storyEnded;
     _Bool clutState;
-    SCENE scenes[3];
+    SCENE scenes[5];
+    uint8_t sceneCount;
 } STORY_STATE;
 extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern _Bool ledState;
 
+void addScene();
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
-void manageFrameReset();
 
 void drawFPS(char* sprintBuffer);
 

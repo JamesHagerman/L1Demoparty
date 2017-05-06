@@ -9,96 +9,144 @@
 .Ltext0:
 	.section .const,psv,page
 .LC0:
-	.asciz	"%u is an invalid scene... \012"
+	.asciz	"Oops! Trying to add too many scenes!"
+	.section	.text,code
+	.align	2
+	.global	_addScene	; export
+	.type	_addScene,@function
+_addScene:
+.LFB1:
+.LSM0:
+	.set ___PA___,1
+	lnk	#0
+.LSM1:
+	mov	#_story_state+164,w4
+	mov.b	[w4],w4
+	ze	w4,w5
+	inc	w5,w5
+	sub	w5,#5,[w15]
+	.set ___BP___,38
+	bra	gt,.L2
+.LSM2:
+	inc.b	w4,w4
+	mov	#_story_state+164,w5
+	mov.b	w4,[w5]
+.LSM3:
+	ze	w4,w4
+	sl	w4,#5,w4
+	mov	#_story_state+4,w5
+	add	w5,w4,w7
+	mov	#-38,w6
+	add	w15,w6,w6
+	repeat	#16-1
+	mov	[w6++],[w7++]
+	bra	.L1
+.L2:
+.LSM4:
+	mov	#.LC0,w0
+	rcall	_puts
+.L1:
+.LSM5:
+	ulnk	
+	return	
+	.set ___PA___,0
+.LFE1:
+	.size	_addScene, .-_addScene
+	.section .const,psv,page
 .LC1:
+	.asciz	"%u is an invalid scene... \012"
+.LC2:
 	.asciz	"Reiniting scene %u\012"
 	.section	.text,code
 	.align	2
 	.global	_switchScene	; export
 	.type	_switchScene,@function
 _switchScene:
-.LFB1:
-.LSM0:
+.LFB2:
+.LSM6:
 	.set ___PA___,1
 	mov.d	w8,[w15++]
 	mov.b	w0,w8
-.LSM1:
-	sub.b	w8,#2,[w15]
+.LSM7:
+	ze	w8,w9
+	mov	#_story_state+164,w4
+	mov.b	[w4],w4
+	ze	w4,w4
+	dec	w4,w4
+	sub	w9,w4,[w15]
 	.set ___BP___,71
-	bra	leu,.L2
-.LSM2:
-	ze	w8,w4
-	mov	w4,[w15++]
+	bra	le,.L5
+.LSM8:
+	mov	w9,[w15++]
 .LCFI0:
-	mov	#.LC0,w4
+	mov	#.LC1,w4
 	mov	w4,[w15++]
 .LCFI1:
 .LCFI2:
 	rcall	__printf_cdnopuxX
-.LSM3:
+.LSM9:
 	clr	w4
 	mov	w4,_frames
-.LSM4:
+.LSM10:
 	mov.b	w4,w6
 	mov	#_story_state,w5
 	mov.b	w6,[w5]
 	sub	w15,#4,w15
 .LCFI3:
-.L2:
-.LSM5:
+.L5:
+.LSM11:
 	mov	#_story_state,w4
 	mov.b	[w4],w4
 	sub.b	w4,w8,[w15]
 	.set ___BP___,19
-	bra	z,.L3
-.LSM6:
+	bra	z,.L6
+.LSM12:
+	mov.b	w8,w5
 	mov	#_story_state,w4
-	mov.b	w8,[w4]
-	bra	.L4
-.L3:
-.LSM7:
-	ze	w4,w4
-	mov	w4,[w15++]
+	mov.b	w5,[w4]
+	bra	.L7
+.L6:
+.LSM13:
+	mov	w9,[w15++]
 .LCFI4:
-	mov	#.LC1,w4
+	mov	#.LC2,w4
 	mov	w4,[w15++]
 .LCFI5:
 	rcall	__printf_cdnopuxX
 	sub	w15,#4,w15
 .LCFI6:
-.L4:
-.LSM8:
-	ze	w8,w8
-	asr	w8,#15,w9
-	sl	w9,#5,w6
-	lsr	w8,#11,w7
+.L7:
+.LSM14:
+	mul.su	w9,#1,w4
+	sl	w5,#5,w6
+	lsr	w4,#11,w7
 	ior	w6,w7,w7
-	sl	w8,#5,w6
+	sl	w4,#5,w6
 	add	w6,#4,w0
 	addc	w7,#0,w1
 	mov	#_story_state,w4
 	mov	_frames,w5
 	mov	w5,[w4+w0]
-.LSM9:
+.LSM15:
 	add	w6,#8,w6
 	addc	w7,#0,w7
 	mov	[w4+w6],w4
 .LCFI7:
 	call	w4
-.LSM10:
+.LSM16:
 	mov.d	[--w15],w8
 	return	
 	.set ___PA___,0
-.LFE1:
+.LFE2:
 	.size	_switchScene, .-_switchScene
 	.align	2
 	.global	_drawCurrentScene	; export
 	.type	_drawCurrentScene,@function
 _drawCurrentScene:
-.LFB2:
-.LSM11:
+.LFB3:
+.LSM17:
 	.set ___PA___,1
-.LSM12:
+.LSM18:
 	mov	#_story_state,w4
 	mov.b	[w4],w4
 	ze	w4,w4
@@ -107,27 +155,29 @@ _drawCurrentScene:
 	mov	[w5+w4],w4
 	mov	_frames,w0
 	call	w4
-.LSM13:
+.LSM19:
 	return	
 	.set ___PA___,0
-.LFE2:
+.LFE3:
 	.size	_drawCurrentScene, .-_drawCurrentScene
 	.section .const,psv,page
-.LC2:
+.LC3:
 	.asciz	"Switching to scene: %i\012"
+.LC4:
+	.asciz	"Scene ran too long. Resetting frames counter to 0..."
 	.section	.text,code
 	.align	2
 	.global	_checkSceneFinished	; export
 	.type	_checkSceneFinished,@function
 _checkSceneFinished:
-.LFB3:
-.LSM14:
+.LFB4:
+.LSM20:
 	.set ___PA___,1
 	mov	w8,[w15++]
-.LSM15:
+.LSM21:
 	mov	#_story_state,w8
 	mov.b	[w8],w8
-.LSM16:
+.LSM22:
 	ze	w8,w4
 	asr	w4,#15,w5
 	sl	w5,#5,w6
@@ -145,61 +195,46 @@ _checkSceneFinished:
 	add	w5,[w4],w5
 	mov	_frames,w4
 	sub	w5,w4,[w15]
-	.set ___BP___,61
-	bra	geu,.L6
-.LSM17:
+	.set ___BP___,71
+	bra	geu,.L10
+.LSM23:
 	inc.b	w8,w8
-.LSM18:
+.LSM24:
 	ze	w8,w4
 	mov	w4,[w15++]
 .LCFI8:
-	mov	#.LC2,w4
+	mov	#.LC3,w4
 	mov	w4,[w15++]
 .LCFI9:
 .LCFI10:
 	rcall	__printf_cdnopuxX
-.LSM19:
+.LSM25:
 	mov.b	w8,w0
 	rcall	_switchScene
 	sub	w15,#4,w15
 .LCFI11:
-.L6:
-.LSM20:
-	mov	[--w15],w8
-	return	
-	.set ___PA___,0
-.LFE3:
-	.size	_checkSceneFinished, .-_checkSceneFinished
-	.section .const,psv,page
-.LC3:
-	.asciz	"Resetting frames counter to 0..."
-	.section	.text,code
-	.align	2
-	.global	_manageFrameReset	; export
-	.type	_manageFrameReset,@function
-_manageFrameReset:
-.LFB4:
-.LSM21:
-	.set ___PA___,1
-.LSM22:
+.L10:
+.LSM26:
 	mov	#2500,w4
 	mov	_frames,w5
 	sub	w5,w4,[w15]
 	.set ___BP___,61
-	bra	leu,.L8
-.LSM23:
-	mov	#.LC3,w0
+	bra	leu,.L9
+.LSM27:
+	mov	#.LC4,w0
+.LCFI12:
 	rcall	_puts
-.LSM24:
+.LSM28:
 	clr	_frames
-.L8:
-.LSM25:
+.L9:
+.LSM29:
+	mov	[--w15],w8
 	return	
 	.set ___PA___,0
 .LFE4:
-	.size	_manageFrameReset, .-_manageFrameReset
+	.size	_checkSceneFinished, .-_checkSceneFinished
 	.section .const,psv,page
-.LC4:
+.LC5:
 	.asciz	"f:%i s:%i"
 	.section	.text,code
 	.align	2
@@ -207,15 +242,15 @@ _manageFrameReset:
 	.type	_drawFPS,@function
 _drawFPS:
 .LFB5:
-.LSM26:
+.LSM30:
 	.set ___PA___,1
 	mov	w8,[w15++]
 	mov	w0,w8
-.LSM27:
+.LSM31:
 	mov	#_story_state,w4
 	mov.b	[w4],w4
 	ze	w4,w4
-.LSM28:
+.LSM32:
 	asr	w4,#15,w5
 	sl	w5,#5,w6
 	lsr	w4,#11,w7
@@ -225,30 +260,30 @@ _drawFPS:
 	addc	w7,#0,w1
 	mov	#_story_state,w4
 	add	w4,w0,w5
-.LSM29:
+.LSM33:
 	add	w6,#4,w6
 	addc	w7,#0,w7
 	add	w4,w6,w4
-.LSM30:
+.LSM34:
 	mov	[w5],w5
 	add	w5,[w4],[w15++]
-.LCFI12:
-	push	_frames
 .LCFI13:
-	mov	#.LC4,w4
-	mov	w4,[w15++]
+	push	_frames
 .LCFI14:
-	mov	w8,w0
+	mov	#.LC5,w4
+	mov	w4,[w15++]
 .LCFI15:
+	mov	w8,w0
+.LCFI16:
 	rcall	__sprintf_cdnopuxX
-.LSM31:
+.LSM35:
 	mov	#459,w2
 	clr	w1
 	mov	w8,w0
 	rcall	_chr_print
 	sub	w15,#6,w15
-.LCFI16:
-.LSM32:
+.LCFI17:
+.LSM36:
 	mov	[--w15],w8
 	return	
 	.set ___PA___,0
@@ -259,23 +294,23 @@ _drawFPS:
 	.type	_checkForJumper,@function
 _checkForJumper:
 .LFB6:
-.LSM33:
+.LSM37:
 	.set ___PA___,1
-.LSM34:
+.LSM38:
 	btst	_PORTBbits,#4
-.LSM35:
+.LSM39:
 	.set ___BP___,61
-	bra	nz,.L12
-.LSM36:
+	bra	nz,.L14
+.LSM40:
 	mov.b	#1,w6
 	mov	#_story_state+1,w5
 	mov.b	w6,[w5]
-	bra	.L11
-.L12:
-.LSM37:
+	bra	.L13
+.L14:
+.LSM41:
 	clr.b	_story_state+1
-.L11:
-.LSM38:
+.L13:
+.LSM42:
 	return	
 	.set ___PA___,0
 .LFE6:
@@ -285,62 +320,62 @@ _checkForJumper:
 	.type	_setupHardware,@function
 _setupHardware:
 .LFB7:
-.LSM39:
+.LSM43:
 	.set ___PA___,1
 	mov.d	w8,[w15++]
-.LSM40:
+.LSM44:
 	clr	w4
 	mov	w4,_ANSB
-.LSM41:
-	mov	w4,_ANSC
-.LSM42:
-	mov	w4,_ANSD
-.LSM43:
-	mov	w4,_ANSF
-.LSM44:
-	mov	w4,_ANSG
 .LSM45:
-	mov	w4,_TRISB
+	mov	w4,_ANSC
 .LSM46:
-	bset.b	_TRISBbits,#4
+	mov	w4,_ANSD
 .LSM47:
-	bclr.b	_TRISBbits,#5
+	mov	w4,_ANSF
 .LSM48:
-	bclr.b	_LATBbits,#5
+	mov	w4,_ANSG
 .LSM49:
-	bset.b	_G1IEbits,#4
+	mov	w4,_TRISB
 .LSM50:
-	bset.b	_G1IEbits,#3
+	bset.b	_TRISBbits,#4
 .LSM51:
-	bclr.b	_G1IRbits,#4
+	bclr.b	_TRISBbits,#5
 .LSM52:
-	bclr.b	_G1IRbits,#3
+	bclr.b	_LATBbits,#5
 .LSM53:
-	bset.b	_IEC6bits,#4
+	bset.b	_G1IEbits,#4
 .LSM54:
-	bclr.b	_IFS6bits,#4
+	bset.b	_G1IEbits,#3
 .LSM55:
+	bclr.b	_G1IRbits,#4
+.LSM56:
+	bclr.b	_G1IRbits,#3
+.LSM57:
+	bset.b	_IEC6bits,#4
+.LSM58:
+	bclr.b	_IFS6bits,#4
+.LSM59:
 	mov	_IPC25bits,w4
 	ior	#7,w4
 	mov	w4,_IPC25bits
-.LSM56:
+.LSM60:
 	mov	#49664,w0
 	mov	#1,w1
 	rcall	_config_uart
-.LSM57:
+.LSM61:
 	rcall	_config_graphics
-.LSM58:
+.LSM62:
 	rcall	_config_chr
-.LSM59:
+.LSM63:
 	rcall	_config_timer
-.LSM60:
+.LSM64:
 	mov	#edsoffset(_GFXDisplayBuffer),w8
 	mov	#edspage(_GFXDisplayBuffer),w9
 	mov.d	w8,w0
 	rcall	_rcc_setdest
-.LSM61:
+.LSM65:
 	rcall	_blank_background
-.LSM62:
+.LSM66:
 	mov	#5632,w0
 	mov	#1,w1
 	sl	w8,w4
@@ -353,9 +388,9 @@ _setupHardware:
 	bset	_SR,#0
 	rrc	w0,w0
 	rcall	_rcc_setdest
-.LSM63:
+.LSM67:
 	rcall	_blank_background
-.LSM64:
+.LSM68:
 	mov.d	[--w15],w8
 	return	
 	.set ___PA___,0
@@ -366,11 +401,11 @@ _setupHardware:
 	.type	_frameStart,@function
 _frameStart:
 .LFB8:
-.LSM65:
+.LSM69:
 	.set ___PA___,1
-.LSM66:
+.LSM70:
 	rcall	_swapWorkAreas
-.LSM67:
+.LSM71:
 	return	
 	.set ___PA___,0
 .LFE8:
@@ -380,20 +415,20 @@ _frameStart:
 	.type	_frameEnd,@function
 _frameEnd:
 .LFB9:
-.LSM68:
+.LSM72:
 	.set ___PA___,1
-.LSM69:
+.LSM73:
 	clr	w0
 	rcall	_rcc_color
-.LSM70:
+.LSM74:
 	mov	#480,w3
 	mov	#1,w2
 	clr	w1
 	mov	#79,w0
 	rcall	_rcc_draw
-.LSM71:
+.LSM75:
 	rcall	_waitForBufferFlip
-.LSM72:
+.LSM76:
 	return	
 	.set ___PA___,0
 .LFE9:
@@ -403,15 +438,15 @@ _frameEnd:
 	.type	_statusLED,@function
 _statusLED:
 .LFB10:
-.LSM73:
+.LSM77:
 	.set ___PA___,1
-.LSM74:
+.LSM78:
 	mov	#_ledState,w4
 	mov.b	[w4],w4
 	btg.b	w4,#0
 	mov	#_ledState,w5
 	mov.b	w4,[w5]
-.LSM75:
+.LSM79:
 	and	w4,#1,w4
 	sl	w4,#5,w4
 	mov	#-33,w5
@@ -419,11 +454,11 @@ _statusLED:
 	and	w5,w6,w5
 	ior	w4,w5,w5
 	mov	w5,_PORTBbits
-.LSM76:
+.LSM80:
 	mov	#27136,w0
 	mov	#24,w1
 	rcall	___delay32
-.LSM77:
+.LSM81:
 	return	
 	.set ___PA___,0
 .LFE10:
@@ -445,7 +480,7 @@ _ledState:
 	.type	_story_state,@object
 	.global	_story_state
 	.align	2
-_story_state:	.space	100
+_story_state:	.space	166
 	.section	.debug_frame,info
 .Lframe0:
 	.4byte	.LECIE0-.LSCIE0
@@ -470,8 +505,16 @@ _story_state:	.space	100
 	.4byte	.Lframe0
 	.4byte	.LFB1
 	.4byte	.LFE1-.LFB1
+	.align	4
+.LEFDE0:
+.LSFDE2:
+	.4byte	.LEFDE2-.LASFDE2
+.LASFDE2:
+	.4byte	.Lframe0
+	.4byte	.LFB2
+	.4byte	.LFE2-.LFB2
 	.byte	0x4
-	.4byte	.LCFI0-.LFB1
+	.4byte	.LCFI0-.LFB2
 	.byte	0x13
 	.sleb128 -3
 	.byte	0x4
@@ -503,14 +546,6 @@ _story_state:	.space	100
 	.byte	0x2e
 	.uleb128 0x0
 	.align	4
-.LEFDE0:
-.LSFDE2:
-	.4byte	.LEFDE2-.LASFDE2
-.LASFDE2:
-	.4byte	.Lframe0
-	.4byte	.LFB2
-	.4byte	.LFE2-.LFB2
-	.align	4
 .LEFDE2:
 .LSFDE4:
 	.4byte	.LEFDE4-.LASFDE4
@@ -518,8 +553,16 @@ _story_state:	.space	100
 	.4byte	.Lframe0
 	.4byte	.LFB3
 	.4byte	.LFE3-.LFB3
+	.align	4
+.LEFDE4:
+.LSFDE6:
+	.4byte	.LEFDE6-.LASFDE6
+.LASFDE6:
+	.4byte	.Lframe0
+	.4byte	.LFB4
+	.4byte	.LFE4-.LFB4
 	.byte	0x4
-	.4byte	.LCFI8-.LFB3
+	.4byte	.LCFI8-.LFB4
 	.byte	0x13
 	.sleb128 -3
 	.byte	0x4
@@ -534,14 +577,10 @@ _story_state:	.space	100
 	.4byte	.LCFI11-.LCFI10
 	.byte	0x13
 	.sleb128 -2
-	.align	4
-.LEFDE4:
-.LSFDE6:
-	.4byte	.LEFDE6-.LASFDE6
-.LASFDE6:
-	.4byte	.Lframe0
-	.4byte	.LFB4
-	.4byte	.LFE4-.LFB4
+	.byte	0x4
+	.4byte	.LCFI12-.LCFI11
+	.byte	0x2e
+	.uleb128 0x0
 	.align	4
 .LEFDE6:
 .LSFDE8:
@@ -551,23 +590,23 @@ _story_state:	.space	100
 	.4byte	.LFB5
 	.4byte	.LFE5-.LFB5
 	.byte	0x4
-	.4byte	.LCFI12-.LFB5
+	.4byte	.LCFI13-.LFB5
 	.byte	0x13
 	.sleb128 -3
 	.byte	0x4
-	.4byte	.LCFI13-.LCFI12
+	.4byte	.LCFI14-.LCFI13
 	.byte	0x13
 	.sleb128 -4
 	.byte	0x4
-	.4byte	.LCFI14-.LCFI13
+	.4byte	.LCFI15-.LCFI14
 	.byte	0x13
 	.sleb128 -5
 	.byte	0x4
-	.4byte	.LCFI15-.LCFI14
+	.4byte	.LCFI16-.LCFI15
 	.byte	0x2e
 	.uleb128 0x6
 	.byte	0x4
-	.4byte	.LCFI16-.LCFI15
+	.4byte	.LCFI17-.LCFI16
 	.byte	0x13
 	.sleb128 -2
 	.align	4
@@ -615,7 +654,7 @@ _story_state:	.space	100
 	.section	.text,code
 .Letext0:
 	.section	.debug_info,info
-	.4byte	0xed5
+	.4byte	0xefc
 	.2byte	0x2
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
@@ -1752,10 +1791,10 @@ _story_state:	.space	100
 	.byte	0x29
 	.4byte	0x94a
 	.uleb128 0xf
-	.byte	0x64
+	.byte	0xa6
 	.byte	0x5
 	.byte	0x2c
-	.4byte	0xa99
+	.4byte	0xaaf
 	.uleb128 0xd
 	.asciz	"currentScene"
 	.byte	0x5
@@ -1768,7 +1807,7 @@ _story_state:	.space	100
 	.asciz	"storyPlaying"
 	.byte	0x5
 	.byte	0x31
-	.4byte	0xa99
+	.4byte	0xaaf
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x1
@@ -1776,7 +1815,7 @@ _story_state:	.space	100
 	.asciz	"storyEnded"
 	.byte	0x5
 	.byte	0x33
-	.4byte	0xa99
+	.4byte	0xaaf
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x2
@@ -1784,7 +1823,7 @@ _story_state:	.space	100
 	.asciz	"clutState"
 	.byte	0x5
 	.byte	0x34
-	.4byte	0xa99
+	.4byte	0xaaf
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x3
@@ -1792,10 +1831,18 @@ _story_state:	.space	100
 	.asciz	"scenes"
 	.byte	0x5
 	.byte	0x35
-	.4byte	0xaa2
+	.4byte	0xab8
 	.byte	0x2
 	.byte	0x23
 	.uleb128 0x4
+	.uleb128 0xd
+	.asciz	"sceneCount"
+	.byte	0x5
+	.byte	0x36
+	.4byte	0x102
+	.byte	0x3
+	.byte	0x23
+	.uleb128 0xa4
 	.byte	0x0
 	.uleb128 0x2
 	.byte	0x1
@@ -1803,19 +1850,19 @@ _story_state:	.space	100
 	.asciz	"_Bool"
 	.uleb128 0x15
 	.4byte	0xa1b
-	.4byte	0xab2
+	.4byte	0xac8
 	.uleb128 0x16
 	.4byte	0x142
-	.byte	0x2
+	.byte	0x4
 	.byte	0x0
 	.uleb128 0x3
 	.asciz	"STORY_STATE"
 	.byte	0x5
-	.byte	0x36
+	.byte	0x37
 	.4byte	0xa28
 	.uleb128 0x17
 	.byte	0x1
-	.asciz	"switchScene"
+	.asciz	"addScene"
 	.byte	0x1
 	.byte	0xa
 	.byte	0x1
@@ -1823,11 +1870,31 @@ _story_state:	.space	100
 	.4byte	.LFE1
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xaf8
+	.4byte	0xb0b
+	.uleb128 0x18
+	.asciz	"newScene"
+	.byte	0x1
+	.byte	0xa
+	.4byte	0xa1b
+	.byte	0x2
+	.byte	0x91
+	.sleb128 -38
+	.byte	0x0
+	.uleb128 0x17
+	.byte	0x1
+	.asciz	"switchScene"
+	.byte	0x1
+	.byte	0x12
+	.byte	0x1
+	.4byte	.LFB2
+	.4byte	.LFE2
+	.byte	0x1
+	.byte	0x5f
+	.4byte	0xb3e
 	.uleb128 0x18
 	.asciz	"nextScene"
 	.byte	0x1
-	.byte	0xa
+	.byte	0x12
 	.4byte	0x102
 	.byte	0x1
 	.byte	0x58
@@ -1836,58 +1903,49 @@ _story_state:	.space	100
 	.byte	0x1
 	.asciz	"drawCurrentScene"
 	.byte	0x1
-	.byte	0x20
-	.4byte	.LFB2
-	.4byte	.LFE2
+	.byte	0x28
+	.4byte	.LFB3
+	.4byte	.LFE3
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xb26
+	.4byte	0xb6c
 	.uleb128 0x1a
 	.asciz	"id"
 	.byte	0x1
-	.byte	0x21
+	.byte	0x29
 	.4byte	0x102
 	.byte	0x0
 	.uleb128 0x19
 	.byte	0x1
 	.asciz	"checkSceneFinished"
 	.byte	0x1
-	.byte	0x25
-	.4byte	.LFB3
-	.4byte	.LFE3
-	.byte	0x1
-	.byte	0x5f
-	.4byte	0xb56
-	.uleb128 0x1a
-	.asciz	"id"
-	.byte	0x1
-	.byte	0x28
-	.4byte	0x102
-	.byte	0x0
-	.uleb128 0x1b
-	.byte	0x1
-	.asciz	"manageFrameReset"
-	.byte	0x1
-	.byte	0x30
+	.byte	0x2d
 	.4byte	.LFB4
 	.4byte	.LFE4
 	.byte	0x1
 	.byte	0x5f
+	.4byte	0xb9c
+	.uleb128 0x1a
+	.asciz	"id"
+	.byte	0x1
+	.byte	0x30
+	.4byte	0x102
+	.byte	0x0
 	.uleb128 0x17
 	.byte	0x1
 	.asciz	"drawFPS"
 	.byte	0x1
-	.byte	0x39
+	.byte	0x41
 	.byte	0x1
 	.4byte	.LFB5
 	.4byte	.LFE5
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xba7
+	.4byte	0xbce
 	.uleb128 0x18
 	.asciz	"sprintBuffer"
 	.byte	0x1
-	.byte	0x39
+	.byte	0x41
 	.4byte	0x187
 	.byte	0x1
 	.byte	0x58
@@ -1896,23 +1954,23 @@ _story_state:	.space	100
 	.byte	0x1
 	.asciz	"checkForJumper"
 	.byte	0x1
-	.byte	0x42
+	.byte	0x4a
 	.4byte	.LFB6
 	.4byte	.LFE6
 	.byte	0x1
 	.byte	0x5f
-	.4byte	0xbd9
+	.4byte	0xc00
 	.uleb128 0x1a
 	.asciz	"jumperOn"
 	.byte	0x1
-	.byte	0x43
-	.4byte	0xa99
+	.byte	0x4b
+	.4byte	0xaaf
 	.byte	0x0
 	.uleb128 0x1b
 	.byte	0x1
 	.asciz	"setupHardware"
 	.byte	0x1
-	.byte	0x4a
+	.byte	0x52
 	.4byte	.LFB7
 	.4byte	.LFE7
 	.byte	0x1
@@ -1921,7 +1979,7 @@ _story_state:	.space	100
 	.byte	0x1
 	.asciz	"frameStart"
 	.byte	0x1
-	.byte	0x74
+	.byte	0x7c
 	.4byte	.LFB8
 	.4byte	.LFE8
 	.byte	0x1
@@ -1930,7 +1988,7 @@ _story_state:	.space	100
 	.byte	0x1
 	.asciz	"frameEnd"
 	.byte	0x1
-	.byte	0x7c
+	.byte	0x84
 	.4byte	.LFB9
 	.4byte	.LFE9
 	.byte	0x1
@@ -1939,7 +1997,7 @@ _story_state:	.space	100
 	.byte	0x1
 	.asciz	"statusLED"
 	.byte	0x1
-	.byte	0x88
+	.byte	0x90
 	.4byte	.LFB10
 	.4byte	.LFE10
 	.byte	0x1
@@ -1948,7 +2006,7 @@ _story_state:	.space	100
 	.4byte	.LASF0
 	.byte	0x3
 	.2byte	0x21e
-	.4byte	0xc4b
+	.4byte	0xc72
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -1957,7 +2015,7 @@ _story_state:	.space	100
 	.4byte	.LASF1
 	.byte	0x3
 	.2byte	0x291
-	.4byte	0xc5e
+	.4byte	0xc85
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -1966,7 +2024,7 @@ _story_state:	.space	100
 	.4byte	.LASF2
 	.byte	0x3
 	.2byte	0x523
-	.4byte	0xc71
+	.4byte	0xc98
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -1975,7 +2033,7 @@ _story_state:	.space	100
 	.asciz	"TRISB"
 	.byte	0x3
 	.2byte	0xd97
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -1984,7 +2042,7 @@ _story_state:	.space	100
 	.4byte	.LASF3
 	.byte	0x3
 	.2byte	0xdaa
-	.4byte	0xc99
+	.4byte	0xcc0
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -1993,7 +2051,7 @@ _story_state:	.space	100
 	.4byte	.LASF4
 	.byte	0x3
 	.2byte	0xdc0
-	.4byte	0xcac
+	.4byte	0xcd3
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -2002,7 +2060,7 @@ _story_state:	.space	100
 	.4byte	.LASF5
 	.byte	0x3
 	.2byte	0xdd6
-	.4byte	0xcbf
+	.4byte	0xce6
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -2011,42 +2069,42 @@ _story_state:	.space	100
 	.asciz	"ANSB"
 	.byte	0x3
 	.2byte	0x132f
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSC"
 	.byte	0x3
 	.2byte	0x1345
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSD"
 	.byte	0x3
 	.2byte	0x134e
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSF"
 	.byte	0x3
 	.2byte	0x1357
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSG"
 	.byte	0x3
 	.2byte	0x135e
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF6
 	.byte	0x3
 	.2byte	0x18b3
-	.4byte	0xd1d
+	.4byte	0xd44
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -2055,7 +2113,7 @@ _story_state:	.space	100
 	.4byte	.LASF7
 	.byte	0x3
 	.2byte	0x18c3
-	.4byte	0xd30
+	.4byte	0xd57
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1d
@@ -2069,7 +2127,7 @@ _story_state:	.space	100
 	.byte	0x1
 	.uleb128 0x15
 	.4byte	0x102
-	.4byte	0xd5b
+	.4byte	0xd82
 	.uleb128 0x16
 	.4byte	0x142
 	.byte	0x1
@@ -2081,12 +2139,12 @@ _story_state:	.space	100
 	.4byte	.LASF8
 	.byte	0x6
 	.byte	0x90
-	.4byte	0xd44
+	.4byte	0xd6b
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x15
 	.4byte	0x8d1
-	.4byte	0xd78
+	.4byte	0xd9f
 	.uleb128 0x16
 	.4byte	0x142
 	.byte	0x8
@@ -2095,126 +2153,126 @@ _story_state:	.space	100
 	.asciz	"s"
 	.byte	0x4
 	.byte	0x34
-	.4byte	0xd68
+	.4byte	0xd8f
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x21
 	.4byte	.LASF9
 	.byte	0x5
-	.byte	0x37
-	.4byte	0xab2
+	.byte	0x38
+	.4byte	0xac8
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1f
 	.asciz	"frames"
 	.byte	0x5
-	.byte	0x39
+	.byte	0x3a
 	.4byte	0x122
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x21
 	.4byte	.LASF10
 	.byte	0x5
-	.byte	0x3a
-	.4byte	0xa99
+	.byte	0x3b
+	.4byte	0xaaf
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF0
 	.byte	0x3
 	.2byte	0x21e
-	.4byte	0xc4b
+	.4byte	0xc72
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF1
 	.byte	0x3
 	.2byte	0x291
-	.4byte	0xc5e
+	.4byte	0xc85
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF2
 	.byte	0x3
 	.2byte	0x523
-	.4byte	0xc71
+	.4byte	0xc98
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"TRISB"
 	.byte	0x3
 	.2byte	0xd97
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF3
 	.byte	0x3
 	.2byte	0xdaa
-	.4byte	0xc99
+	.4byte	0xcc0
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF4
 	.byte	0x3
 	.2byte	0xdc0
-	.4byte	0xcac
+	.4byte	0xcd3
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF5
 	.byte	0x3
 	.2byte	0xdd6
-	.4byte	0xcbf
+	.4byte	0xce6
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSB"
 	.byte	0x3
 	.2byte	0x132f
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSC"
 	.byte	0x3
 	.2byte	0x1345
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSD"
 	.byte	0x3
 	.2byte	0x134e
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSF"
 	.byte	0x3
 	.2byte	0x1357
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1e
 	.asciz	"ANSG"
 	.byte	0x3
 	.2byte	0x135e
-	.4byte	0xc86
+	.4byte	0xcad
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF6
 	.byte	0x3
 	.2byte	0x18b3
-	.4byte	0xd1d
+	.4byte	0xd44
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1c
 	.4byte	.LASF7
 	.byte	0x3
 	.2byte	0x18c3
-	.4byte	0xd30
+	.4byte	0xd57
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1f
@@ -2228,21 +2286,21 @@ _story_state:	.space	100
 	.4byte	.LASF8
 	.byte	0x6
 	.byte	0x90
-	.4byte	0xd44
+	.4byte	0xd6b
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x1f
 	.asciz	"s"
 	.byte	0x4
 	.byte	0x34
-	.4byte	0xd68
+	.4byte	0xd8f
 	.byte	0x1
 	.byte	0x1
 	.uleb128 0x22
 	.4byte	.LASF9
 	.byte	0x1
-	.byte	0x4
-	.4byte	0xab2
+	.byte	0x5
+	.4byte	0xac8
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
@@ -2260,7 +2318,7 @@ _story_state:	.space	100
 	.4byte	.LASF10
 	.byte	0x1
 	.byte	0x7
-	.4byte	0xa99
+	.4byte	0xaaf
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
@@ -2732,42 +2790,42 @@ _story_state:	.space	100
 	.byte	0x0
 	.byte	0x0
 	.section	.debug_pubnames,info
-	.4byte	0xe2
+	.4byte	0xda
 	.2byte	0x2
 	.4byte	.Ldebug_info0
-	.4byte	0xed9
-	.4byte	0xac5
+	.4byte	0xf00
+	.4byte	0xadb
+	.asciz	"addScene"
+	.4byte	0xb0b
 	.asciz	"switchScene"
-	.4byte	0xaf8
+	.4byte	0xb3e
 	.asciz	"drawCurrentScene"
-	.4byte	0xb26
+	.4byte	0xb6c
 	.asciz	"checkSceneFinished"
-	.4byte	0xb56
-	.asciz	"manageFrameReset"
-	.4byte	0xb75
+	.4byte	0xb9c
 	.asciz	"drawFPS"
-	.4byte	0xba7
+	.4byte	0xbce
 	.asciz	"checkForJumper"
-	.4byte	0xbd9
+	.4byte	0xc00
 	.asciz	"setupHardware"
-	.4byte	0xbf5
+	.4byte	0xc1c
 	.asciz	"frameStart"
-	.4byte	0xc0e
+	.4byte	0xc35
 	.asciz	"frameEnd"
-	.4byte	0xc25
+	.4byte	0xc4c
 	.asciz	"statusLED"
-	.4byte	0xe9f
-	.asciz	"story_state"
-	.4byte	0xeb1
-	.asciz	"frames"
 	.4byte	0xec6
+	.asciz	"story_state"
+	.4byte	0xed8
+	.asciz	"frames"
+	.4byte	0xeed
 	.asciz	"ledState"
 	.4byte	0x0
 	.section	.debug_pubtypes,info
 	.4byte	0x13a
 	.2byte	0x2
 	.4byte	.Ldebug_info0
-	.4byte	0xed9
+	.4byte	0xf00
 	.4byte	0x102
 	.asciz	"uint8_t"
 	.4byte	0x122
@@ -2808,7 +2866,7 @@ _story_state:	.space	100
 	.asciz	"Sprite"
 	.4byte	0xa1b
 	.asciz	"SCENE"
-	.4byte	0xab2
+	.4byte	0xac8
 	.asciz	"STORY_STATE"
 	.4byte	0x0
 	.section	.debug_aranges,info
@@ -2900,32 +2958,39 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM3
-	.byte	0x17
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM4
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM5
-	.byte	0x17
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM6
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM7
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
+	.4byte	.LSM5
+	.byte	0x16
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LFE1
+	.byte	0x0
+	.uleb128 0x1
+	.byte	0x1
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM6
+	.byte	0x25
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM7
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
 	.4byte	.LSM8
-	.byte	0x18
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -2939,37 +3004,23 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LFE1
-	.byte	0x0
-	.uleb128 0x1
-	.byte	0x1
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
 	.4byte	.LSM11
-	.byte	0x33
+	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM12
-	.byte	0x16
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM13
 	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LFE2
-	.byte	0x0
-	.uleb128 0x1
-	.byte	0x1
+	.4byte	.LSM13
+	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM14
-	.byte	0x38
+	.byte	0x18
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -2983,23 +3034,25 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
+	.4byte	.LFE2
+	.byte	0x0
+	.uleb128 0x1
+	.byte	0x1
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
 	.4byte	.LSM17
-	.byte	0x15
+	.byte	0x3b
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM18
-	.byte	0x15
+	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM19
 	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM20
-	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3010,8 +3063,13 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
+	.4byte	.LSM20
+	.byte	0x40
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
 	.4byte	.LSM21
-	.byte	0x43
+	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3031,6 +3089,26 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM25
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM26
+	.byte	0x1a
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM27
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM28
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM29
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
@@ -3042,28 +3120,8 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM26
-	.byte	0x4c
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM27
-	.byte	0x17
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM28
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM29
-	.byte	0x13
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
 	.4byte	.LSM30
-	.byte	0x13
+	.byte	0x54
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3077,25 +3135,18 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LFE5
-	.byte	0x0
-	.uleb128 0x1
-	.byte	0x1
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
 	.4byte	.LSM33
-	.byte	0x55
+	.byte	0x13
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM34
-	.byte	0x15
+	.byte	0x13
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM35
-	.byte	0x15
+	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3104,12 +3155,39 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
+	.4byte	.LFE5
+	.byte	0x0
+	.uleb128 0x1
+	.byte	0x1
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
 	.4byte	.LSM37
-	.byte	0x16
+	.byte	0x5d
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM38
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM39
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM40
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM41
+	.byte	0x16
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM42
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
@@ -3121,28 +3199,8 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM39
-	.byte	0x5d
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM40
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM41
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
-	.4byte	.LSM42
-	.byte	0x15
-	.byte	0x0
-	.uleb128 0x5
-	.byte	0x2
 	.4byte	.LSM43
-	.byte	0x15
+	.byte	0x65
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3157,7 +3215,7 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM46
-	.byte	0x17
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3167,17 +3225,17 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM48
-	.byte	0x16
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM49
-	.byte	0x18
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM50
-	.byte	0x15
+	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3187,12 +3245,12 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM52
-	.byte	0x15
+	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM53
-	.byte	0x16
+	.byte	0x18
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3207,12 +3265,12 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM56
-	.byte	0x17
+	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM57
-	.byte	0x15
+	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3227,7 +3285,7 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM60
-	.byte	0x19
+	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
@@ -3247,6 +3305,26 @@ _story_state:	.space	100
 	.uleb128 0x5
 	.byte	0x2
 	.4byte	.LSM64
+	.byte	0x19
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM65
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM66
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM67
+	.byte	0x15
+	.byte	0x0
+	.uleb128 0x5
+	.byte	0x2
+	.4byte	.LSM68
 	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
@@ -3258,17 +3336,17 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM65
-	.byte	0x87
+	.4byte	.LSM69
+	.byte	0x8f
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM66
+	.4byte	.LSM70
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM67
+	.4byte	.LSM71
 	.byte	0x18
 	.byte	0x0
 	.uleb128 0x5
@@ -3280,27 +3358,27 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM68
-	.byte	0x8f
+	.4byte	.LSM72
+	.byte	0x97
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM69
+	.4byte	.LSM73
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM70
+	.4byte	.LSM74
 	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM71
+	.4byte	.LSM75
 	.byte	0x17
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM72
+	.4byte	.LSM76
 	.byte	0x18
 	.byte	0x0
 	.uleb128 0x5
@@ -3312,27 +3390,27 @@ _story_state:	.space	100
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM73
-	.byte	0x9b
+	.4byte	.LSM77
+	.byte	0xa3
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM74
+	.4byte	.LSM78
 	.byte	0x16
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM75
+	.4byte	.LSM79
 	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM76
+	.4byte	.LSM80
 	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5
 	.byte	0x2
-	.4byte	.LSM77
+	.4byte	.LSM81
 	.byte	0x15
 	.byte	0x0
 	.uleb128 0x5

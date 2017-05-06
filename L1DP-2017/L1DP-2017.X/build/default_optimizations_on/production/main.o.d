@@ -9,4 +9,7 @@ text.h  \
  music.h  \
 sprites.h  \
 drawing_helpers.h  \
-demo_management.h 
+demo_management.h  \
+intro.h  \
+road.h  \
+ credits.h 

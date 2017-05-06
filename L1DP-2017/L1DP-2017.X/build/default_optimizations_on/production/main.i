@@ -8014,17 +8014,18 @@ typedef struct {
 
     _Bool storyEnded;
     _Bool clutState;
-    SCENE scenes[3];
+    SCENE scenes[5];
+    uint8_t sceneCount;
 } STORY_STATE;
 extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern _Bool ledState;
 
+void addScene();
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
-void manageFrameReset();
 
 void drawFPS(char* sprintBuffer);
 
@@ -8034,6 +8035,189 @@ void frameStart();
 void frameEnd();
 void statusLED();
 # 24 "main.c" 2
+
+
+# 1 "intro.h" 1
+
+
+
+
+
+
+
+# 1 "demo_management.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "demo_management.h" 2
+
+
+# 1 "system.h" 1
+# 14 "demo_management.h" 2
+
+
+# 1 "serial.h" 1
+# 17 "demo_management.h" 2
+
+
+# 1 "sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "sprites.h" 2
+
+
+# 1 "system.h" 1
+# 9 "sprites.h" 2
+# 20 "demo_management.h" 2
+# 9 "intro.h" 2
+# 17 "intro.h"
+extern SCENE introScene;
+
+void initIntro();
+void drawIntro(uint16_t frame);
+unsigned char audioIntro(unsigned char t);
+# 27 "main.c" 2
+# 1 "road.h" 1
+
+
+
+
+
+
+
+# 1 "demo_management.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "demo_management.h" 2
+
+
+# 1 "system.h" 1
+# 14 "demo_management.h" 2
+
+
+# 1 "serial.h" 1
+# 17 "demo_management.h" 2
+
+
+# 1 "sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "sprites.h" 2
+
+
+# 1 "system.h" 1
+# 9 "sprites.h" 2
+# 20 "demo_management.h" 2
+# 9 "road.h" 2
+# 17 "road.h"
+extern SCENE roadScene;
+
+void initRoad();
+void drawRoad(uint16_t frame);
+unsigned char audioRoad(unsigned char t);
+# 28 "main.c" 2
+# 1 "credits.h" 1
+
+
+
+
+
+
+
+# 1 "demo_management.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "demo_management.h" 2
+
+
+# 1 "system.h" 1
+# 14 "demo_management.h" 2
+
+
+# 1 "serial.h" 1
+# 17 "demo_management.h" 2
+
+
+# 1 "sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "sprites.h" 2
+
+
+# 1 "system.h" 1
+# 9 "sprites.h" 2
+# 20 "demo_management.h" 2
+# 9 "credits.h" 2
+# 17 "credits.h"
+extern SCENE creditsScene;
+static char creditsText[];
+
+void initCredits();
+void drawCredits(uint16_t frame);
+unsigned char audioCredits(unsigned char t);
+# 29 "main.c" 2
 
 
 
@@ -8070,246 +8254,36 @@ void statusLED();
 
 
 
-void drawIntro(uint16_t frames);
-void drawFPS();
-int handleSerialInput();
-
 
 char projectName[] = "Code MESS";
 char buf[20];
-uint8_t startSceneIndex = 1;
+
 volatile uint8_t serialStoryIndex = 100;
 
-
-
-
-
-
-
-uint16_t maxY = 474;
-
-
-uint8_t color = 0;
-
-
-uint8_t clutStart = 5;
-int speed = 1;
-int dir = 1;
-int xPosition = 0;
-uint8_t rotAngle = 0;
-int currentSpriteIndex = 0;
-int currentSpriteOffset = 1;
-int currentSpriteFrameCount = 3;
-int spriteStepTimeout = 0;
-int spriteStepTrigger = 10;
-
-uint8_t colorScrollSpeed = 0;
-void initIntro() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-
-    currentSpriteIndex = currentSpriteOffset;
-
-
-    G1CLUTbits.CLUTEN = 0;
-    clut_set(1, 0x4208);
-    clut_set(2, 0x9a60);
-    clut_set(3, 0xb800);
-    clut_set(4, 0x2124);
-    calc_colors(clutStart);
-    G1CLUTbits.CLUTEN = 1;
-}
-void drawIntro(uint16_t frame) {
-    uint16_t i, j, sizeW, sizeH, vertOffset;
-    sizeW = 1;
-    sizeH = 1*PIX_H;
-    vertOffset = 480UL/4;
-
-
-    if (sizeH >= 80UL -1 || sizeW >= 480UL -1 || sizeH <= 0 || sizeW <= 0) return;
-
-    if (frame == 0 ) {
-
-        for (i = 0; i < (480UL -1)/2; i+=sizeH) {
-            for (j = 0; j < 80UL -1; j+=sizeW) {
-                color = 0x4;
-                rcc_color(color);
-                rcc_draw(j, i + vertOffset, sizeW, sizeH);
-            }
-        }
-
-
-        currentSpriteIndex = currentSpriteOffset;
-
-    } else {
-        colorScrollSpeed++;
-
-        for (i = 0; i < (480UL -1)/2; i+=sizeH) {
-            for (j = 0; j < 80UL -1; j+=sizeW) {
-
-
-                color = (uint8_t)(frame * colorScrollSpeed) +
-                        sinetable[(uint8_t)i] +
-                        sinetable[(uint8_t)j*3];
-
-                if (color == 0 ) {
-                    color = 1;
-                }else if (color == 0xff) {
-                    color = 0xfe;
-                }
-
-
-                if (color < clutStart) {
-                    color = clutStart;
-                }
-
-                rcc_color(color);
-                rcc_draw(j, i + vertOffset, sizeW, sizeH);
-            }
-        }
-
-
-        spriteStepTimeout++;
-        if (spriteStepTimeout > spriteStepTrigger + 30) {
-            currentSpriteIndex = currentSpriteOffset + 1;
-        } else {
-            currentSpriteIndex = currentSpriteOffset + 2;
-        }
-# 174 "main.c"
-    }
-    drawSprite(2, 480UL -(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-# 187 "main.c"
-    if (frame != 0 ) {
-
-
-        sprintf(buf, "Code MESS");
-        chr_print(buf, 0, (21*5)-4);
-        sprintf(buf, "by:jamisnemo");
-        chr_print(buf, 80UL -48, 480UL -(21*6));
-    }
-
-}
-unsigned char audioIntro(unsigned char t) {
-    return t;
-}
-
-
-
-void initRoad() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-
-    currentSpriteIndex = currentSpriteOffset;
-# 217 "main.c"
-}
-void drawRoad() {
-    drawSprite(2, 480UL -(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-}
-unsigned char audioRoad(unsigned char t) {
-    return t/2;
-}
-
-
-
-
-static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n"
-            "Thank you Arko\n"
-            "and everyone at NSL\n"
-            "that helps make\n"
-            "LayerOne happen!\n"
-            "\n"
-            "Never enough time.\n"
-            "Was it good for u?";
-void initCredits() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-    G1CLUTbits.CLUTEN = 0;
-}
-void drawCredits(uint16_t frame) {
-    drawSprite((80UL -32)/2, 4*PIX_H, 8, 0);
-    chr_print(creditsText, 0, 0);
-}
-unsigned char audioCredits(unsigned char t) {
-    return t & t>>8;
-}
-
-
-
-
-
-
-
 void loadScenes() {
-
-    SCENE intro = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
-
-    SCENE credits = {0, 1000, &initCredits, &drawCredits, &audioCredits, "Credits"};
-    story_state.scenes[0] = intro;
-
-    story_state.scenes[1] = credits;
+    addScene(introScene);
+    addScene(roadScene);
+    addScene(creditsScene);
 }
 
 void initDemo() {
     printf("Initing demo...\r\n");
 
-    maxY = 480-PIX_H;
-
     blank_background();
     loadAllSprites();
 
 
+
+    story_state.sceneCount = 0;
     loadScenes();
 
 
-    story_state.storyPlaying = 0;
-
-
+    uint8_t startSceneIndex = 0;
     story_state.currentScene = startSceneIndex;
     switchScene(startSceneIndex);
-}
-
-void codecrow() {
-
-    printf("Welcome to project: %s!\r\n", projectName);
-    initDemo();
 
 
-
-
-
-
-
-    while (1) {
-        frameStart();
-
-
-
-
-        manageFrameReset();
-
-
-        serialStoryIndex = handleSerialInput();
-
-
-        drawCurrentScene();
-
-
-        checkForJumper();
-        if (story_state.storyPlaying == 1) {
-            frames++;
-            checkSceneFinished();
-        } else {
-            sprintf(buf, "Please jump R28 to");
-            chr_print(buf, 2, 480UL -(21*3));
-            sprintf(buf, "to Ground...");
-            chr_print(buf, 22, 480UL -(21*2));
-        }
-
-
-
-
-        frameEnd();
-    }
+    story_state.storyPlaying = 0;
 }
 
 int handleSerialInput() {
@@ -8351,7 +8325,46 @@ int handleSerialInput() {
 }
 
 int main(void) {
+
     setupHardware();
-    codecrow();
+
+
+    printf("Welcome to project: %s!\r\n", projectName);
+    initDemo();
+
+
+
+
+
+
+
+    while (1) {
+        frameStart();
+
+
+
+        serialStoryIndex = handleSerialInput();
+
+
+        drawCurrentScene();
+
+
+        checkForJumper();
+        if (story_state.storyPlaying == 1) {
+            frames++;
+            checkSceneFinished();
+        } else {
+            sprintf(buf, "Please jump R28 to");
+            chr_print(buf, 2, 480UL -(21*3));
+            sprintf(buf, "to Ground...");
+            chr_print(buf, 22, 480UL -(21*2));
+        }
+
+
+
+
+        frameEnd();
+    }
+
     return 0;
 }

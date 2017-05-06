@@ -22,6 +22,11 @@
 #include "drawing_helpers.h"
 #include "demo_management.h"
 
+// Include all scene definitions:
+#include "intro.h"
+#include "road.h"
+#include "credits.h"
+
 //#include "particles.h"
 //#include "screens.h"
 //#include "testgfx.h"
@@ -56,273 +61,37 @@
 #pragma config JTAGEN = OFF             // JTAG Port Enable (JTAG port is disabled)
 
 //=========
-// Demo method declarations:
-void drawIntro(uint16_t frames);
-void drawFPS();
-int handleSerialInput();
 
 // Variable declarations:
 char projectName[] = "Code MESS";
 char buf[20]; // Buffer for any text rendering sprintf() calls
-uint8_t startSceneIndex = 1; // 0 is intro!!
+
 volatile uint8_t serialStoryIndex = 100;
 
-//================================
-// Start of frame drawing methods:
-// START OF SCENES
-// START OF SCENES
-// START OF SCENES
-
-uint16_t maxY = 474; // 480-PIX_H
-
-// Start Intro scene:
-uint8_t color = 0;
-// This should be one greater than the index of the last color we care about in
-// the palette for the Crow sprite:
-uint8_t clutStart = 5;
-int speed = 1;
-int dir = 1;
-int xPosition = 0;
-uint8_t rotAngle = 0;
-int currentSpriteIndex = 0;
-int currentSpriteOffset = 1;
-int currentSpriteFrameCount = 3;
-int spriteStepTimeout = 0;
-int spriteStepTrigger = 10;
-
-uint8_t colorScrollSpeed = 0;
-void initIntro() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-    // Setup bird sprite offsets:
-    currentSpriteIndex = currentSpriteOffset;
-    // Setup colors for bird sprite using palette (manually!?! kids these days...)
-    // clut_set(0) is black
-    _CLUTEN = 0; // disable CLUT before we swap colors
-    clut_set(1, 0x4208); // gray
-    clut_set(2, 0x9a60); // orange
-    clut_set(3, 0xb800); // red
-    clut_set(4, 0x2124); // dark gray: #232323: 35, 35, 35
-    calc_colors(clutStart); // Build a rainbow starting with CLUT index 4
-    _CLUTEN = 1; // enable the CLUT for this scene
-}
-void drawIntro(uint16_t frame) {
-    uint16_t i, j, sizeW, sizeH, vertOffset;
-    sizeW = 1;
-    sizeH = 1*PIX_H;
-    vertOffset = VER_RES/4;
-    
-    // Safety third:
-    if (sizeH >= HOR_RES-1 || sizeW >= VER_RES-1 || sizeH <= 0 || sizeW <= 0) return;
-
-    if (frame == 0 ) {
-        // Draw background:
-        for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
-            for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
-                color = 0x4; // dark gray background
-                rcc_color(color);
-                rcc_draw(j, i + vertOffset, sizeW, sizeH);            
-            }
-        }
-        
-        // Manage Crow:
-        currentSpriteIndex = currentSpriteOffset; // sleep state
-        
-    } else {
-        colorScrollSpeed++;
-        // Draw warp! Finally! A Warp! FUCK yeah!!
-        for (i = 0; i < (VER_RES-1)/2; i+=sizeH) { // y
-            for (j = 0; j < HOR_RES-1; j+=sizeW) { // x
-    //            color = i + j;
-
-                color = (uint8_t)(frame * colorScrollSpeed) +
-                        sinetable[(uint8_t)i] + 
-                        sinetable[(uint8_t)j*3];
-
-                if (color == 0 ) {
-                    color = 1;
-                }else if (color == 0xff) {
-                    color = 0xfe;
-                }
-
-                // This is a hack to drop our defined colors from the lookup.
-                if (color < clutStart) {
-                    color = clutStart;
-                }
-
-                rcc_color(color);
-                rcc_draw(j, i + vertOffset, sizeW, sizeH);            
-            }
-        }
-        
-        // Manage Crow:
-        spriteStepTimeout++;
-        if (spriteStepTimeout > spriteStepTrigger + 30) {
-            currentSpriteIndex = currentSpriteOffset + 1; // awake state
-        } else {
-            currentSpriteIndex = currentSpriteOffset + 2; // caw state
-        }
-//        spriteStepTimeout++;
-//        if (spriteStepTimeout > spriteStepTrigger) {
-//            currentSpriteIndex++;
-//            spriteStepTimeout = 0;
-//        }
-//        if ( currentSpriteIndex >= currentSpriteOffset + currentSpriteFrameCount
-//                || currentSpriteIndex == currentSpriteOffset) {
-//            currentSpriteIndex = currentSpriteOffset + 1;
-//        }
-    }
-    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-    
-//    if (xPosition + (speed *dir) > maxX || xPosition + (speed *dir) < 0) {
-//        dir = dir * -1;
-//    }
-//    xPosition = xPosition + (speed * dir);
-
-//    rcc_color(0x3);
-//    line(0, 0*PIX_H, HOR_RES-1, 0*PIX_H);
-//    line(0, maxY-(vertOffset*PIX_H), HOR_RES-1, maxY-(vertOffset*PIX_H));
-//    printf("x: %i, dir: %i\r\n", xPosition, dir);
-    
-    if (frame != 0 ) {
-        // We have to calculate horizontal movement manually here. No way to 
-        // detect the drawable width of a string of text at this point.
-        sprintf(buf, "Code MESS");
-        chr_print(buf, 0, (21*5)-4); // x, y are bounded in chr_print
-        sprintf(buf, "by:jamisnemo");
-        chr_print(buf, HOR_RES-48, VER_RES-(21*6)); // x, y are bounded in chr_print
-    }
-
-}
-unsigned char audioIntro(unsigned char t) {
-    return t;
-}
-// End of Intro scene
-
-// Start of road scene
-void initRoad() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-    // Setup bird sprite offsets:
-    currentSpriteIndex = currentSpriteOffset;
-    // Setup colors for bird sprite using palette (manually!?! kids these days...)
-    // clut_set(0) is black
-//    _CLUTEN = 0; // disable CLUT before we swap colors
-//    clut_set(1, 0x4208); // gray
-//    clut_set(2, 0x9a60); // orange
-//    clut_set(3, 0xb800); // red
-//    clut_set(4, 0x2124); // dark gray: #232323: 35, 35, 35
-//    calc_colors(clutStart); // Build a rainbow starting with CLUT index 4
-//    _CLUTEN = 1; // enable the CLUT for this scene
-}
-void drawRoad() {
-    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-}
-unsigned char audioRoad(unsigned char t) {
-    return t/2;
-}
-// End of road scene
-
-
-// Start Credits scene:
-static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
-            "Thank you Arko\n" \
-            "and everyone at NSL\n" \
-            "that helps make\n" \
-            "LayerOne happen!\n" \
-            "\n" \
-            "Never enough time.\n" \
-            "Was it good for u?";
-void initCredits() {
-    int sceneId = story_state.currentScene;
-    printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-    _CLUTEN = 0; // enable the CLUT for this scene
-}
-void drawCredits(uint16_t frame) {
-    drawSprite((HOR_RES-32)/2, 4*PIX_H, 8, 0);
-    chr_print(creditsText, 0, 0); // x, y are bounded in chr_print
-}
-unsigned char audioCredits(unsigned char t) {
-    return t & t>>8;
-}
-// End of Credits scene
-
-
-// END OF SCENES
-// END OF SCENES
-// END OF SCENES
-
 void loadScenes() {
-    // Don't forget to change SCENE_COUNT
-    SCENE intro = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
-//    SCENE road = {0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
-    SCENE credits = {0, 1000, &initCredits, &drawCredits, &audioCredits, "Credits"};
-    story_state.scenes[0] = intro;
-//    story_state.scenes[1] = road
-    story_state.scenes[1] = credits;
+    addScene(introScene);
+    addScene(roadScene);
+    addScene(creditsScene);
 }
 
 void initDemo() {
     printf("Initing demo...\r\n");
-    // Calculate some stuff
-    maxY = 480-PIX_H; // validate that the maxX size is correct.
     
     blank_background();
     loadAllSprites();
     
-    // Build the scenes:
+    // Configure the stories initial state:
+    // Add the scenes:
+    story_state.sceneCount = 0;
     loadScenes();
     
-    // Pause the demo until the UART or GPIO starts it:
-    story_state.storyPlaying = false;
-    
     // Start on the correct scene:
+    uint8_t startSceneIndex = 0;
     story_state.currentScene = startSceneIndex;
     switchScene(startSceneIndex);
-}
 
-void codecrow() {
-    // Start of the 2016 demo!!!!!!!!!!!!!!!
-    printf("Welcome to project: %s!\r\n", projectName); 
-    initDemo();
-    
-//    char someInput[128] = "";
-//    printf("Enter some string: ");
-//    scanf("%s", someInput);
-//    printf("You entered: '%s'", someInput);
-
-    // Start drawing the demo. This is the main loop:
-    while (1) {
-        frameStart();
-        // Start frame drawing:
-
-        // Make sure we reset our frame count to zero after some time. Not sure 
-        // if we even want this except for arbitrary looping...
-        manageFrameReset(); // TODO: Swap this for the demo manager stuff...
-
-        // Manage any newly available data from the serial port:
-        serialStoryIndex = handleSerialInput();
-
-        // Draw the current Scene:
-        drawCurrentScene();
-        
-        // Play only if we've got that jumper on r28
-        checkForJumper();
-        if (story_state.storyPlaying == true) {
-            frames++;
-            checkSceneFinished();
-        } else {
-            sprintf(buf, "Please jump R28 to");
-            chr_print(buf, 2, VER_RES-(21*3)); // x, y are bounded in chr_print
-            sprintf(buf, "to Ground...");
-            chr_print(buf, 22, VER_RES-(21*2)); // x, y are bounded in chr_print
-        }
-        
-        //drawFPS(buf); // actually draws frames counter value
-
-        // End frame drawing
-        frameEnd();
-    }
+    // Pause the demo until the UART or GPIO starts it:
+    story_state.storyPlaying = false;
 }
 
 int handleSerialInput() {
@@ -364,7 +133,46 @@ int handleSerialInput() {
 }
 
 int main(void) {
+    // Setup the hardware before anything else:
     setupHardware();
-    codecrow(); // Actually run the demo! This will loop forever.
+
+    // Start of the demo!!!!!!!!!!!!!!!
+    printf("Welcome to project: %s!\r\n", projectName);
+    initDemo();
+
+//    char someInput[128] = "";
+//    printf("Enter some string: ");
+//    scanf("%s", someInput);
+//    printf("You entered: '%s'", someInput);
+
+    // Start drawing the demo. This is the main loop:
+    while (1) {
+        frameStart();
+        // Start frame drawing:
+
+        // Manage any newly available data from the serial port:
+        serialStoryIndex = handleSerialInput();
+
+        // Draw the current Scene:
+        drawCurrentScene();
+
+        // Play only if we've got that jumper on r28
+        checkForJumper();
+        if (story_state.storyPlaying == true) {
+            frames++;
+            checkSceneFinished();
+        } else {
+            sprintf(buf, "Please jump R28 to");
+            chr_print(buf, 2, VER_RES-(21*3)); // x, y are bounded in chr_print
+            sprintf(buf, "to Ground...");
+            chr_print(buf, 22, VER_RES-(21*2)); // x, y are bounded in chr_print
+        }
+
+        //drawFPS(buf); // actually draws frames counter value
+
+        // End frame drawing
+        frameEnd();
+    }
+
     return 0; // Never hit.
 }
