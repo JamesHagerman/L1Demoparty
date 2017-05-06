@@ -5,25 +5,27 @@
 STORY_STATE story_state;
 uint16_t frames = 0;
 bool ledState = true;
+char jumperMessage[] = "Please jump R28 to\nto Ground...";
 
 // StoryState management methods:
 void addScene(SCENE newScene) {
     if (story_state.sceneCount+1 <= MAX_SCENES) {
-        story_state.sceneCount++;
         story_state.scenes[story_state.sceneCount] = newScene;
+        story_state.sceneCount++;
     } else {
         printf("Oops! Trying to add too many scenes!\n");
     }
 }
 void switchScene(uint8_t nextScene) {
-    if (nextScene > story_state.sceneCount - 1) {
-        printf("%u is an invalid scene... \n", nextScene);
+    if (nextScene >= story_state.sceneCount) {
+        // TODO: Handle this more gracefully...
+        printf("Tried to switch to an invalid scene. Restarting demo...\n\n");
         
         // Reset after we reach the end of the last scene:
-        frames = 0;
-        story_state.currentScene = 0;
-//        return;
+        nextScene = 0;
+        frames = 0; // We're starting over, so reset frames to 0
     }
+    
     if (nextScene != story_state.currentScene) {
         story_state.currentScene = nextScene;
     } else {
@@ -119,26 +121,6 @@ void setupHardware() {
     blank_background();
 #endif
     
-}
-
-void frameStart() {
-#ifdef	DOUBLE_BUFFERED
-    swapWorkAreas();
-#else
-//    blank_background(); // Clearing the buffer here means tearing for some reason
-#endif
-}
-
-void frameEnd() {
-    // Cleanup the right most column:
-    rcc_color(0);
-    rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); // Weird things occur if the right column isn't 0
-
-#ifdef	DOUBLE_BUFFERED
-    waitForBufferFlip();
-#else
-    waitForVSync();
-#endif
 }
 
 void statusLED() {

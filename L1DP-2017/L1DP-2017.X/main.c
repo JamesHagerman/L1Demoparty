@@ -82,7 +82,7 @@ void initDemo() {
     
     // Configure the stories initial state:
     // Add the scenes:
-    story_state.sceneCount = 0;
+    story_state.sceneCount = 0; // Start we zero scenes...
     loadScenes();
     
     // Start on the correct scene:
@@ -162,13 +162,10 @@ int main(void) {
             frames++;
             checkSceneFinished();
         } else {
-            sprintf(buf, "Please jump R28 to");
-            chr_print(buf, 2, VER_RES-(21*3)); // x, y are bounded in chr_print
-            sprintf(buf, "to Ground...");
-            chr_print(buf, 22, VER_RES-(21*2)); // x, y are bounded in chr_print
+            chr_print(jumperMessage, 2, VER_RES-(21*3));
         }
 
-        //drawFPS(buf); // actually draws frames counter value
+        drawFPS(buf); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();

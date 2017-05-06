@@ -57,6 +57,7 @@ extern STORY_STATE story_state;
 
 extern uint16_t frames;
 extern bool ledState;
+extern char jumperMessage[];
 
 void addScene();
 void switchScene(uint8_t nextScene);
@@ -67,8 +68,6 @@ void drawFPS(char* sprintBuffer);
 
 void checkForJumper();
 void setupHardware();
-void frameStart();
-void frameEnd();
 void statusLED();
 
 #ifdef	__cplusplus

@@ -34,7 +34,7 @@ void calc_colors(int startingIndex) {
     uint16_t i;
     uint16_t color = 0;
     uint8_t r, g, b, sat = 255, val = 255; // hue
-    printf("Setting up CLUT:\r\n");
+    //printf("Setting up CLUT:\r\n");
     
     
     // Only build CLUT rainbow for colors we WANT to use:
@@ -48,7 +48,7 @@ void calc_colors(int startingIndex) {
     
     clut_set(  0, 0x0000); // black needs to stay black...
     clut_set(255, 0xFFFF); // white needs to stay white...
-    printf("\r\nDone!\r\n");
+    //printf("\r\nDone!\r\n");
 }
 
 

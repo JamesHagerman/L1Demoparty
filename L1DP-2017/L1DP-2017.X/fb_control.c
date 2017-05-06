@@ -34,6 +34,26 @@ void gpu_setfb(__eds__ uint8_t *buf) {
     G1DPADRH = (unsigned long)(buf);
 }
 
+void frameStart() {
+#ifdef	DOUBLE_BUFFERED
+    swapWorkAreas();
+#else
+//    blank_background(); // Clearing the buffer here means tearing for some reason
+#endif
+}
+
+void frameEnd() {
+    // Cleanup the right most column:
+    rcc_color(0);
+    rcc_draw((int)HOR_RES-1, 0, 1, (int)VER_RES); // Weird things occur if the right column isn't 0
+
+#ifdef	DOUBLE_BUFFERED
+    waitForBufferFlip();
+#else
+    waitForVSync();
+#endif
+}
+
 #ifdef DOUBLE_BUFFERED
 int next_fb = 0;
 void waitForBufferFlip() {
