@@ -7668,12 +7668,20 @@ void _write_flash_word16(_prog_addressT dst, int dat);
 void _write_flash_word24(_prog_addressT dst, long dat);
 # 14 "serial.c" 2
 # 1 "serial.h" 1
-# 18 "serial.h"
-extern unsigned char rx1Buf[128];
-extern unsigned char tx1Buf[128];
-extern unsigned int rxSize;
-extern unsigned int txSize;
-extern _Bool dataAvailable;
+# 20 "serial.h"
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[128];
+extern unsigned char txBufU1[128];
+extern _Bool dataAvailableU1;
+
+
+
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[128];
+extern unsigned char txBufU2[128];
+extern _Bool dataAvailableU2;
 
 void config_uart(unsigned long baudRate);
 void reset_buffer();
@@ -7681,16 +7689,25 @@ void reset_buffer();
 
 
 
-unsigned char rx1Buf[128];
-unsigned char tx1Buf[128];
+unsigned int rxSizeU1;
+unsigned int txSizeU1;
+unsigned char rxBufU1[128];
+unsigned char txBufU1[128];
 unsigned char *U1TXCharPtr;
 unsigned char *U1RXCharPtr;
-unsigned int rxSize;
-unsigned int txSize;
-_Bool dataAvailable = 0;
+_Bool dataAvailableU1 = 0;
+
+
+
+unsigned int rxSizeU2;
+unsigned int txSizeU2;
+unsigned char rxBufU2[128];
+unsigned char txBufU2[128];
+unsigned char *U2TXCharPtr;
+unsigned char *U2RXCharPtr;
+_Bool dataAvailableU2 = 0;
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
-
     IFS0bits.U1RXIF = 0;
 
 
@@ -7701,15 +7718,13 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
         if(U1STAbits.FERR == 0) {
 
             while(U1STAbits.URXDA == 1) {
-                rx1Buf[rxSize] = U1RXREG;
-                U1TXREG = rx1Buf[rxSize];
-                if (rx1Buf[rxSize] == '\r' || rx1Buf[rxSize] == '\n') {
-                    dataAvailable = 1;
+                rxBufU1[rxSizeU1] = U1RXREG;
+                U1TXREG = rxBufU1[rxSizeU1];
+                if (rxBufU1[rxSizeU1] == '\r' || rxBufU1[rxSizeU1] == '\n') {
+                    dataAvailableU1 = 1;
                 }
-                rxSize++;
+                rxSizeU1++;
             }
-
-
         } else {
 
 
@@ -7720,9 +7735,38 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {
     IFS0bits.U1TXIF = 0;
 
+}
 
+void __attribute__((__interrupt__, no_auto_psv)) _U2RXInterrupt( void ) {
+    IFS1bits.U2RXIF = 0;
+
+
+    if(U2STAbits.OERR == 1) {
+        U2STAbits.OERR = 0;
+    } else {
+
+        if(U2STAbits.FERR == 0) {
+
+            while(U2STAbits.URXDA == 1) {
+                rxBufU2[rxSizeU2] = U2RXREG;
+                U2TXREG = rxBufU2[rxSizeU2];
+                if (rxBufU2[rxSizeU2] == '\r' || rxBufU2[rxSizeU2] == '\n') {
+                    dataAvailableU2 = 1;
+                }
+                rxSizeU2++;
+            }
+        } else {
+
+
+        }
+    }
+}
+
+void __attribute__((__interrupt__, no_auto_psv)) _U2TXInterrupt(void) {
+    IFS1bits.U2TXIF = 0;
 
 }
+
 
 void config_uart(unsigned long baudRate) {
 
@@ -7731,10 +7775,16 @@ void config_uart(unsigned long baudRate) {
 
 
 
+
+
     TRISBbits.TRISB7 = 1;
 
     OSCCONbits.IOLOCK = 0;
+
+
     RPINR18bits.U1RXR = 7;
+
+
 
     RPOR3bits.RP6R = 3;
     OSCCONbits.IOLOCK = 1;
@@ -7771,18 +7821,18 @@ void config_uart(unsigned long baudRate) {
     IFS0bits.U1RXIF = 0;
 
 
-    U1TXCharPtr = &tx1Buf[0];
-    U1RXCharPtr = &tx1Buf[0];
+    U1TXCharPtr = &txBufU1[0];
+    U1RXCharPtr = &rxBufU1[0];
 
     { __delay32( (unsigned long) (((unsigned long long) 100)*(16000000UL)/1000ULL)); };
     printf("\n\nUART should be working at 115200 baud now!\r\n");
 }
 
 void reset_buffer() {
-    rx1Buf[0] = '\0';
-    rxSize = 0;
+    rxBufU1[0] = '\0';
+    rxSizeU1 = 0;
 }
-# 129 "serial.c"
+# 171 "serial.c"
 int __attribute__((__weak__, __section__(".libc")))
 read(int handle, void *buffer, unsigned int len)
 {

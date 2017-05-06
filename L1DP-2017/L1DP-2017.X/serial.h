@@ -13,16 +13,29 @@
 extern "C" {
 #endif
 
-#define	RX_BUF_SIZE	128
-#define	TX_BUF_SIZE	128
-extern unsigned char	rx1Buf[RX_BUF_SIZE];
-extern unsigned char	tx1Buf[TX_BUF_SIZE];
-extern unsigned int rxSize;
-extern unsigned int txSize;
-extern bool dataAvailable;
+
+// TODO: Define all of this stuff in a struct so it is easier to abstract:
+#define	RX_BUF_SIZE_U1	128
+#define	TX_BUF_SIZE_U1	128
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[RX_BUF_SIZE_U1];
+extern unsigned char txBufU1[TX_BUF_SIZE_U1];
+extern bool dataAvailableU1;
+
+#define	RX_BUF_SIZE_U2	128
+#define	TX_BUF_SIZE_U2	128
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[RX_BUF_SIZE_U2];
+extern unsigned char txBufU2[TX_BUF_SIZE_U2];
+extern bool dataAvailableU2;
 
 void config_uart(unsigned long baudRate);
 void reset_buffer();
+
+// TODO: Build a keyboard handler...
+//int handleSerialInput();
 
 
 #ifdef	__cplusplus

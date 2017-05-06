@@ -64,49 +64,8 @@ int handleSerialInput();
 // Variable declarations:
 char projectName[] = "Code MESS";
 char buf[20]; // Buffer for any text rendering sprintf() calls
+uint8_t startSceneIndex = 1; // 0 is intro!!
 volatile uint8_t serialStoryIndex = 100;
-
-//=========
-// Static inline functions:
-inline void fast_pixel(unsigned long ax, unsigned long ay) {
-    //ax += (ay << 9) + (ay << 7);
-    ax += ay*HOR_RES;
-    while(_CMDFUL) continue;
-    G1CMDL = ax;
-    G1CMDH = RCC_DESTADDR | ax>>16;
-
-    while(_CMDFUL) continue;
-    G1CMDL = 0x1006; // This needs to be changed for non 80x
-    G1CMDH = RCC_RECTSIZE;
-
-    while(_CMDFUL) continue;
-    G1CMDL = 0x60;
-    G1CMDH = RCC_STARTCOPY;
-    Nop();
-}
-
-//================================
-// Start of music playing methods:
-//_T1Interrupt() is the T1 interrupt service routine (ISR).
-void __attribute__((__interrupt__)) _T1Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
-{
-	static unsigned char idx = 0;
-    if (story_state.currentScene == 0) {
-        PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
-        
-//    } else if (story_state.currentScene == 1 ) {
-//        PORTB = ((zigzagtable[idx]/4)&0xf) << 12 | ((sinetable[idx]/4)&0xf) << 8;
-    } else {
-        PORTB = (sinetable[idx]/4) << 8;
-    }
-    
-    if (frames != 0) {
-        idx -= 1;
-    }
-	_T1IF = 0;
-}
-
 
 //================================
 // Start of frame drawing methods:
@@ -266,30 +225,22 @@ unsigned char audioRoad(unsigned char t) {
 
 
 // Start Credits scene:
+static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
+            "Thank you Arko\n" \
+            "and everyone at NSL\n" \
+            "that helps make\n" \
+            "LayerOne happen!\n" \
+            "\n" \
+            "Never enough time.\n" \
+            "Was it good for u?";
 void initCredits() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-
     _CLUTEN = 0; // enable the CLUT for this scene
 }
 void drawCredits(uint16_t frame) {
-   
     drawSprite((HOR_RES-32)/2, 4*PIX_H, 8, 0);
-
-    sprintf(buf, "Thank you Arko ");
-    chr_print(buf, 0, VER_RES-(21*12)); // x, y are bounded in chr_print
-    sprintf(buf, "and everyone at NSL");
-    chr_print(buf, 0, VER_RES-(21*11)); // x, y are bounded in chr_print
-    sprintf(buf, "that helps make");
-    chr_print(buf, 0, VER_RES-(21*10)); // x, y are bounded in chr_print
-    sprintf(buf, "LayerOne happen!");
-    chr_print(buf, 0, VER_RES-(21*9)); // x, y are bounded in chr_print
-    
-    sprintf(buf, "Never enough time.");
-    chr_print(buf, 0, VER_RES-(21*6)); // x, y are bounded in chr_print
-    sprintf(buf, "Was it good for u?");
-    chr_print(buf, 0, VER_RES-(21*5)); // x, y are bounded in chr_print
-    
+    chr_print(creditsText, 0, 0); // x, y are bounded in chr_print
 }
 unsigned char audioCredits(unsigned char t) {
     return t & t>>8;
@@ -303,9 +254,12 @@ unsigned char audioCredits(unsigned char t) {
 
 void loadScenes() {
     // Don't forget to change SCENE_COUNT
-    story_state.scenes[0] = (SCENE) {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
-//    story_state.scenes[1] = (SCENE) {0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
-    story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
+    SCENE intro = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
+//    SCENE road = {0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
+    SCENE credits = {0, 1000, &initCredits, &drawCredits, &audioCredits, "Credits"};
+    story_state.scenes[0] = intro;
+//    story_state.scenes[1] = road
+    story_state.scenes[1] = credits;
 }
 
 void initDemo() {
@@ -322,9 +276,9 @@ void initDemo() {
     // Pause the demo until the UART or GPIO starts it:
     story_state.storyPlaying = false;
     
-    // Start on the first scene:
-    story_state.currentScene = 0;
-    switchScene(0);
+    // Start on the correct scene:
+    story_state.currentScene = startSceneIndex;
+    switchScene(startSceneIndex);
 }
 
 void codecrow() {
@@ -364,20 +318,11 @@ void codecrow() {
             chr_print(buf, 22, VER_RES-(21*2)); // x, y are bounded in chr_print
         }
         
-//        drawFPS(); // actually draws frames counter value
+        //drawFPS(buf); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();
     }
-}
-
-// Frame/Demo management:
-void drawFPS() {
-    // TODO: Print the fps to the UART cleanly without borking our term...
-    sprintf(buf, "f:%i s:%i", frames, 
-            story_state.scenes[story_state.currentScene].sceneStartFrame + 
-            story_state.scenes[story_state.currentScene].sceneLength);
-    chr_print(buf, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
 }
 
 int handleSerialInput() {
@@ -385,12 +330,12 @@ int handleSerialInput() {
     // TODO: Manage some amount of command input. Single char will work for now...
     int toRet = -1;
     uint16_t i;
-    if (dataAvailable) {
+    if (dataAvailableU1) {
 //        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
-        dataAvailable = false;
+        dataAvailableU1 = false;
 
-        for (i = 0; i < rxSize; i++) {
-            char c = rx1Buf[i];
+        for (i = 0; i < rxSizeU1; i++) {
+            char c = rxBufU1[i];
 
             //handle number chars:
             if (c >= '0' && c <= '9') {

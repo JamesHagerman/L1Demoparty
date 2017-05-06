@@ -7623,12 +7623,20 @@ void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned cha
 # 16 "main.c" 2
 
 # 1 "serial.h" 1
-# 18 "serial.h"
-extern unsigned char rx1Buf[128];
-extern unsigned char tx1Buf[128];
-extern unsigned int rxSize;
-extern unsigned int txSize;
-extern _Bool dataAvailable;
+# 20 "serial.h"
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[128];
+extern unsigned char txBufU1[128];
+extern _Bool dataAvailableU1;
+
+
+
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[128];
+extern unsigned char txBufU2[128];
+extern _Bool dataAvailableU2;
 
 void config_uart(unsigned long baudRate);
 void reset_buffer();
@@ -7647,7 +7655,6 @@ extern uint8_t FontStart[] __attribute__((space(eds), section("FONTS") ));
 extern const unsigned short song[];
 
 void config_timer();
-
 
 
 extern const unsigned char sinetable[];
@@ -7991,8 +7998,8 @@ unsigned long __udiv3216(unsigned long, unsigned int);
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
-    int (*sceneInit)();
-    int (*sceneDraw)(uint16_t frame);
+    void (*sceneInit)();
+    void (*sceneDraw)(uint16_t frame);
     unsigned char (*audioBuilder)(unsigned char t);
     char sceneName[21];
 } SCENE;
@@ -8018,6 +8025,8 @@ void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
 void manageFrameReset();
+
+void drawFPS(char* sprintBuffer);
 
 void checkForJumper();
 void setupHardware();
@@ -8068,49 +8077,15 @@ int handleSerialInput();
 
 char projectName[] = "Code MESS";
 char buf[20];
+uint8_t startSceneIndex = 1;
 volatile uint8_t serialStoryIndex = 100;
 
 
 
-inline void fast_pixel(unsigned long ax, unsigned long ay) {
-
-    ax += ay*80UL;
-    while(G1STATbits.CMDFUL) continue;
-    G1CMDL = ax;
-    G1CMDH = 0x6300 | ax>>16;
-
-    while(G1STATbits.CMDFUL) continue;
-    G1CMDL = 0x1006;
-    G1CMDH = 0x6400;
-
-    while(G1STATbits.CMDFUL) continue;
-    G1CMDL = 0x60;
-    G1CMDH = 0x6700;
-    __builtin_nop();
-}
 
 
 
 
-void __attribute__((__interrupt__)) _T1Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
-{
- static unsigned char idx = 0;
-    if (story_state.currentScene == 0) {
-        PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
-
-
-
-    } else {
-        PORTB = (sinetable[idx]/4) << 8;
-    }
-
-    if (frames != 0) {
-        idx -= 1;
-    }
- IFS0bits.T1IF = 0;
-}
-# 117 "main.c"
 uint16_t maxY = 474;
 
 
@@ -8200,10 +8175,10 @@ void drawIntro(uint16_t frame) {
         } else {
             currentSpriteIndex = currentSpriteOffset + 2;
         }
-# 215 "main.c"
+# 174 "main.c"
     }
     drawSprite(2, 480UL -(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
-# 228 "main.c"
+# 187 "main.c"
     if (frame != 0 ) {
 
 
@@ -8225,7 +8200,7 @@ void initRoad() {
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
 
     currentSpriteIndex = currentSpriteOffset;
-# 258 "main.c"
+# 217 "main.c"
 }
 void drawRoad() {
     drawSprite(2, 480UL -(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
@@ -8237,30 +8212,22 @@ unsigned char audioRoad(unsigned char t) {
 
 
 
+static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n"
+            "Thank you Arko\n"
+            "and everyone at NSL\n"
+            "that helps make\n"
+            "LayerOne happen!\n"
+            "\n"
+            "Never enough time.\n"
+            "Was it good for u?";
 void initCredits() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
-
     G1CLUTbits.CLUTEN = 0;
 }
 void drawCredits(uint16_t frame) {
-
     drawSprite((80UL -32)/2, 4*PIX_H, 8, 0);
-
-    sprintf(buf, "Thank you Arko ");
-    chr_print(buf, 0, 480UL -(21*12));
-    sprintf(buf, "and everyone at NSL");
-    chr_print(buf, 0, 480UL -(21*11));
-    sprintf(buf, "that helps make");
-    chr_print(buf, 0, 480UL -(21*10));
-    sprintf(buf, "LayerOne happen!");
-    chr_print(buf, 0, 480UL -(21*9));
-
-    sprintf(buf, "Never enough time.");
-    chr_print(buf, 0, 480UL -(21*6));
-    sprintf(buf, "Was it good for u?");
-    chr_print(buf, 0, 480UL -(21*5));
-
+    chr_print(creditsText, 0, 0);
 }
 unsigned char audioCredits(unsigned char t) {
     return t & t>>8;
@@ -8274,9 +8241,12 @@ unsigned char audioCredits(unsigned char t) {
 
 void loadScenes() {
 
-    story_state.scenes[0] = (SCENE) {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
+    SCENE intro = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
 
-    story_state.scenes[1] = (SCENE) {0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
+    SCENE credits = {0, 1000, &initCredits, &drawCredits, &audioCredits, "Credits"};
+    story_state.scenes[0] = intro;
+
+    story_state.scenes[1] = credits;
 }
 
 void initDemo() {
@@ -8294,8 +8264,8 @@ void initDemo() {
     story_state.storyPlaying = 0;
 
 
-    story_state.currentScene = 0;
-    switchScene(0);
+    story_state.currentScene = startSceneIndex;
+    switchScene(startSceneIndex);
 }
 
 void codecrow() {
@@ -8342,26 +8312,17 @@ void codecrow() {
     }
 }
 
-
-void drawFPS() {
-
-    sprintf(buf, "f:%i s:%i", frames,
-            story_state.scenes[story_state.currentScene].sceneStartFrame +
-            story_state.scenes[story_state.currentScene].sceneLength);
-    chr_print(buf, 0, 480UL -(21*1));
-}
-
 int handleSerialInput() {
 
 
     int toRet = -1;
     uint16_t i;
-    if (dataAvailable) {
+    if (dataAvailableU1) {
 
-        dataAvailable = 0;
+        dataAvailableU1 = 0;
 
-        for (i = 0; i < rxSize; i++) {
-            char c = rx1Buf[i];
+        for (i = 0; i < rxSizeU1; i++) {
+            char c = rxBufU1[i];
 
 
             if (c >= '0' && c <= '9') {

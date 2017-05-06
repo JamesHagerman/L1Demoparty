@@ -34,8 +34,8 @@ extern "C" {
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
-    int (*sceneInit)();
-    int (*sceneDraw)(uint16_t frame);
+    void (*sceneInit)();
+    void (*sceneDraw)(uint16_t frame);
     unsigned char (*audioBuilder)(unsigned char t);
     char sceneName[21];
 } SCENE;
@@ -61,6 +61,8 @@ void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
 void manageFrameReset();
+
+void drawFPS(char* sprintBuffer);
 
 void checkForJumper();
 void setupHardware();

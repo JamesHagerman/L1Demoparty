@@ -8,7 +8,7 @@ And that's bullshit when you're trying to build cool projects.
 
 The saving grace of all this is that, despite Microchips inability to host decent, working, stable, long lived web forums, at LEAST they know how to write verbose docs and datasheets...
 
-Now, to say that their verbosity isn't a complete pain in the ass sometimes...
+Not, to say that their verbosity isn't a complete pain in the ass sometimes...
 
 ## UART/Serial ports
 
@@ -51,6 +51,10 @@ So, go find where ever XC16 was installed (under Linux, it's `/opt/microchip/xc1
 Once you unzip that, you'll be able to look inside the new `pic30` directory for those three `stdio.h` related .c files.
 
 Those files, along with the notes in section `2.13.2 Customizing STDIO` (as well as actually understanding how the UART peripheral on your micro works at a low level) SHOULD be enough for you to patch together NEW versions of those methods that will work correctly with your UART.
+
+## Working putc() method for printf()
+
+THIS they seem to have gotten right in XC16! We don't have to override it to get it to work. XC8 required you too, so this was nice break get after a bunch of other work!
 
 ## Working read() method for scanf()
 

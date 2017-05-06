@@ -7741,12 +7741,20 @@ void _write_flash_word24(_prog_addressT dst, long dat);
 
 # 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdbool.h" 1 3 4
 # 8 "serial.h" 2
-# 18 "serial.h"
-extern unsigned char rx1Buf[128];
-extern unsigned char tx1Buf[128];
-extern unsigned int rxSize;
-extern unsigned int txSize;
-extern _Bool dataAvailable;
+# 20 "serial.h"
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[128];
+extern unsigned char txBufU1[128];
+extern _Bool dataAvailableU1;
+
+
+
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[128];
+extern unsigned char txBufU2[128];
+extern _Bool dataAvailableU2;
 
 void config_uart(unsigned long baudRate);
 void reset_buffer();
@@ -7765,7 +7773,6 @@ extern uint8_t FontStart[] __attribute__((space(eds), section("FONTS") ));
 extern const unsigned short song[];
 
 void config_timer();
-
 
 
 extern const unsigned char sinetable[];
@@ -7956,8 +7963,8 @@ extern void swapWorkAreas();
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
-    int (*sceneInit)();
-    int (*sceneDraw)(uint16_t frame);
+    void (*sceneInit)();
+    void (*sceneDraw)(uint16_t frame);
     unsigned char (*audioBuilder)(unsigned char t);
     char sceneName[21];
 } SCENE;
@@ -7983,6 +7990,8 @@ void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
 void manageFrameReset();
+
+void drawFPS(char* sprintBuffer);
 
 void checkForJumper();
 void setupHardware();
@@ -8045,7 +8054,13 @@ void manageFrameReset() {
 
 
 
+void drawFPS(char* sprintBuffer) {
 
+    sprintf(sprintBuffer, "f:%i s:%i", frames,
+            story_state.scenes[story_state.currentScene].sceneStartFrame +
+            story_state.scenes[story_state.currentScene].sceneLength);
+    chr_print(sprintBuffer, 0, 480UL -(21*1));
+}
 
 
 void checkForJumper() {

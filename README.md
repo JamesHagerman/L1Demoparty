@@ -23,7 +23,7 @@ I was happy to see how fast this little board could push pixels!
 
 #### Serial Setup
 
-The serial port is supposed to sit on `RX:RP7` and `TX:RP6` running at `9600 baud`
+The serial port sits on `TX:RP6` and `RX:RP7`running at `115200 baud`. Hook up ground, and those two to a FTDI or other USB serial adapter and you should see output!
 
 It works, but I don't remember how I wired the damn thing right now. It'll be used in the 2017 (this year) demo so I'll add notes here when I get there.
 

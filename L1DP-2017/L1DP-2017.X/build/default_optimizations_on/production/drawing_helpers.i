@@ -7776,6 +7776,23 @@ void config_graphics(void);
 
 
 
+inline void fast_pixel(unsigned long ax, unsigned long ay) {
+
+    ax += ay*80UL;
+    while(G1STATbits.CMDFUL) continue;
+    G1CMDL = ax;
+    G1CMDH = 0x6300 | ax>>16;
+
+    while(G1STATbits.CMDFUL) continue;
+    G1CMDL = 0x1006;
+    G1CMDH = 0x6400;
+
+    while(G1STATbits.CMDFUL) continue;
+    G1CMDL = 0x60;
+    G1CMDH = 0x6700;
+    __builtin_nop();
+}
+
 
 float radians(uint16_t angle) {
  return ((angle*3.14159)/180.0);

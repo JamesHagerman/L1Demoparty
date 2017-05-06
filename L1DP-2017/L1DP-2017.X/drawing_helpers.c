@@ -14,6 +14,23 @@
 
 //float angle, x[8], y[8], z[8], rx[8], ry[8], rz[8], scrx[8], scry[8];
 
+inline void fast_pixel(unsigned long ax, unsigned long ay) {
+    //ax += (ay << 9) + (ay << 7);
+    ax += ay*HOR_RES;
+    while(_CMDFUL) continue;
+    G1CMDL = ax;
+    G1CMDH = RCC_DESTADDR | ax>>16;
+
+    while(_CMDFUL) continue;
+    G1CMDL = 0x1006; // This needs to be changed for non 80x
+    G1CMDH = RCC_RECTSIZE;
+
+    while(_CMDFUL) continue;
+    G1CMDL = 0x60;
+    G1CMDH = RCC_STARTCOPY;
+    Nop();
+}
+
 // math helpers:
 float radians(uint16_t angle) {
 	return ((angle*3.14159)/180.0);

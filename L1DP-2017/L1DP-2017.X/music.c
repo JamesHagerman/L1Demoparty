@@ -10,6 +10,7 @@
 
 #include "color_management.h"
 #include "resolution_management.h"
+#include "demo_management.h"
 
 /* In-A-Gadda-Da-Vida Tab
 D[--------3-2-------\7-6-5------[
@@ -126,15 +127,32 @@ void config_timer() {
     _T2IE = 1; // enable the timer2 interrupt
 }
 
+// This is the interrupt for stepping through the wave table:
+// _T1Interrupt() is the T1 interrupt service routine (ISR).
+void __attribute__((__interrupt__)) _T1Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
+{
+    static unsigned char idx = 0;
+    if (story_state.currentScene == 0) {
+    PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
 
-//_T2Interrupt() is the T2 interrupt service routine (ISR).
+//    } else if (story_state.currentScene == 1 ) {
+//        PORTB = ((zigzagtable[idx]/4)&0xf) << 12 | ((sinetable[idx]/4)&0xf) << 8;
+    } else {
+    PORTB = (sinetable[idx]/4) << 8;
+    }
+
+    if (frames != 0) {
+        idx -= 1;
+    }
+	_T1IF = 0;
+}
+
+// This interrupt is for stepping through the song:
+// _T2Interrupt() is the T2 interrupt service routine (ISR).
 void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
-    // This interrupt is for stepping through the song.
-    // The interrupt for stepping through the wave table is in main.c so it can
-    // have access to PORTB
-
     static unsigned short idx = 0;
     static uint8_t sineDump = 0;
     static uint8_t rampDump = 0;
@@ -150,7 +168,6 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
             idx = 0;
     _T2IF = 0;
 }
-
 
 const unsigned char sinetable[] = {
 0x0,0x0,0x0,0x0,0x1,0x1,0x1,0x2,

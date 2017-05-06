@@ -7668,7 +7668,6 @@ extern const unsigned short song[];
 void config_timer();
 
 
-
 extern const unsigned char sinetable[];
 extern const unsigned char zigzagtable[];
 extern const unsigned char saw[];
@@ -7702,7 +7701,324 @@ extern __eds__ uint8_t GFXDisplayBuffer[2][(80UL * 480UL / (8/8))] __attribute__
 
 void config_graphics(void);
 # 13 "music.c" 2
-# 39 "music.c"
+# 1 "demo_management.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 8 "demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 9 "demo_management.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 11 "demo_management.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 1 3 4
+# 38 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 3 4
+float acosf(float);
+float asinf(float);
+float atanf(float);
+float atan2f(float, float);
+float cosf(float);
+float sinf(float);
+float tanf(float);
+float coshf(float);
+float sinhf(float);
+float tanhf(float);
+float expf(float);
+float frexpf(float, int *);
+float ldexpf(float, int);
+float logf(float);
+float log10f(float);
+
+
+
+
+
+float modff(float, void *);
+
+
+
+float powf(float, float);
+float sqrtf(float);
+float ceilf(float);
+float fabsf(float);
+float floorf(float);
+float fmodf(float, float);
+
+
+
+
+
+
+long double acosl(long double);
+long double asinl(long double);
+long double atanl(long double);
+long double atan2l(long double, long double);
+long double cosl(long double);
+long double sinl(long double);
+long double tanl(long double);
+long double coshl(long double);
+long double sinhl(long double);
+long double tanhl(long double);
+long double expl(long double);
+long double frexpl(long double, int *);
+long double ldexpl(long double, int);
+long double logl(long double);
+long double log10l(long double);
+long double modfl(long double, long double *);
+long double powl(long double, long double);
+long double sqrtl(long double);
+long double ceill(long double);
+long double fabsl(long double);
+long double floorl(long double);
+long double fmodl(long double, long double);
+# 138 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/math.h" 3 4
+unsigned long __udiv3216(unsigned long, unsigned int);
+         long __div3216(long, int);
+# 12 "demo_management.h" 2
+
+# 1 "system.h" 1
+# 14 "demo_management.h" 2
+
+
+# 1 "serial.h" 1
+
+
+
+
+
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdbool.h" 1 3 4
+# 8 "serial.h" 2
+# 20 "serial.h"
+extern unsigned int rxSizeU1;
+extern unsigned int txSizeU1;
+extern unsigned char rxBufU1[128];
+extern unsigned char txBufU1[128];
+extern _Bool dataAvailableU1;
+
+
+
+extern unsigned int rxSizeU2;
+extern unsigned int txSizeU2;
+extern unsigned char rxBufU2[128];
+extern unsigned char txBufU2[128];
+extern _Bool dataAvailableU2;
+
+void config_uart(unsigned long baudRate);
+void reset_buffer();
+# 17 "demo_management.h" 2
+# 1 "text.h" 1
+# 15 "text.h"
+extern int maxCharHeight;
+
+void config_chr(void);
+void chr_print(char *c, uint16_t x, uint16_t y);
+
+extern uint8_t FontStart[] __attribute__((space(eds), section("FONTS") ));
+# 18 "demo_management.h" 2
+
+# 1 "sprites.h" 1
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdint.h" 1 3 4
+# 3 "sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/stdio.h" 1 3 4
+# 4 "sprites.h" 2
+
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 1 3 4
+# 478 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 3 4
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\PIC24F\\h/p24FJ256DA206.h" 1 3 4
+# 479 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\support\\generic\\h/xc.h" 2 3 4
+# 6 "sprites.h" 2
+# 1 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/string.h" 1 3 4
+# 14 "c:\\program files (x86)\\microchip\\xc16\\v1.24\\bin\\bin\\../..\\include/string.h" 3 4
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strrchr(const char *, int);
+# 7 "sprites.h" 2
+
+# 1 "system.h" 1
+# 9 "sprites.h" 2
+
+
+
+
+# 1 "drawing_helpers.h" 1
+# 19 "drawing_helpers.h"
+float radians(uint16_t angle);
+int realtoint(float oldval, float oldmin, float oldmax, float newmin, float newmax);
+
+void rcc_color(uint16_t color);
+void rcc_setdest(__eds__ uint8_t *buf);
+void rcc_draw(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+void rcc_w1tow2(__eds__ uint8_t *dest, __eds__ uint8_t *src);
+extern inline void fast_pixel(unsigned long ax, unsigned long ay);
+
+void line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+void lineFloat(float x1, float y1, float x2, float y2);
+
+void blank_background();
+void cleanup(void);
+void drawBorder(uint16_t c);
+
+void verBlind(void);
+
+void render (float xa, float ya, float za);
+# 14 "sprites.h" 2
+# 44 "sprites.h"
+struct Sprite {
+  uint8_t width;
+  uint8_t height;
+  uint8_t bitres;
+   uint8_t trans;
+   uint8_t rotate;
+__prog__ uint8_t *data;
+};
+extern struct Sprite s[9];
+
+void ipu_decomp(__eds__ uint8_t *src, __eds__ uint8_t *dst, unsigned long size);
+void loadAllSprites(void);
+void drawSpriteRotation(uint16_t x, uint16_t y, uint8_t id, float rotation);
+
+extern __prog__ uint8_t SpriteMap[] __attribute__((space(prog)));
+
+
+
+void static inline drawSprite(uint16_t x, uint16_t y, uint8_t id, uint8_t rotation) {
+
+ unsigned int w,h;
+ uint16_t x1,y1;
+ uint8_t color;
+
+ if (x >= 80UL -1 || y >= 480UL -1 || x < 0|| y < 0) return;
+
+ for (h=0; h < s[id].height; h++) {
+  for (w=0; w < s[id].width; w++) {
+   color = s[id].data[w + s[id].width*h];
+
+   if (color == s[id].trans) continue;
+   rcc_color(color);
+
+
+
+   switch(rotation) {
+
+
+
+
+    case 0:
+     x1 = x+w;
+     y1 = y + (h<<2) + (h<<1);
+     if (x1 >= 80UL -2) continue;
+     if (y1 >= 480UL -PIX_H) return;
+     fast_pixel(x1, y1);
+     break;
+    case 1:
+     x1 = x+(s[id].width-h-1);
+     y1 = y+(PIX_H*(w));
+     if (x1 >= 80UL -1 || x1 <= 0) continue;
+     if (y1 >= 480UL -PIX_H || y1 <= 0) continue;
+     fast_pixel(x1, y1);
+     break;
+    case 2:
+     x1 = x+(s[id].width-w-1);
+     y1 = y+(PIX_H*(s[id].height-h-1));
+     if (x1 >= 80UL -1) continue;
+     if (y1 >= 480UL -PIX_H) continue;
+     fast_pixel(x1, y1);
+     break;
+    case 3:
+     break;
+    default:
+     break;
+   }
+  }
+ }
+
+}
+# 20 "demo_management.h" 2
+
+
+
+# 1 "fb_control.h" 1
+# 15 "fb_control.h"
+extern volatile int fb_ready;
+extern volatile int vSync;
+void gpu_setfb(__eds__ uint8_t *buf);
+
+
+
+extern int next_fb;
+extern void waitForBufferFlip();
+extern void swapWorkAreas();
+# 24 "demo_management.h" 2
+# 34 "demo_management.h"
+typedef struct {
+    uint16_t sceneStartFrame;
+    uint16_t sceneLength;
+    void (*sceneInit)();
+    void (*sceneDraw)(uint16_t frame);
+    unsigned char (*audioBuilder)(unsigned char t);
+    char sceneName[21];
+} SCENE;
+
+
+typedef struct {
+
+
+
+    uint8_t currentScene;
+    _Bool storyPlaying;
+
+    _Bool storyEnded;
+    _Bool clutState;
+    SCENE scenes[3];
+} STORY_STATE;
+extern STORY_STATE story_state;
+
+extern uint16_t frames;
+extern _Bool ledState;
+
+void switchScene(uint8_t nextScene);
+void drawCurrentScene();
+void checkSceneFinished();
+void manageFrameReset();
+
+void drawFPS(char* sprintBuffer);
+
+void checkForJumper();
+void setupHardware();
+void frameStart();
+void frameEnd();
+void statusLED();
+# 14 "music.c" 2
+# 40 "music.c"
 const unsigned short song[] = {
  0x191,
     0x1dd,
@@ -7776,20 +8092,42 @@ const unsigned short song[] = {
 
 
 void config_timer() {
- PR1 = 0;
+
+    PR1 = 0;
     T1CONbits.TCKPS = 0b00;
- IPC0bits.T1IP = 5;
- T1CONbits.TON = 1;
+    IPC0bits.T1IP = 5;
+    T1CONbits.TON = 1;
+    IFS0bits.T1IF = 0;
+    IEC0bits.T1IE = 1;
+
+
+    PR2 = 0xf0;
+    IPC1bits.T2IP = 6;
+    IFS0bits.T2IF = 0;
+
+    T2CON = 0b1000000000110000;
+    IEC0bits.T2IE = 1;
+}
+
+
+
+void __attribute__((__interrupt__)) _T1Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
+{
+    static unsigned char idx = 0;
+    if (story_state.currentScene == 0) {
+    PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
+
+
+
+    } else {
+    PORTB = (sinetable[idx]/4) << 8;
+    }
+
+    if (frames != 0) {
+        idx -= 1;
+    }
  IFS0bits.T1IF = 0;
- IEC0bits.T1IE = 1;
-
-
- PR2 = 0xf0;
- IPC1bits.T2IP = 6;
- IFS0bits.T2IF = 0;
-
- T2CON = 0b1000000000110000;
- IEC0bits.T2IE = 1;
 }
 
 
@@ -7797,7 +8135,7 @@ void config_timer() {
 void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
- static unsigned short idx = 0;
+    static unsigned short idx = 0;
     static uint8_t sineDump = 0;
     static uint8_t rampDump = 0;
 
@@ -7805,14 +8143,13 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
     PR1 = 0x3bb + sinetable[sineDump]/2 + sinetable[rampDump];
 
 
- idx++;
+    idx++;
     sineDump+=4;
     rampDump++;
- if(idx == sizeof(song) / sizeof(song[0]))
-  idx = 0;
- IFS0bits.T2IF = 0;
+    if(idx == sizeof(song) / sizeof(song[0]))
+            idx = 0;
+    IFS0bits.T2IF = 0;
 }
-
 
 const unsigned char sinetable[] = {
 0x0,0x0,0x0,0x0,0x1,0x1,0x1,0x2,

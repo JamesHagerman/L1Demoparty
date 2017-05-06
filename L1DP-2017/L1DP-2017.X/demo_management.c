@@ -54,7 +54,13 @@ void manageFrameReset() {
 
 
 // Scene management methods:
-
+void drawFPS(char* sprintBuffer) {
+    // TODO: Print the fps to the UART cleanly without borking our term...
+    sprintf(sprintBuffer, "f:%i s:%i", frames,
+            story_state.scenes[story_state.currentScene].sceneStartFrame +
+            story_state.scenes[story_state.currentScene].sceneLength);
+    chr_print(sprintBuffer, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
+}
 
 // Demo hardware helpers:
 void checkForJumper() {
