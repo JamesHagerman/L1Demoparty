@@ -120,7 +120,20 @@ extern "C" {
 #define Bb8	118
 #define B8	119
 
+typedef struct {
+    uint32_t accumulator;
+    uint32_t phase;
+    uint8_t value;
+    const uint8_t *wavetable;
+} NCO;
+
 void config_audio();
+
+void ncoSetFreq(struct NCO *n, float freq);
+void ncoSetPhase(struct NCO *n, uint32_t phase);
+
+void ncoInit(struct NCO *n, float freq, const uint8_t *wavetable);
+void ncoStep(struct NCO *n);
 
 // Song itself:
 extern const uint8_t chan1[];
@@ -128,7 +141,8 @@ extern const uint8_t chan2[];
 extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
 // NCO Phase table:
-extern const uint32_t phaseTable[];
+extern const uint32_t phaseTable44100[];
+extern const uint32_t phaseTable22050[];
 
 // Big wave tables:
 //extern __prog__ const uint8_t sinetable[] __attribute__((space(prog)));

@@ -1,3 +1,11 @@
+/*
+ * Some of this code was derived from someone smarter than I:
+ * http://blog.thelonepole.com/2011/07/numerically-controlled-oscillators/
+ *
+ * I needed this to understand the NCO code though:
+ * https://www.youtube.com/watch?v=YDC5zaEZGhM
+ */
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,88 +20,11 @@
 #include "resolution_management.h"
 #include "demo_management.h"
 
-/*
- * Some of this code was derived from someone smarter than I:
- * http://blog.thelonepole.com/2011/07/numerically-controlled-oscillators/
- *
- * I needed this to understand the code though:
- * https://www.youtube.com/watch?v=YDC5zaEZGhM
- */
-
-struct nco32 {
-    uint32_t accumulator;
-    uint32_t phase;
-    uint8_t value;
-};
-struct nco32 sinOsc;
-struct nco32 sawOsc;
+struct NCO chan1Osc;
+struct NCO chan2Osc;
 
 //float freq = 8.17/44100; // Start everything out at a sane value
 float freq = 8.17/22050; // Start everything out at a sane value
-
-void nco_set_freq32(struct nco32 *n, float freq);
-void ncoSetPhase(struct nco32 *n, uint32_t phase);
-
-void nco_init32_sin(struct nco32 *n, float freq);
-void nco_step32_sin(struct nco32 *n);
-
-void nco_init32_saw(struct nco32 *n, float freq);
-void nco_step32_saw(struct nco32 *n);
-
-/**
- * Set the phase step parameter of the given NCO struct based on the
- * desired value, given as a float. This changes its frequency in a phase
- * continuous manner, but this function should not be used inside a
- * critical loop for performance reasons. Instead, a chirp should be
- * implemented by precomputing the correct change to the phase rate
- * in fixed point and adding it after every sample.
- */
-void nco_set_freq32(struct nco32 *n, float freq) {
-    // 256 table entries, 24 bits of fractional index; 2^24 = 16777216
-    n->phase = (uint32_t) (freq * 256. * 16777216. + 0.5);
-    printf("Freq: %f, Phase: %lu\n", (double)freq, n->phase);
-}
-
-void ncoSetPhase(struct nco32 *n, uint32_t phase) {
-    n->phase = phase;
-}
-
-/**
- * Initialize the oscillator data structure and set the target frequency
- * Frequency must be positive (although I don't check this).
- */
-void nco_init32_sin(struct nco32 *n, float freq) {
-    n->accumulator = 0;
-    n->value = sinetable[0];
-    nco_set_freq32(n, freq);
-}
-void nco_init32_saw(struct nco32 *n, float freq) {
-    n->accumulator = 0;
-    n->value = saw[0];
-    nco_set_freq32(n, freq);
-}
-
-/**
- * Compute the next output value from the table and save it so that it
- * can be referenced multiple times. Also, advance the accumulator by
- * the phase step amount.
- */
-void nco_step32_sin(struct nco32 *n) {
-    uint8_t index;
-    // Convert from 8.24 fixed point to 8 bits of integer index
-    // via a truncation (cheaper to implement but noisier than rounding)
-    index = (n->accumulator >> 24) & 0xff;
-    n->value = sinetable[index];
-    n->accumulator += n->phase;
-}
-void nco_step32_saw(struct nco32 *n) {
-    uint8_t index;
-    // Convert from 8.24 fixed point to 8 bits of integer index
-    // via a truncation (cheaper to implement but noisier than rounding)
-    index = (n->accumulator >> 24) & 0xff;
-    n->value = saw[index];
-    n->accumulator += n->phase;
-}
 
 const uint8_t chan1[] = {
     D4, C4, C4, C4, D4, C4, C4, C4,
@@ -142,11 +73,51 @@ __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
     124, 125, 126, 127
 };
 
+
+// This interrupt is for stepping through the song:
+// _T2Interrupt() is the T2 interrupt service routine (ISR).
+void __attribute__((__interrupt__)) _T2Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
+{
+    static unsigned short idx = 0;
+
+    // TODO: INTERESTING! Read off the end of the buffer for "music"...
+    uint8_t currentMidiNote = chan1[idx];
+    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
+    
+    currentMidiNote = chan2[idx];
+    ncoSetPhase(&chan2Osc, phaseTable22050[currentMidiNote]);
+    
+    idx++;
+    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
+        idx = 0;
+    }
+    _T2IF = 0;
+}
+
+// This is the interrupt for stepping through the wave table:
+// _T1Interrupt() is the T1 interrupt service routine (ISR).
+void __attribute__((__interrupt__)) _T1Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
+{
+    unsigned short sample=0;
+
+    ncoStep(&chan1Osc);
+    ncoStep(&chan2Osc);
+    sample = chan1Osc.value /2;
+    sample += chan2Osc.value /2;
+
+    // Spit the mixed value to the audio port:
+    PORTB=(sample<<8); // shift is to get to the right pins
+
+    _T1IF = 0;
+}
+
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    nco_init32_sin(&sinOsc, freq);
-    nco_init32_saw(&sawOsc, freq);
+    ncoInit(&chan1Osc, freq, saw);
+    ncoInit(&chan2Osc, freq, saw);
 
     // Set up timer for stepping through song:
     PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
@@ -182,43 +153,42 @@ void config_audio() {
     _T1IE = 1;	// turn on the timer1 interrupt
 }
 
-// This interrupt is for stepping through the song:
-// _T2Interrupt() is the T2 interrupt service routine (ISR).
-void __attribute__((__interrupt__)) _T2Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
-{
-    static unsigned short idx = 0;
-
-    // TODO: INTERESTING! Read off the end of the buffer for "music"...
-    uint8_t currentMidiNote = chan1[idx];
-    ncoSetPhase(&sinOsc, phaseTable[currentMidiNote]);
-    
-    currentMidiNote = chan2[idx];
-    ncoSetPhase(&sawOsc, phaseTable[currentMidiNote]);
-    
-    idx++;
-    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
-        idx = 0;
-    }
-    _T2IF = 0;
+void ncoSetFreq(struct NCO *n, float freq) {
+    // Set the phase step parameter of the given NCO struct based on the
+    // desired value, given as a float. This changes its frequency in a phase
+    // continuous manner, but this function should not be used inside a
+    // critical loop for performance reasons. Instead, a chirp should be
+    // implemented by precomputing the correct change to the phase rate
+    // in fixed point and adding it after every sample:
+    //
+    // 256 table entries, 24 bits of fractional index; 2^24 = 16777216
+    n->phase = (uint32_t) (freq * 256. * 16777216. + 0.5);
+    printf("Freq: %f, Phase: %lu\n", (double)freq, n->phase);
 }
 
-// This is the interrupt for stepping through the wave table:
-// _T1Interrupt() is the T1 interrupt service routine (ISR).
-void __attribute__((__interrupt__)) _T1Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
-{
-    unsigned short sample=0;
+void ncoSetPhase(struct NCO *n, uint32_t phase) {
+    n->phase = phase;
+}
 
-    nco_step32_sin(&sinOsc);
-    nco_step32_saw(&sawOsc);
-    sample = sinOsc.value /2;
-    sample += sawOsc.value /2;
+void ncoInit(struct NCO *n, float freq, const uint8_t *wavetable ) {
+    // Initialize the oscillator data structure and set the target frequency
+    // Frequency must be positive (although I don't check this).
+    n->accumulator = 0;
+    n->wavetable = wavetable;
+    n->value = n->wavetable[0];
+    ncoSetFreq(n, freq);
+}
 
-    // Spit the mixed value to the audio port:
-    PORTB=(sample<<8); // shift is to get to the right pins
-
-    _T1IF = 0;
+void ncoStep(struct NCO *n) {
+    // Compute the next output value from the table and save it so that it
+    // can be referenced multiple times. Also, advance the accumulator by
+    // the phase step amount.
+    uint8_t index;
+    // Convert from 8.24 fixed point to 8 bits of integer index
+    // via a truncation (cheaper to implement but noisier than rounding)
+    index = (n->accumulator >> 24) & 0xff;
+    n->value = n->wavetable[index];
+    n->accumulator += n->phase;
 }
 
 // NCO Phase table for all MIDI notes, 0-127:
@@ -227,43 +197,43 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 //
 // Should probably generate this using C because this has floating point errors:
 // 44100Hz sample rate
-//const uint32_t phaseTable[] = {
-//    796254.2179447162, 843601.9279088025, 893765.0792181802, 946911.0867272264,
-//    1003217.3202956029, 1062871.696743673, 1126073.3070074187, 1193033.0805859372,
-//    1263974.4894990327, 1339134.2941043084, 1418763.3332628536, 1503127.3614906245,
-//    1592507.9358894324, 1687203.355817605, 1787529.6584363603, 1893821.6734544528,
-//    2006434.1405912058, 2125742.893487346, 2252146.1140148374, 2386065.6611718745,
-//    2527948.4789980655, 2678268.0882086167, 2837526.166525708, 3006254.2229812476,
-//    3185015.371778865, 3374406.21163521, 3575058.816872719, 3787642.8469089055,
-//    4012867.781182413, 4251485.286974691, 4504291.728029675, 4772130.82234375,
-//    5055896.45799613, 5356535.676417233, 5675051.833051416, 6012507.945962495,
-//    6370030.24355773, 6748811.92327042, 7150117.133745438, 7575285.193817811,
-//    8025735.062364826, 8502970.073949382, 9008582.95605935, 9544261.1446875,
-//    10111792.41599226, 10713070.852834467, 11350103.166102832, 12025015.391924994,
-//    12740059.98711546, 13497623.34654084, 14300233.767490879, 15150569.887635622,
-//    16051469.624729648, 17005939.647898763, 18017165.4121187, 19088521.789374996,
-//    20223584.33198452, 21426141.205668934, 22700205.832205664, 24050030.283849988,
-//    25480119.47423092, 26995246.19308168, 28600467.034981757, 30301139.275271244,
-//    32102938.749459296, 34011878.79579753, 36034330.3242374, 38177043.07874999,
-//    40447168.16396904, 42852281.91133787, 45400411.16441133, 48100060.067699976,
-//    50960238.44846184, 53990491.88616336, 57200933.569963515, 60602278.05054249,
-//    64205876.99891859, 68023757.09159505, 72068660.1484748, 76354085.65749998,
-//    80894335.82793808, 85704563.32267573, 90800821.82882266, 96200119.63539995,
-//    101920476.39692368, 107980983.27232672, 114401866.63992703, 121204555.60108498,
-//    128411753.49783719, 136047513.6831901, 144137319.7969496, 152708170.81499997,
-//    161788671.15587616, 171409126.14535147, 181601643.15764531, 192400238.77079985,
-//    203840952.29384735, 215961966.04465345, 228803732.77985403, 242409110.70216995,
-//    256823506.49567443, 272095026.8663802, 288274639.0938992, 305416341.13,
-//    323577341.8117523, 342818251.79070294, 363203285.81529063, 384800477.0415997,
-//    407681904.0876947, 431923931.5893069, 457607465.05970806, 484818220.9043399,
-//    513647012.49134886, 544190053.2327604, 576549277.6877984, 610832681.76,
-//    647154683.1235046, 685636503.0814059, 726406571.130581, 769600953.5831997,
-//    815363807.6753894, 863847862.6786138, 915214929.6194165, 969636441.3086798,
-//    1027294024.4826974, 1088380105.965521, 1153098554.8755968, 1221665363.0199997
-//};
+const uint32_t phaseTable44100[] = {
+    796254.2179447162, 843601.9279088025, 893765.0792181802, 946911.0867272264,
+    1003217.3202956029, 1062871.696743673, 1126073.3070074187, 1193033.0805859372,
+    1263974.4894990327, 1339134.2941043084, 1418763.3332628536, 1503127.3614906245,
+    1592507.9358894324, 1687203.355817605, 1787529.6584363603, 1893821.6734544528,
+    2006434.1405912058, 2125742.893487346, 2252146.1140148374, 2386065.6611718745,
+    2527948.4789980655, 2678268.0882086167, 2837526.166525708, 3006254.2229812476,
+    3185015.371778865, 3374406.21163521, 3575058.816872719, 3787642.8469089055,
+    4012867.781182413, 4251485.286974691, 4504291.728029675, 4772130.82234375,
+    5055896.45799613, 5356535.676417233, 5675051.833051416, 6012507.945962495,
+    6370030.24355773, 6748811.92327042, 7150117.133745438, 7575285.193817811,
+    8025735.062364826, 8502970.073949382, 9008582.95605935, 9544261.1446875,
+    10111792.41599226, 10713070.852834467, 11350103.166102832, 12025015.391924994,
+    12740059.98711546, 13497623.34654084, 14300233.767490879, 15150569.887635622,
+    16051469.624729648, 17005939.647898763, 18017165.4121187, 19088521.789374996,
+    20223584.33198452, 21426141.205668934, 22700205.832205664, 24050030.283849988,
+    25480119.47423092, 26995246.19308168, 28600467.034981757, 30301139.275271244,
+    32102938.749459296, 34011878.79579753, 36034330.3242374, 38177043.07874999,
+    40447168.16396904, 42852281.91133787, 45400411.16441133, 48100060.067699976,
+    50960238.44846184, 53990491.88616336, 57200933.569963515, 60602278.05054249,
+    64205876.99891859, 68023757.09159505, 72068660.1484748, 76354085.65749998,
+    80894335.82793808, 85704563.32267573, 90800821.82882266, 96200119.63539995,
+    101920476.39692368, 107980983.27232672, 114401866.63992703, 121204555.60108498,
+    128411753.49783719, 136047513.6831901, 144137319.7969496, 152708170.81499997,
+    161788671.15587616, 171409126.14535147, 181601643.15764531, 192400238.77079985,
+    203840952.29384735, 215961966.04465345, 228803732.77985403, 242409110.70216995,
+    256823506.49567443, 272095026.8663802, 288274639.0938992, 305416341.13,
+    323577341.8117523, 342818251.79070294, 363203285.81529063, 384800477.0415997,
+    407681904.0876947, 431923931.5893069, 457607465.05970806, 484818220.9043399,
+    513647012.49134886, 544190053.2327604, 576549277.6877984, 610832681.76,
+    647154683.1235046, 685636503.0814059, 726406571.130581, 769600953.5831997,
+    815363807.6753894, 863847862.6786138, 915214929.6194165, 969636441.3086798,
+    1027294024.4826974, 1088380105.965521, 1153098554.8755968, 1221665363.0199997
+};
 
 // 22050Hz sample rate
-const uint32_t phaseTable[] = {
+const uint32_t phaseTable22050[] = {
     1592507.9358894324, 1687203.355817605, 1787529.6584363603, 1893821.6734544528,
     2006434.1405912058, 2125742.893487346, 2252146.1140148374, 2386065.6611718745,
     2527948.4789980655, 2678268.0882086167, 2837526.166525707, 3006254.222981249,
