@@ -73,6 +73,13 @@ void loadScenes() {
 
 void initDemo() {
     printf("Initing demo...\r\n");
+
+    float freq = 440.00;
+    const uint16_t wtSize = 2048UL; // Not all of them are. Be sure of this
+    const float sampleRate = 44100;
+    float frqTL = wtSize/sampleRate;
+    float stepSize = frqTL*freq;
+    printf("Oh come ON: %.3f", stepSize);
     
     blank_background();
     loadAllSprites();
