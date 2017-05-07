@@ -28,7 +28,6 @@
 #include "credits.h"
 
 //#include "particles.h"
-//#include "screens.h"
 //#include "testgfx.h"
 
 // CONFIG3
@@ -64,14 +63,12 @@
 
 // Variable declarations:
 char projectName[] = "Code MESS";
-char buf[20]; // Buffer for any text rendering sprintf() calls
-
 volatile uint8_t serialStoryIndex = 100;
 
 void loadScenes() {
     addScene(introScene);
-    addScene(roadScene);
-    addScene(creditsScene);
+//    addScene(roadScene);
+//    addScene(creditsScene);
 }
 
 void initDemo() {
@@ -81,9 +78,8 @@ void initDemo() {
     loadAllSprites();
     
     // Configure the stories initial state:
-    // Add the scenes:
-    story_state.sceneCount = 0; // Start we zero scenes...
-    loadScenes();
+    story_state.sceneCount = 0; // Start with zero scenes
+    loadScenes(); // Add the scenes
     
     // Start on the correct scene:
     uint8_t startSceneIndex = 0;
@@ -140,6 +136,7 @@ int main(void) {
     printf("Welcome to project: %s!\r\n", projectName);
     initDemo();
 
+    // TODO: Make user input work this way. It isn't currently:
 //    char someInput[128] = "";
 //    printf("Enter some string: ");
 //    scanf("%s", someInput);
@@ -165,7 +162,7 @@ int main(void) {
             chr_print(jumperMessage, 2, VER_RES-(21*3));
         }
 
-        drawFPS(buf); // actually draws frames counter value
+        drawFPS(); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();

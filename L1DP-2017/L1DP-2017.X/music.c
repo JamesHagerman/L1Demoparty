@@ -12,140 +12,45 @@
 #include "resolution_management.h"
 #include "demo_management.h"
 
-/* In-A-Gadda-Da-Vida Tab
-D[--------3-2-------\7-6-5------[
-A[---5-5-------3-5----------3---[
-*/
-// OLD SONG BULLSHIT
-//unsigned short song[] = {
-//	NOTES_D5,
-//	0,
-//	NOTES_D5,
-//	0,
-//	NOTES_F5,
-//	NOTES_E5,
-//	NOTES_C5,
-//	NOTES_D5,
-//	0,
-//	NOTES_A5,
-//	0,
-//	NOTES_Ab5,
-//	0,
-//	NOTES_G5,
-//	0,
-//	NOTES_C5,
-//	};
-
-
-const unsigned short song[] = {
-	NOTES_Eb3,
-    NOTES_C3,
-    NOTES_Eb3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_Db3,
-    NOTES_F3,
-
-    NOTES_Eb3,
-    NOTES_C3,
-    NOTES_Eb3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_Ab3,
-
-    NOTES_Eb3,
-    NOTES_C3,
-    NOTES_Eb3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_B3,
-    NOTES_C4,
-
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_G2,
-    NOTES_C2,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_F2,
-    NOTES_Ab2,
-    NOTES_G3,
-    NOTES_C3,
-    NOTES_F3,
-    NOTES_C3,
-    NOTES_Eb2,
-    NOTES_C2,
-    NOTES_D3,
-    NOTES_Eb2,
-
+__prog__ const unsigned short song[] __attribute__((space(prog), section("SONG"))) = {
+    181 // 181.405895692, rounded down
 };
 
-
-void config_timer() {
-    // Setup the timer to step through the wavetable:
-    PR1 = 0;
-    _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8,
-    _T1IP = 5;	// set interrupt priority
-    _TON  = 1;	// turn on the timer
-    _T1IF = 0;	// reset interrupt flag
-    _T1IE = 1;	// turn on the timer1 interrupt
-
+void config_audio() {
     // Set up timer for stepping through song:
-    PR2 = 0xf0; // slower: 0x3d09
+    PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
     _T2IP = 6; // interrupt priority
     _T2IF = 0; // reset flag
     /* no nice macros for T2CON :( */
     T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
     _T2IE = 1; // enable the timer2 interrupt
-}
 
-// This is the interrupt for stepping through the wave table:
-// _T1Interrupt() is the T1 interrupt service routine (ISR).
-void __attribute__((__interrupt__)) _T1Interrupt(void);
-void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
-{
-    static unsigned char idx = 0;
-    if (story_state.currentScene == 0) {
-    PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
-
-//    } else if (story_state.currentScene == 1 ) {
-//        PORTB = ((zigzagtable[idx]/4)&0xf) << 12 | ((sinetable[idx]/4)&0xf) << 8;
-    } else {
-    PORTB = (sinetable[idx]/4) << 8;
-    }
-
-    if (frames != 0) {
-        idx -= 1;
-    }
-	_T1IF = 0;
+    // Setup the timer to step through the wavetable:
+    // Try to get this to be 44.1kHz (period of 22675.737 ns)
+    //
+    // Use internal clock (TCS register): This is FOSC/2 (see note on next line)
+    // NOTE: CLOCK COUNTS ON RISING EDGES!!!! So, actually use: FOSC/4
+    // Then the prescaler (TCKPS) will divide that clock rate by some amount
+    // And when the counter counts to some value (PR1) or clock cycles, it fires the interrupt
+    //
+    // So, we need to figure out how fast the thing increments without prescale:
+    //  T = 1/f (T is period in seconds, f is frequency)
+    //  1/16MHz = 62.5 ns (how much time it takes to clock the counter)
+    //  1/44.1kHz = 22675.737 ns (our target)
+    // That gets us to:
+    //  22675.737/62.5 = 362.8 cycles we need to count to for the interupt.
+    // But the counter only counts rising edges so divide that by two:
+    //  362.8/2
+    //
+    // The whole formula is:
+    // ((1/44.1kHz)/(1/16MHz))/2 = value for PR1 (rounded, because integer)
+    PR1 = 181; // 181.405895692, rounded down;
+    _TCS = 0; // Use internal clock (Fosc/2)
+    _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8, 0b10 = 1:64, 0b11 = 1:256
+    _T1IP = 5;	// set interrupt priority
+    _TON  = 1;	// turn on the timer
+    _T1IF = 0;	// reset interrupt flag
+    _T1IE = 1;	// turn on the timer1 interrupt
 }
 
 // This interrupt is for stepping through the song:
@@ -154,19 +59,55 @@ void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
     static unsigned short idx = 0;
-    static uint8_t sineDump = 0;
-    static uint8_t rampDump = 0;
-//    PR1 = song[idx];
-
-    PR1 = NOTES_C2 + sinetable[sineDump]/2 + sinetable[rampDump];
-//    PR1 = c;
-
+    //PR1 = song[idx];
+//    PR1 = C2 + sinetable[sineDump]/2 + sinetable[rampDump];
+    
     idx++;
-    sineDump+=4;
-    rampDump++;
-    if(idx == sizeof(song) / sizeof(song[0])) /* loop it! */
+    if(idx == sizeof(song) / sizeof(song[0])) {
             idx = 0;
+    }
     _T2IF = 0;
+}
+
+// This is the interrupt for stepping through the wave table:
+// _T1Interrupt() is the T1 interrupt service routine (ISR).
+void __attribute__((__interrupt__)) _T1Interrupt(void);
+void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
+{
+    static unsigned char idx = 0;
+    static bool fastestToggle = false;
+    unsigned short sample=0;
+
+//    if (story_state.currentScene == 0) {
+//        PORTB = ((zigzagtable[idx]/4)&0xf) << 8 | ((sinetable[idx]/4)&0xf) << 12;
+//
+////    } else if (story_state.currentScene == 1 ) {
+////        PORTB = ((zigzagtable[idx]/4)&0xf) << 12 | ((sinetable[idx]/4)&0xf) << 8;
+//    } else {
+//        PORTB = (sinetable[idx]/4) << 8;
+//    }
+//    sample += sinetable[idx];// & 0xf;
+//    sample += zigzagtable[idx];// & 0xf;
+//    sample += saw[idx];// & 0xf;
+//    sample += pulse50[idx];// & 0xf;
+
+    if (fastestToggle) {
+        sample = saw[0]; // 0
+        sample += pulse50[247]; // 0
+        fastestToggle = false;
+    } else {
+        sample = pulse50[0]; // 0xff
+        sample += saw[0]; // 0
+        fastestToggle = true;
+    }
+
+    // Spit the mixed value to the audio port:
+    PORTB=(sample<<8); // shift is to get to the right pins
+
+    if (frames != 0) {
+        idx -= 10;
+    }
+    _T1IF = 0;
 }
 
 const unsigned char sinetable[] = {
@@ -203,8 +144,6 @@ const unsigned char sinetable[] = {
 0xa,0x9,0x7,0x6,0x5,0x5,0x4,0x3,
 0x2,0x2,0x1,0x1,0x1,0x0,0x0,0x0,
 };
-
-
 const unsigned char zigzagtable[] = {
 0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9, 0xf8,
 0xf7, 0xf6, 0xf5, 0xf4, 0xf3, 0xf2, 0xf1, 0xf0,
@@ -238,7 +177,6 @@ const unsigned char zigzagtable[] = {
 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77,
 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
 };
-
 const unsigned char saw[] = {
 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf,
@@ -272,7 +210,6 @@ const unsigned char saw[] = {
 0xef, 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6,
 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe
 };
-
 const unsigned char pulse50[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -306,7 +243,6 @@ const unsigned char pulse50[] = {
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 };
-
 const unsigned char pulse75[] = {
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -340,7 +276,6 @@ const unsigned char pulse75[] = {
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 };
-
 const unsigned char noise[] = {
 0x50, 0x31, 0x64, 0x75, 0xdd, 0xaf, 0x3, 0x8d,
 0xb1, 0xfe, 0xd7, 0xe3, 0xd8, 0x8e, 0x8d, 0x85,

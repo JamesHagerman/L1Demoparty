@@ -58,13 +58,14 @@ extern STORY_STATE story_state;
 extern uint16_t frames;
 extern bool ledState;
 extern char jumperMessage[];
+extern char fpsTextBuffer[20];
 
 void addScene();
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
 
-void drawFPS(char* sprintBuffer);
+void drawFPS();
 
 void checkForJumper();
 void setupHardware();

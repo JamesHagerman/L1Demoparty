@@ -6,6 +6,7 @@ STORY_STATE story_state;
 uint16_t frames = 0;
 bool ledState = true;
 char jumperMessage[] = "Please jump R28 to\nto Ground...";
+char fpsTextBuffer[20]; // Buffer for any text rendering sprintf() calls
 
 // StoryState management methods:
 void addScene(SCENE newScene) {
@@ -64,12 +65,13 @@ void checkSceneFinished() {
 }
 
 // Scene management methods:
-void drawFPS(char* sprintBuffer) {
+void drawFPS() {
+    // TODO: Make this ACTUALLY calculate FPS!!!
     // TODO: Print the fps to the UART cleanly without borking our term...
-    sprintf(sprintBuffer, "f:%i s:%i", frames,
+    sprintf(fpsTextBuffer, "f:%i s:%i", frames,
             story_state.scenes[story_state.currentScene].sceneStartFrame +
             story_state.scenes[story_state.currentScene].sceneLength);
-    chr_print(sprintBuffer, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
+    chr_print(fpsTextBuffer, 0, VER_RES-(21*1)); // x, y are bounded in chr_print
 }
 
 // Demo hardware helpers:
@@ -110,7 +112,7 @@ void setupHardware() {
     config_uart(115200UL);
     config_graphics();
     config_chr(); // config the character GPU
-    config_timer();
+    config_audio();
     
    
     // Validate that both buffers start empty:
