@@ -35,7 +35,7 @@ void setup() {
     
     // PWM
     int iAdj = round(map(i, 0, tableSize, 0, 255));
-    if (i <= tableSize*0.75) {
+    if (i <= tableSize*0.5) {
       val = 255;
     } else {
       val = 0;

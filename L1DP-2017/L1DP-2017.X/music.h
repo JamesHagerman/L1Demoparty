@@ -125,20 +125,23 @@ void config_audio();
 // Song itself:
 extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
+// NCO Phase table:
+extern const uint32_t phaseTable[];
+
 // Big wave tables:
-//extern __prog__ const unsigned char sinetable[] __attribute__((space(prog)));
-//extern __prog__ const unsigned char zigzagtable[] __attribute__((space(prog)));
-//extern __prog__ const unsigned char saw[] __attribute__((space(prog)));
-//extern __prog__ const unsigned char pulse50[] __attribute__((space(prog)));
-//extern __prog__ const unsigned char pulse75[] __attribute__((space(prog)));
-//extern __prog__ const unsigned char noise[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t sinetable[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t zigzagtable[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t saw[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t pulse50[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t pulse75[] __attribute__((space(prog)));
+//extern __prog__ const uint8_t noise[] __attribute__((space(prog)));
 
 extern const uint8_t sinetable[];
-extern const unsigned char zigzagtable[];
-extern const unsigned char saw[];
-extern const unsigned char pulse50[];
-extern const unsigned char pulse75[];
-extern const unsigned char noise[];
+extern const uint8_t zigzagtable[];
+extern const uint8_t saw[];
+extern const uint8_t pulse50[];
+extern const uint8_t pulse75[];
+extern const uint8_t noise[];
 
 #ifdef	__cplusplus
 }
