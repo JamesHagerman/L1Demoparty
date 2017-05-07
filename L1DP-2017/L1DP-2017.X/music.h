@@ -133,8 +133,7 @@ extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 //extern __prog__ const unsigned char pulse75[] __attribute__((space(prog)));
 //extern __prog__ const unsigned char noise[] __attribute__((space(prog)));
 
-extern const unsigned char sinetable[];
-extern const unsigned char sinetable2048[];
+extern const uint8_t sinetable[];
 extern const unsigned char zigzagtable[];
 extern const unsigned char saw[];
 extern const unsigned char pulse50[];
