@@ -25,6 +25,7 @@
 NCO chan1Osc;
 NCO chan2Osc;
 NCO chan3Osc;
+NCO chan4Osc;
 
 uint32_t *currentPhaseTable = phaseTable44100;
 float startingFreq = AUDIO_SAMPLE_RATE;
@@ -45,6 +46,12 @@ const uint8_t chan3[] = {
     G3, G3, G3, G3, G3, G3, G3, G3,
     Ab3,Ab3,G3, G3, G3, G3, G3, G3,
     G3, G3, G3, G3, G3, G3,
+};
+
+const uint8_t chan4[] = {
+    D2, C2, C2, C2, D2, C2, C2, C2,
+    D2, C2, B1, B1, B1, B1, B1, B1,
+    B1, B1, B1, B1, B1, B1,
 };
 
 __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
@@ -105,6 +112,9 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 
     currentMidiNote = chan3[idx];
     ncoSetNote(&chan3Osc, currentMidiNote);
+
+    currentMidiNote = chan4[idx];
+    ncoSetNote(&chan4Osc, currentMidiNote);
     
     idx++;
     // For song[]
@@ -129,12 +139,14 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     ncoStep(&chan1Osc);
     ncoStep(&chan2Osc);
     ncoStep(&chan3Osc);
+    ncoStep(&chan4Osc);
 
     // Divide the values by the number of channels just to be sure we have
     // enough headroom when they're all full scale peak to peak:
-    sample = chan1Osc.value /3;
-    sample += chan2Osc.value /3;
-    sample += chan3Osc.value /3;
+    sample = chan1Osc.value /4;
+    sample += chan2Osc.value /4;
+    sample += chan3Osc.value /4;
+    sample += chan4Osc.value /4;
 
     // Spit the mixed value to the audio port:
     PORTB=(sample<<8); // shift is to get to the right pins
@@ -145,9 +157,10 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, saw);
-    ncoInit(&chan2Osc, startingFreq, saw);
-    ncoInit(&chan3Osc, startingFreq, saw);
+    ncoInit(&chan1Osc, startingFreq, sinetable);
+    ncoInit(&chan2Osc, startingFreq, sinetable);
+    ncoInit(&chan3Osc, startingFreq, sinetable);
+    ncoInit(&chan4Osc, startingFreq, sinetable);
 
     // Set up timer for stepping through song:
     PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
@@ -196,17 +209,17 @@ void setSampleRate(SAMPLE_RATES newRate) {
     switch (newRate) {
         case LOW:
             // TODO: THIS IS BROKEN RIGHT NOW!!!
-            PR1 = 1451; // 11025: 1451.24716553288
             currentPhaseTable = phaseTable11025;
+            PR1 = 1451; // 11025: 1451.24716553288
             break;
         case MEDIUM:
-            PR1 = 725; // 22050: 725.623582766
             currentPhaseTable = phaseTable22050;
+            PR1 = 725; // 22050: 725.623582766
             break;
         case HIGH:
         default:
-            PR1 = 362; // 44100: 362.811792
             currentPhaseTable = phaseTable44100;
+            PR1 = 362; // 44100: 362.811792
             break;
     }
 }

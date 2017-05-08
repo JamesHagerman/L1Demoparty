@@ -136,6 +136,7 @@ typedef struct {
 extern NCO chan1Osc;
 extern NCO chan2Osc;
 extern NCO chan3Osc;
+extern NCO chan4Osc;
 
 extern float startingFreq; //
 
@@ -152,6 +153,8 @@ void ncoStep(NCO *n);
 // Song itself:
 extern const uint8_t chan1[];
 extern const uint8_t chan2[];
+extern const uint8_t chan3[];
+extern const uint8_t chan4[];
 extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
 // NCO Phase table:
