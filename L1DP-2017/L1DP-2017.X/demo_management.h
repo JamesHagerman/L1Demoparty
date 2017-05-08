@@ -30,7 +30,7 @@ extern "C" {
 #endif
     
 #define MAX_SCENES 5
-  
+
 typedef struct {
     uint16_t sceneStartFrame;
     uint16_t sceneLength;

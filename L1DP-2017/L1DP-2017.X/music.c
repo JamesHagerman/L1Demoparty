@@ -20,11 +20,14 @@
 #include "resolution_management.h"
 #include "demo_management.h"
 
-struct NCO chan1Osc;
-struct NCO chan2Osc;
+#define AUDIO_SAMPLE_RATE MEDIUM
 
-//float freq = 8.17/44100; // Start everything out at a sane value
-float freq = 8.17/22050; // Start everything out at a sane value
+NCO chan1Osc;
+NCO chan2Osc;
+NCO chan3Osc;
+
+uint32_t *currentPhaseTable = phaseTable44100;
+float startingFreq = AUDIO_SAMPLE_RATE;
 
 const uint8_t chan1[] = {
     D4, C4, C4, C4, D4, C4, C4, C4,
@@ -38,39 +41,46 @@ const uint8_t chan2[] = {
     D3, D3, D3, D3, D3, D3,
 };
 
+const uint8_t chan3[] = {
+    G3, G3, G3, G3, G3, G3, G3, G3,
+    Ab3,Ab3,G3, G3, G3, G3, G3, G3,
+    G3, G3, G3, G3, G3, G3,
+};
+
 __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
-    0, 1, 2, 3,
-    4, 5, 6, 7,
-    8, 9, 10, 11, 
-    12, 13, 14, 15,
-    16, 17, 18, 19,
-    20, 21, 22, 23,
-    24, 25, 26, 27,
-    28, 29, 30, 31,
-    32, 33, 34, 35,
-    36, 37, 38, 39,
-    40, 41, 42, 43,
-    44, 45, 46, 47,
-    48, 49, 50, 51,
-    52, 53, 54, 55,
-    56, 57, 58, 59,
-    60, 61, 62, 63,
-    64, 65, 66, 67,
-    68, 69, 70, 71,
-    72, 73, 74, 75,
-    76, 77, 78, 79,
-    80, 81, 82, 83,
-    84, 85, 86, 87,
-    88, 89, 90, 91,
-    92, 93, 94, 95,
-    96, 97, 98, 99,
-    100, 101, 102, 103,
-    104, 105, 106, 107,
-    108, 109, 110, 111,
-    112, 113, 114, 115,
-    116, 117, 118, 119,
-    120, 121, 122, 123,
-    124, 125, 126, 127
+    69
+//    0, 1, 2, 3,
+//    4, 5, 6, 7,
+//    8, 9, 10, 11,
+//    12, 13, 14, 15,
+//    16, 17, 18, 19,
+//    20, 21, 22, 23,
+//    24, 25, 26, 27,
+//    28, 29, 30, 31,
+//    32, 33, 34, 35,
+//    36, 37, 38, 39,
+//    40, 41, 42, 43,
+//    44, 45, 46, 47,
+//    48, 49, 50, 51,
+//    52, 53, 54, 55,
+//    56, 57, 58, 59,
+//    60, 61, 62, 63,
+//    64, 65, 66, 67,
+//    68, 69, 70, 71,
+//    72, 73, 74, 75,
+//    76, 77, 78, 79,
+//    80, 81, 82, 83,
+//    84, 85, 86, 87,
+//    88, 89, 90, 91,
+//    92, 93, 94, 95,
+//    96, 97, 98, 99,
+//    100, 101, 102, 103,
+//    104, 105, 106, 107,
+//    108, 109, 110, 111,
+//    112, 113, 114, 115,
+//    116, 117, 118, 119,
+//    120, 121, 122, 123,
+//    124, 125, 126, 127
 };
 
 
@@ -81,17 +91,39 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
     static unsigned short idx = 0;
 
+    uint8_t currentMidiNote = song[idx];
+
+    // TODO: MOVE PHASETABLE INTO THE NCO STRUCT!
+//#if AUDIO_SAMPLE_RATE == 44100
+//    ncoSetPhase(&chan1Osc, phaseTable44100[currentMidiNote]);
+//#elif AUDIO_SAMPLE_RATE == 22050
+//    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
+//#elif AUDIO_SAMPLE_RATE == 11025
+//    ncoSetPhase(&chan1Osc, phaseTable11025[currentMidiNote]);
+//#endif
+
+    ncoSetNote(&chan1Osc, currentMidiNote);
+
     // TODO: INTERESTING! Read off the end of the buffer for "music"...
-    uint8_t currentMidiNote = chan1[idx];
-    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
-    
-    currentMidiNote = chan2[idx];
-    ncoSetPhase(&chan2Osc, phaseTable22050[currentMidiNote]);
+//    uint8_t currentMidiNote = chan1[idx];
+//    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
+//
+//    currentMidiNote = chan2[idx];
+//    ncoSetPhase(&chan2Osc, phaseTable22050[currentMidiNote]);
+//
+//    currentMidiNote = chan3[idx];
+//    ncoSetPhase(&chan3Osc, phaseTable22050[currentMidiNote]);
     
     idx++;
-    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
+    // For song[]
+    if(idx == sizeof(song) / sizeof(song[0])) {
         idx = 0;
     }
+
+    // For chan1[] and it's friends
+//    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
+//        idx = 0;
+//    }
     _T2IF = 0;
 }
 
@@ -103,9 +135,14 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     unsigned short sample=0;
 
     ncoStep(&chan1Osc);
-    ncoStep(&chan2Osc);
-    sample = chan1Osc.value /2;
-    sample += chan2Osc.value /2;
+//    ncoStep(&chan2Osc);
+//    ncoStep(&chan3Osc);
+
+    // Divide the values by the number of channels just to be sure we have
+    // enough headroom when they're all full scale peak to peak:
+    sample = chan1Osc.value /3;
+//    sample += chan2Osc.value /3;
+//    sample += chan3Osc.value /3;
 
     // Spit the mixed value to the audio port:
     PORTB=(sample<<8); // shift is to get to the right pins
@@ -116,8 +153,9 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, freq, saw);
-    ncoInit(&chan2Osc, freq, saw);
+    ncoInit(&chan1Osc, startingFreq, sinetable);
+    ncoInit(&chan2Osc, startingFreq, saw);
+    ncoInit(&chan3Osc, startingFreq, saw);
 
     // Set up timer for stepping through song:
     PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
@@ -143,8 +181,17 @@ void config_audio() {
     //
     // The whole formula is:
     // ((1/44.1kHz)/(1/16MHz)) = value for PR1 (rounded, because integer)
-//    PR1 = 362; // 44100: 362.811792, rounded down; 725.623582766
-    PR1 = 725; // 22050: 725.623582766, rounded down;
+
+//#if AUDIO_SAMPLE_RATE == 44100
+//    PR1 = 362; // 44100: 362.811792
+//#elif AUDIO_SAMPLE_RATE == 22050
+//    PR1 = 725; // 22050: 725.623582766
+//#elif AUDIO_SAMPLE_RATE == 11025
+//    PR1 = 1451; // 11025: 1451.24716553288
+//#endif
+
+    setSampleRate(MEDIUM); // 22050
+
     _TCS = 0; // Use internal clock (Fosc/2)
     _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8, 0b10 = 1:64, 0b11 = 1:256
     _T1IP = 5;	// set interrupt priority
@@ -153,7 +200,26 @@ void config_audio() {
     _T1IE = 1;	// turn on the timer1 interrupt
 }
 
-void ncoSetFreq(struct NCO *n, float freq) {
+void setSampleRate(SAMPLE_RATES newRate) {
+    switch (newRate) {
+        case LOW:
+            // TODO: THIS IS BROKEN RIGHT NOW!!!
+            currentPhaseTable = phaseTable11025;
+            PR1 = 1451; // 11025: 1451.24716553288
+            break;
+        case MEDIUM:
+            currentPhaseTable = phaseTable22050;
+            PR1 = 725; // 22050: 725.623582766
+            break;
+        case HIGH:
+        default:
+            currentPhaseTable = phaseTable44100;
+            PR1 = 362; // 44100: 362.811792
+            break;
+    }
+}
+
+void ncoSetFreq(NCO *n, float freq) {
     // Set the phase step parameter of the given NCO struct based on the
     // desired value, given as a float. This changes its frequency in a phase
     // continuous manner, but this function should not be used inside a
@@ -166,11 +232,14 @@ void ncoSetFreq(struct NCO *n, float freq) {
     printf("Freq: %f, Phase: %lu\n", (double)freq, n->phase);
 }
 
-void ncoSetPhase(struct NCO *n, uint32_t phase) {
+void ncoSetPhase(NCO *n, uint32_t phase) {
     n->phase = phase;
 }
+void ncoSetNote(NCO *n, uint8_t note) {
+    ncoSetPhase(n, currentPhaseTable[note]);
+}
 
-void ncoInit(struct NCO *n, float freq, const uint8_t *wavetable ) {
+void ncoInit(NCO *n, float freq, const uint8_t *wavetable ) {
     // Initialize the oscillator data structure and set the target frequency
     // Frequency must be positive (although I don't check this).
     n->accumulator = 0;
@@ -179,7 +248,7 @@ void ncoInit(struct NCO *n, float freq, const uint8_t *wavetable ) {
     ncoSetFreq(n, freq);
 }
 
-void ncoStep(struct NCO *n) {
+void ncoStep(NCO *n) {
     // Compute the next output value from the table and save it so that it
     // can be referenced multiple times. Also, advance the accumulator by
     // the phase step amount.
@@ -197,7 +266,7 @@ void ncoStep(struct NCO *n) {
 //
 // Should probably generate this using C because this has floating point errors:
 // 44100Hz sample rate
-const uint32_t phaseTable44100[] = {
+uint32_t phaseTable44100[] = {
     796254.2179447162, 843601.9279088025, 893765.0792181802, 946911.0867272264,
     1003217.3202956029, 1062871.696743673, 1126073.3070074187, 1193033.0805859372,
     1263974.4894990327, 1339134.2941043084, 1418763.3332628536, 1503127.3614906245,
@@ -233,7 +302,7 @@ const uint32_t phaseTable44100[] = {
 };
 
 // 22050Hz sample rate
-const uint32_t phaseTable22050[] = {
+uint32_t phaseTable22050[] = {
     1592507.9358894324, 1687203.355817605, 1787529.6584363603, 1893821.6734544528,
     2006434.1405912058, 2125742.893487346, 2252146.1140148374, 2386065.6611718745,
     2527948.4789980655, 2678268.0882086167, 2837526.166525707, 3006254.222981249,
@@ -266,6 +335,41 @@ const uint32_t phaseTable22050[] = {
     1294309365.7470093, 1371273005.6628118, 1452813141.761162, 1539201906.6663995,
     1630727614.8507788, 1727695724.8572276, 1830429858.738833, 1939272882.1173596,
     2054588048.4653947, 2176760211.431042, 2306197109.2511935, 2443330725.5399995
+};
+
+uint32_t phaseTable11025[] = {
+    318632.0408680367, 337578.8582485204, 357652.31201870827, 378919.39546454954,
+    401451.0855000779, 425322.57954626356, 450613.54649541463, 477408.3925987009,
+    505796.5431641699, 535872.741005399, 567737.36263683, 601496.7532710544,
+    637263.5817360734, 675157.2164970408, 715304.1240374165, 757838.2909290991,
+    802901.6710001559, 850644.6590925271, 901226.5929908293, 954816.2851974018,
+    1011592.5863283398, 1071744.982010798, 1135474.2252736602, 1202993.006542108,
+    1274526.6634721467, 1350313.9329940816, 1430607.7480748324, 1515676.0818581982,
+    1605802.8420003122, 1701288.8181850538, 1802452.6859816585, 1909632.070394804,
+    2023184.6726566793, 2143489.464021596, 2270947.9505473203, 2405985.513084216,
+    2549052.8269442935, 2700627.3659881633, 2861214.9961496647, 3031351.6637163963,
+    3211605.1840006243, 3402577.1363701075, 3604904.871963317, 3819263.640789608,
+    4046368.8453133586, 4286978.428043192, 4541895.401094641, 4811970.526168433,
+    5098105.153888587, 5401254.231976327, 5722429.492299331, 6062702.827432793,
+    6423209.868001248, 6805153.772740215, 7209809.243926634, 7638526.781579215,
+    8092737.190626717, 8573956.356086385, 9083790.302189281, 9623940.552336866,
+    10196209.807777174, 10802507.963952653, 11444858.484598663, 12125405.154865585,
+    12846419.236002496, 13610307.04548043, 14419617.987853268, 15277053.06315843,
+    16185473.881253434, 17147912.21217277, 18167580.104378562, 19247880.604673732,
+    20392419.115554348, 21605015.427905306, 22889716.469197325, 24250809.80973117,
+    25692837.97200499, 27220613.59096086, 28839235.475706536, 30554105.62631686,
+    32370947.26250687, 34295823.92434554, 36335159.708757125, 38495760.709347464,
+    40784837.731108695, 43210030.35581061, 45779432.43839465, 48501619.11946234,
+    51385675.44400998, 54441226.68192172, 57678470.45141307, 61108210.75263372,
+    64741894.02501374, 68591647.34869108, 72670318.91751425, 76991520.91869491,
+    81569674.96221739, 86420060.21162122, 91558864.37678927, 97003237.73892468,
+    102771350.38801998, 108882452.86384344, 115356940.40282615, 122216421.00526746,
+    129483787.55002747, 137183294.19738215, 145340637.3350285, 153983041.33738983,
+    163139349.42443478, 172840119.92324245, 183117728.25357854, 194006474.97784936,
+    205542700.27603996, 217764905.22768688, 230713880.3056523, 244432841.5105349,
+    258967574.60005495, 274366587.8947643, 290681274.17005694, 307966082.17477983,
+    326278698.34886956, 345680239.3464849, 366235456.00715727, 388012949.4556987,
+    411085400.0520798, 435529809.9553739, 461427760.1113046, 488865682.5210697
 };
 
 const uint8_t sinetable[] = {
