@@ -48,39 +48,39 @@ const uint8_t chan3[] = {
 };
 
 __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
-    69
-//    0, 1, 2, 3,
-//    4, 5, 6, 7,
-//    8, 9, 10, 11,
-//    12, 13, 14, 15,
-//    16, 17, 18, 19,
-//    20, 21, 22, 23,
-//    24, 25, 26, 27,
-//    28, 29, 30, 31,
-//    32, 33, 34, 35,
-//    36, 37, 38, 39,
-//    40, 41, 42, 43,
-//    44, 45, 46, 47,
-//    48, 49, 50, 51,
-//    52, 53, 54, 55,
-//    56, 57, 58, 59,
-//    60, 61, 62, 63,
-//    64, 65, 66, 67,
-//    68, 69, 70, 71,
-//    72, 73, 74, 75,
-//    76, 77, 78, 79,
-//    80, 81, 82, 83,
-//    84, 85, 86, 87,
-//    88, 89, 90, 91,
-//    92, 93, 94, 95,
-//    96, 97, 98, 99,
-//    100, 101, 102, 103,
-//    104, 105, 106, 107,
-//    108, 109, 110, 111,
-//    112, 113, 114, 115,
-//    116, 117, 118, 119,
-//    120, 121, 122, 123,
-//    124, 125, 126, 127
+//    69
+    0, 1, 2, 3,
+    4, 5, 6, 7,
+    8, 9, 10, 11,
+    12, 13, 14, 15,
+    16, 17, 18, 19,
+    20, 21, 22, 23,
+    24, 25, 26, 27,
+    28, 29, 30, 31,
+    32, 33, 34, 35,
+    36, 37, 38, 39,
+    40, 41, 42, 43,
+    44, 45, 46, 47,
+    48, 49, 50, 51,
+    52, 53, 54, 55,
+    56, 57, 58, 59,
+    60, 61, 62, 63,
+    64, 65, 66, 67,
+    68, 69, 70, 71,
+    72, 73, 74, 75,
+    76, 77, 78, 79,
+    80, 81, 82, 83,
+    84, 85, 86, 87,
+    88, 89, 90, 91,
+    92, 93, 94, 95,
+    96, 97, 98, 99,
+    100, 101, 102, 103,
+    104, 105, 106, 107,
+    108, 109, 110, 111,
+    112, 113, 114, 115,
+    116, 117, 118, 119,
+    120, 121, 122, 123,
+    124, 125, 126, 127
 };
 
 
@@ -91,39 +91,31 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
     static unsigned short idx = 0;
 
-    uint8_t currentMidiNote = song[idx];
+    // TODO: INTERESTING! Read off the end of the buffer for "music"...
 
-    // TODO: MOVE PHASETABLE INTO THE NCO STRUCT!
-//#if AUDIO_SAMPLE_RATE == 44100
-//    ncoSetPhase(&chan1Osc, phaseTable44100[currentMidiNote]);
-//#elif AUDIO_SAMPLE_RATE == 22050
-//    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
-//#elif AUDIO_SAMPLE_RATE == 11025
-//    ncoSetPhase(&chan1Osc, phaseTable11025[currentMidiNote]);
-//#endif
+//    uint8_t currentMidiNote = song[idx];
+//    ncoSetNote(&chan1Osc, currentMidiNote);
 
+    
+    uint8_t currentMidiNote = chan1[idx];
     ncoSetNote(&chan1Osc, currentMidiNote);
 
-    // TODO: INTERESTING! Read off the end of the buffer for "music"...
-//    uint8_t currentMidiNote = chan1[idx];
-//    ncoSetPhase(&chan1Osc, phaseTable22050[currentMidiNote]);
-//
-//    currentMidiNote = chan2[idx];
-//    ncoSetPhase(&chan2Osc, phaseTable22050[currentMidiNote]);
-//
-//    currentMidiNote = chan3[idx];
-//    ncoSetPhase(&chan3Osc, phaseTable22050[currentMidiNote]);
+    currentMidiNote = chan2[idx];
+    ncoSetNote(&chan2Osc, currentMidiNote);
+
+    currentMidiNote = chan3[idx];
+    ncoSetNote(&chan3Osc, currentMidiNote);
     
     idx++;
     // For song[]
-    if(idx == sizeof(song) / sizeof(song[0])) {
-        idx = 0;
-    }
-
-    // For chan1[] and it's friends
-//    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
+//    if(idx == sizeof(song) / sizeof(song[0])) {
 //        idx = 0;
 //    }
+
+    // For chan1[] and it's friends
+    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
+        idx = 0;
+    }
     _T2IF = 0;
 }
 
@@ -135,14 +127,14 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     unsigned short sample=0;
 
     ncoStep(&chan1Osc);
-//    ncoStep(&chan2Osc);
-//    ncoStep(&chan3Osc);
+    ncoStep(&chan2Osc);
+    ncoStep(&chan3Osc);
 
     // Divide the values by the number of channels just to be sure we have
     // enough headroom when they're all full scale peak to peak:
     sample = chan1Osc.value /3;
-//    sample += chan2Osc.value /3;
-//    sample += chan3Osc.value /3;
+    sample += chan2Osc.value /3;
+    sample += chan3Osc.value /3;
 
     // Spit the mixed value to the audio port:
     PORTB=(sample<<8); // shift is to get to the right pins
@@ -153,7 +145,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, sinetable);
+    ncoInit(&chan1Osc, startingFreq, saw);
     ncoInit(&chan2Osc, startingFreq, saw);
     ncoInit(&chan3Osc, startingFreq, saw);
 
@@ -204,17 +196,17 @@ void setSampleRate(SAMPLE_RATES newRate) {
     switch (newRate) {
         case LOW:
             // TODO: THIS IS BROKEN RIGHT NOW!!!
-            currentPhaseTable = phaseTable11025;
             PR1 = 1451; // 11025: 1451.24716553288
+            currentPhaseTable = phaseTable11025;
             break;
         case MEDIUM:
-            currentPhaseTable = phaseTable22050;
             PR1 = 725; // 22050: 725.623582766
+            currentPhaseTable = phaseTable22050;
             break;
         case HIGH:
         default:
-            currentPhaseTable = phaseTable44100;
             PR1 = 362; // 44100: 362.811792
+            currentPhaseTable = phaseTable44100;
             break;
     }
 }
