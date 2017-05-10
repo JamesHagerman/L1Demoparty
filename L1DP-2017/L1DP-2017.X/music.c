@@ -31,67 +31,69 @@ uint32_t *currentPhaseTable = phaseTable44100;
 float startingFreq = AUDIO_SAMPLE_RATE;
 
 const uint8_t chan1[] = {
-    D4, C4, C4, C4, D4, C4, C4, C4,
-    D4, C4, B3, B3, B3, B3, B3, B3,
-    B3, B3, B3, B3, B3, B3,
+//    D4, C4, C4, C4, D4, C4, C4, C4,
+//    D4, C4, B3, B3, B3, B3, B3, B3,
+//    B3, B3, B3, B3, B3, B3,
+    D5, C5, G4, C5, D5, C5, G4, C5,
+    D5, C5, G4, C5, D5, C5, G4, C5,
+    D5, C5, G4, C5, D5, C5, G4, C5,
+    D5, C5, G4, C5, D5, C5, G4, C5
 };
 
 const uint8_t chan1Amp[] = {
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50,
+    1,1,1,1,2,2,2,2,
+    3,3,3,3,4,4,4,4,
+    5,5,5,5,6,6,6,6,
+    7,7,7,7,8,8,8,8,
 };
 
 const uint8_t chan2[] = {
-    Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,
-    F3, F3, D3, D3, D3, D3, D3, D3,
-    D3, D3, D3, D3, D3, D3,
+//    Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,
+//    F3, F3, D3, D3, D3, D3, D3, D3,
+//    D3, D3, D3, D3, D3, D3,
+     C4, C4, C4, C4, C4, C4, C4, C4,
+    Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,
+    Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,
+    Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,
 };
 const uint8_t chan2Amp[] = {
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50,
+    1,1,1,1,2,2,2,2,
+    3,3,3,3,4,4,4,4,
+    5,5,5,5,6,6,6,6,
+    7,7,7,7,8,8,8,8,
 };
 
 const uint8_t chan3[] = {
-    G3, G3, G3, G3, G3, G3, G3, G3,
-    Ab3,Ab3,G3, G3, G3, G3, G3, G3,
-    G3, G3, G3, G3, G3, G3,
+//    G3, G3, G3, G3, G3, G3, G3, G3,
+//    Ab3,Ab3,G3, G3, G3, G3, G3, G3,
+//    G3, G3, G3, G3, G3, G3,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5
 };
 const uint8_t chan3Amp[] = {
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8
 };
 
 const uint8_t chan4[] = {
-    D2, C2, C2, C2, D2, C2, C2, C2,
-    D2, C2, B1, B1, B1, B1, B1, B1,
-    B1, B1, B1, B1, B1, B1,
+//    D2, C2, C2, C2, D2, C2, C2, C2,
+//    D2, C2, B1, B1, B1, B1, B1, B1,
+//    B1, B1, B1, B1, B1, B1,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5,
+    D5, C5, G5, D5, D5, C5, G5, D5
 };
 const uint8_t chan4Amp[] = {
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50, 50, 50,
-    50, 50, 50, 50, 50, 50,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8
 };
-
-
-
-
-
-// FIGURE OUT:
-// Keyboard input over serial
-// midi input over serial??
-
-// TEMPO!!!!!!!!
-// TEMPO!!!!!!!!
-// TEMPO!!!!!!!!
-// TEMPO!!!!!!!!
-
-
-
-
-
 
 // Setting up some tied notes:
 //               not tied     tied
@@ -158,19 +160,19 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 #else
     uint8_t currentMidiNote = chan1[idx];
     uint8_t currentMidiAmp = chan1Amp[idx];
-    ncoSetNote(&chan1Osc, currentMidiNote, 0);
+    ncoSetNote(&chan1Osc, currentMidiNote, currentMidiAmp, 0);
 
     currentMidiNote = chan2[idx];
     currentMidiAmp = chan2Amp[idx];
-    ncoSetNote(&chan2Osc, currentMidiNote, 0);
+    ncoSetNote(&chan2Osc, currentMidiNote, currentMidiAmp, 0);
 
     currentMidiNote = chan3[idx];
     currentMidiAmp = chan3Amp[idx];
-    ncoSetNote(&chan3Osc, currentMidiNote, 0);
+    ncoSetNote(&chan3Osc, currentMidiNote, currentMidiAmp, 0);
 
     currentMidiNote = chan4[idx];
     currentMidiAmp = chan4Amp[idx];
-    ncoSetNote(&chan4Osc, currentMidiNote, 0);
+    ncoSetNote(&chan4Osc, currentMidiNote, currentMidiAmp, 0);
 #endif
     
     idx++;
@@ -202,10 +204,10 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
     // Divide the values by the number of channels just to be sure we have
     // enough headroom when they're all full scale peak to peak:
-    sample = chan1Osc.value /4;
-    sample += chan2Osc.value /4;
-    sample += chan3Osc.value /4;
-    sample += chan4Osc.value /4;
+    sample  = chan1Osc.value >> chan1Osc.amplitude;
+    sample += chan2Osc.value >> chan2Osc.amplitude;
+    sample += chan3Osc.value >> chan3Osc.amplitude;
+    sample += chan4Osc.value >> chan4Osc.amplitude;
 
     // Spit the mixed value to the audio port:
     PORTB=(sample<<8); // shift is to get to the right pins
@@ -216,14 +218,16 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, saw);
-    ncoInit(&chan2Osc, startingFreq, saw);
-    ncoInit(&chan3Osc, startingFreq, saw);
-    ncoInit(&chan4Osc, startingFreq, saw);
+    ncoInit(&chan1Osc, startingFreq, sinetable);
+    ncoInit(&chan2Osc, startingFreq, sinetable);
+    ncoInit(&chan3Osc, startingFreq, sinetable);
+    ncoInit(&chan4Osc, startingFreq, sinetable);
 
     // Set up timer for stepping through song:
     //
     // We need to figure out how to calculate the tempo here.
+    // currently at about 120 or 121 bpm
+    // But that's with quarter notes
     // 0x3d09 = 15625
     // prescale is set to 1:256
 
@@ -307,8 +311,9 @@ void ncoSetFreq(NCO *n, float freq) {
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend) {
     n->phase = phase + ((phase/1000) * bend);
 }
-void ncoSetNote(NCO *n, uint8_t note, uint8_t bend) {
+void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend) {
     ncoSetPhase(n, currentPhaseTable[note], bend);
+    n->amplitude = amplitude;
 }
 
 void ncoInit(NCO *n, float freq, const uint8_t *wavetable ) {
@@ -317,6 +322,7 @@ void ncoInit(NCO *n, float freq, const uint8_t *wavetable ) {
     n->accumulator = 0;
     n->wavetable = wavetable;
     n->value = n->wavetable[0];
+    n->amplitude = 0; // bit shift amount for final volume
     ncoSetFreq(n, freq);
 }
 

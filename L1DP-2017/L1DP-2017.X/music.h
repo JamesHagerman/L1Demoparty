@@ -131,6 +131,7 @@ typedef struct {
     uint32_t phase;
     uint8_t value;
     const uint8_t *wavetable;
+    uint8_t amplitude;
 } NCO;
 
 extern NCO chan1Osc;
@@ -145,7 +146,7 @@ void setSampleRate(SAMPLE_RATES newRate);
 
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
-void ncoSetNote(NCO *n, uint8_t note, uint8_t bend);
+void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend);
 
 void ncoInit(NCO *n, float freq, const uint8_t *wavetable);
 void ncoStep(NCO *n);
