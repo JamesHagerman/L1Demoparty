@@ -43,14 +43,15 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
         // No UART receive overrun!
         if(U1STAbits.FERR == 0) { // if no framing error detected...
             // Read out the UART FIFO
-            while(U1STAbits.URXDA == 1) {
+            while(U1STAbits.URXDA == 1) { // 1 if receive buffer has data, 0 if empty
                 rxBufU1[rxSizeU1] = U1RXREG;
                 U1TXREG = rxBufU1[rxSizeU1];
-                if (rxBufU1[rxSizeU1] == '\r' || rxBufU1[rxSizeU1] == '\n') {
-                    dataAvailableU1 = true;
-                }
+//                if (rxBufU1[rxSizeU1] == '\r' || rxBufU1[rxSizeU1] == '\n') {
+//                    dataAvailableU1 = true;
+//                }
                 rxSizeU1++;
-            }            
+            }
+            dataAvailableU1 = true; // Let someone else handle the buffer contents
         } else {
             // UART framming error...
             // grab from U1RXREG;
@@ -93,7 +94,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _U2TXInterrupt(void) {
 //    int ch = txBufU2[0]; // Read the data from the tx1Buf
 }
 
-// TODO: Get this thing to be able to setup ANY of the UART channels somehow
+// TODO: Get this thing to be able to setup ANY of the UART channels somehow!!
 void config_uart(unsigned long baudRate) {
     
     // Make sure our buffers start empty:

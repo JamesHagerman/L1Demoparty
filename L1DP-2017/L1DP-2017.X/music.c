@@ -36,10 +36,21 @@ const uint8_t chan1[] = {
     B3, B3, B3, B3, B3, B3,
 };
 
+const uint8_t chan1Amp[] = {
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50,
+};
+
 const uint8_t chan2[] = {
     Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,
     F3, F3, D3, D3, D3, D3, D3, D3,
     D3, D3, D3, D3, D3, D3,
+};
+const uint8_t chan2Amp[] = {
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50,
 };
 
 const uint8_t chan3[] = {
@@ -47,11 +58,51 @@ const uint8_t chan3[] = {
     Ab3,Ab3,G3, G3, G3, G3, G3, G3,
     G3, G3, G3, G3, G3, G3,
 };
+const uint8_t chan3Amp[] = {
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50,
+};
 
 const uint8_t chan4[] = {
     D2, C2, C2, C2, D2, C2, C2, C2,
     D2, C2, B1, B1, B1, B1, B1, B1,
     B1, B1, B1, B1, B1, B1,
+};
+const uint8_t chan4Amp[] = {
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50, 50, 50,
+    50, 50, 50, 50, 50, 50,
+};
+
+
+
+
+
+// FIGURE OUT:
+// Keyboard input over serial
+// midi input over serial??
+
+// TEMPO!!!!!!!!
+// TEMPO!!!!!!!!
+// TEMPO!!!!!!!!
+// TEMPO!!!!!!!!
+
+
+
+
+
+
+// Setting up some tied notes:
+//               not tied     tied
+// Channel 1:      1            2
+// Channel 2:      4            8
+// Channel 3:      16           32
+// Channel 4:      64           128
+const uint8_t chanTie[] = {
+    21,  22, 21,  0,  0, 21,  0, 21,
+    0, 21,  0,  0, 21,  0,  0, 21,
+    0,  0, 21,  0,  0, 21,
 };
 
 __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
@@ -90,6 +141,7 @@ __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
     124, 125, 126, 127
 };
 
+#define PLAY_DEBUG_SONG false
 
 // This interrupt is for stepping through the song:
 // _T2Interrupt() is the T2 interrupt service routine (ISR).
@@ -100,32 +152,39 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 
     // TODO: INTERESTING! Read off the end of the buffer for "music"...
 
-//    uint8_t currentMidiNote = song[idx];
-//    ncoSetNote(&chan1Osc, currentMidiNote);
-
-    
-    uint8_t currentMidiNote = chan1[idx];
+#if PLAY_DEBUG_SONG
+    uint8_t currentMidiNote = song[idx];
     ncoSetNote(&chan1Osc, currentMidiNote);
+#else
+    uint8_t currentMidiNote = chan1[idx];
+    uint8_t currentMidiAmp = chan1Amp[idx];
+    ncoSetNote(&chan1Osc, currentMidiNote, 0);
 
     currentMidiNote = chan2[idx];
-    ncoSetNote(&chan2Osc, currentMidiNote);
+    currentMidiAmp = chan2Amp[idx];
+    ncoSetNote(&chan2Osc, currentMidiNote, 0);
 
     currentMidiNote = chan3[idx];
-    ncoSetNote(&chan3Osc, currentMidiNote);
+    currentMidiAmp = chan3Amp[idx];
+    ncoSetNote(&chan3Osc, currentMidiNote, 0);
 
     currentMidiNote = chan4[idx];
-    ncoSetNote(&chan4Osc, currentMidiNote);
+    currentMidiAmp = chan4Amp[idx];
+    ncoSetNote(&chan4Osc, currentMidiNote, 0);
+#endif
     
     idx++;
-    // For song[]
-//    if(idx == sizeof(song) / sizeof(song[0])) {
-//        idx = 0;
-//    }
 
+#if PLAY_DEBUG_SONG
+    if(idx == sizeof(song) / sizeof(song[0])) {
+        idx = 0;
+    }
+#else
     // For chan1[] and it's friends
     if(idx == sizeof(chan1) / sizeof(chan1[0])) {
         idx = 0;
     }
+#endif
     _T2IF = 0;
 }
 
@@ -157,18 +216,26 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, sinetable);
-    ncoInit(&chan2Osc, startingFreq, sinetable);
-    ncoInit(&chan3Osc, startingFreq, sinetable);
-    ncoInit(&chan4Osc, startingFreq, sinetable);
+    ncoInit(&chan1Osc, startingFreq, saw);
+    ncoInit(&chan2Osc, startingFreq, saw);
+    ncoInit(&chan3Osc, startingFreq, saw);
+    ncoInit(&chan4Osc, startingFreq, saw);
 
     // Set up timer for stepping through song:
+    //
+    // We need to figure out how to calculate the tempo here.
+    // 0x3d09 = 15625
+    // prescale is set to 1:256
+
+
     PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
+    /* no nice macros for T2CON :( */
+//    T2CON = 0b0000000000110000; // set T2 on with max prescaler (256)
+    T2CONbits.TCKPS = 0b11; // 2 bit: 0b00 = 1:1, 0b01 = 1:8, 0b10 = 1:64, 0b11 = 1:256
     _T2IP = 6; // interrupt priority
     _T2IF = 0; // reset flag
-    /* no nice macros for T2CON :( */
-    T2CON = 0b1000000000110000; // set T2 on with max prescaler (256)
     _T2IE = 1; // enable the timer2 interrupt
+    T2CONbits.TON = 1; // turn on the timer
 
     // Setup the timer to step through the wavetable:
     // Try to get this to be 44.1kHz (period of 22675.737 ns)
@@ -200,9 +267,9 @@ void config_audio() {
     _TCS = 0; // Use internal clock (Fosc/2)
     _TCKPS = 0b00; // prescale. 0b00 = 1:1, 0b01 = 1:8, 0b10 = 1:64, 0b11 = 1:256
     _T1IP = 5;	// set interrupt priority
-    _TON  = 1;	// turn on the timer
     _T1IF = 0;	// reset interrupt flag
-    _T1IE = 1;	// turn on the timer1 interrupt
+    _T1IE = 1;	// enable the timer1 interrupt
+    _TON  = 1;	// turn on the timer
 }
 
 void setSampleRate(SAMPLE_RATES newRate) {
@@ -237,11 +304,11 @@ void ncoSetFreq(NCO *n, float freq) {
     printf("Freq: %f, Phase: %lu\n", (double)freq, n->phase);
 }
 
-void ncoSetPhase(NCO *n, uint32_t phase) {
-    n->phase = phase;
+void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend) {
+    n->phase = phase + ((phase/1000) * bend);
 }
-void ncoSetNote(NCO *n, uint8_t note) {
-    ncoSetPhase(n, currentPhaseTable[note]);
+void ncoSetNote(NCO *n, uint8_t note, uint8_t bend) {
+    ncoSetPhase(n, currentPhaseTable[note], bend);
 }
 
 void ncoInit(NCO *n, float freq, const uint8_t *wavetable ) {

@@ -13,13 +13,14 @@
 #include "resolution_management.h"
 #include "fb_control.h"
 #include "color_management.h"
-
-#include "serial.h"
+#include "drawing_helpers.h"
 #include "text.h"
-#include "music.h"
 #include "sprites.h"
 
-#include "drawing_helpers.h"
+#include "music.h"
+#include "serial.h"
+#include "tty.h"
+
 #include "demo_management.h"
 
 // Include all scene definitions:
@@ -65,6 +66,32 @@
 char projectName[] = "Code MESS";
 volatile uint8_t serialStoryIndex = 100;
 
+// No headerfile = define stuff first:
+int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
+    int toRet = -1;
+    uint16_t i;
+    for (i = 0; i < inputSize; i++) {
+        unsigned char c = inputBuffer[i];
+
+        if (c >= '0' && c <= '9') {
+            uint16_t numberValue = (uint16_t)c - 0x30;
+            toRet = numberValue;
+        } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+            printf("A letter!: '%c: %x'\r\n", c, c);
+            if (c == 'r') {
+                printf("Restting frames\r\n");
+                frames = 0;
+            } else if (c == 'e') {
+                printf("Toggling CLUT\r\n");
+                story_state.clutState = !story_state.clutState;
+                _CLUTEN = story_state.clutState;
+            }
+        }
+    }
+    return toRet;
+}
+
+
 void loadScenes() {
     addScene(introScene);
 //    addScene(roadScene);
@@ -73,7 +100,11 @@ void loadScenes() {
 
 void initDemo() {
     printf("Initing demo...\r\n");
-    
+
+    // Configure TTY/UART input management:
+    setStringHandlerCallback(handleInputString);
+
+    // Configure graphics:
     blank_background();
     loadAllSprites();
     
@@ -90,43 +121,7 @@ void initDemo() {
     story_state.storyPlaying = false;
 }
 
-int handleSerialInput() {
-    // My serial handler for the demo's keyboard input:
-    // TODO: Manage some amount of command input. Single char will work for now...
-    int toRet = -1;
-    uint16_t i;
-    if (dataAvailableU1) {
-//        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
-        dataAvailableU1 = false;
 
-        for (i = 0; i < rxSizeU1; i++) {
-            char c = rxBufU1[i];
-
-            //handle number chars:
-            if (c >= '0' && c <= '9') {
-                uint16_t numberValue = (uint16_t)c - 0x30;
-                toRet = numberValue;
-            } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-                printf("A letter!: '%c'\r\n", c);
-                if (c == 'r') {
-                    printf("Restting frames\r\n");
-                    frames = 0;
-                } else if (c == 'e') {
-                    printf("Toggling CLUT\r\n");
-                    _CLUTEN = story_state.clutState = !story_state.clutState;
-                }
-            } else if (c == '\n' || c == '\r') {
-                //do nothing...
-            } else {
-                printf("That char is not a number or letter: '%c'\r\n", c);
-            }
-        }
-
-        reset_buffer();
-    }
-
-    return toRet;
-}
 
 int main(void) {
     // Setup the hardware before anything else:

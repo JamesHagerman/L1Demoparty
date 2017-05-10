@@ -87,7 +87,8 @@ uint8_t get8bppRGBColor(uint8_t red, uint8_t green, uint8_t blue) {
 }
 
 // Taken from: http://web.mit.edu/storborg/Public/hsvtorgb.c
-// And modified to work correctly. Integer overflows are bullshit.
+// And modified to work correctly. "Integer overflows are bullshit.", he said
+// the year before he realized how useful they'd be for audio...
 void hsvtorgb(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char h, unsigned char s, unsigned char v) {
     uint16_t region, fpart, p, q, t;
 

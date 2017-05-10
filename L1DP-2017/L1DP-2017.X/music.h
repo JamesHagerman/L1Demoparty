@@ -144,17 +144,21 @@ void config_audio();
 void setSampleRate(SAMPLE_RATES newRate);
 
 void ncoSetFreq(NCO *n, float freq);
-void ncoSetPhase(NCO *n, uint32_t phase);
-void ncoSetNote(NCO *n, uint8_t note);
+void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
+void ncoSetNote(NCO *n, uint8_t note, uint8_t bend);
 
 void ncoInit(NCO *n, float freq, const uint8_t *wavetable);
 void ncoStep(NCO *n);
 
 // Song itself:
 extern const uint8_t chan1[];
+extern const uint8_t chan1Amp[];
 extern const uint8_t chan2[];
+extern const uint8_t chan2Amp[];
 extern const uint8_t chan3[];
+extern const uint8_t chan3Amp[];
 extern const uint8_t chan4[];
+extern const uint8_t chan4Amp[];
 extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
 // NCO Phase table:
