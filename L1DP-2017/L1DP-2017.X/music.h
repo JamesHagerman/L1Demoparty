@@ -126,6 +126,9 @@ typedef enum  {
     HIGH = 44100 // 44100
 } SAMPLE_RATES;
 
+extern uint8_t bpm;
+extern uint8_t noteDivision;
+
 typedef struct {
     uint32_t accumulator;
     uint32_t phase;

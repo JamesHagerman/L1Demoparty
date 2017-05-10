@@ -22,6 +22,11 @@
 
 #define AUDIO_SAMPLE_RATE MEDIUM
 
+uint8_t bpm = 120;
+//uint8_t noteDivision = 4; // quarter notes
+uint8_t noteDivision = 8; // 1/8th notes
+//uint8_t noteDivision = 16; // 1/16th notes
+
 NCO chan1Osc;
 NCO chan2Osc;
 NCO chan3Osc;
@@ -156,7 +161,7 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 
 #if PLAY_DEBUG_SONG
     uint8_t currentMidiNote = song[idx];
-    ncoSetNote(&chan1Osc, currentMidiNote);
+    ncoSetNote(&chan1Osc, currentMidiNote, 0, 0);
 #else
     uint8_t currentMidiNote = chan1[idx];
     uint8_t currentMidiAmp = chan1Amp[idx];
@@ -226,13 +231,28 @@ void config_audio() {
     // Set up timer for stepping through song:
     //
     // We need to figure out how to calculate the tempo here.
-    // currently at about 120 or 121 bpm
-    // But that's with quarter notes
+    // currently at about 120 or 121 bpm: 0.5Hz
+    // But that's with quarter notes so: 2Hz
     // 0x3d09 = 15625
     // prescale is set to 1:256
+    //
+    // First, calculate BPM in Hertz for quarter notes:
+    // (BPM/60*NoteDivisions)
+    // (120/60/4) = 0.5Hz
+    //
+    // Then use the BPM in Hertz to calculate the PR2 value:
+    // 1/( BPM in Hertz/(16MHz/256) )
+    //
+    // So, for 120 bpm with quarter notes (2Hz) we get the following:
+    // 1/(8/(16000000/256)) = 15625
+    //
+    // Complete formula from BPM with Note Divisions:
+    // 1/( (60*NoteDivision/BPM) /16MHz/256)
+
+    PR2 = (uint16_t) 1/(bpm*noteDivision/(float)60/4/62550); // 31250 62550
 
 
-    PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
+//    PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
     /* no nice macros for T2CON :( */
 //    T2CON = 0b0000000000110000; // set T2 on with max prescaler (256)
     T2CONbits.TCKPS = 0b11; // 2 bit: 0b00 = 1:1, 0b01 = 1:8, 0b10 = 1:64, 0b11 = 1:256
