@@ -4,23 +4,8 @@
  *
  * Created on May 25, 2016, 1:18 AM
  */
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <xc.h>
-#include <math.h>
 
-#include "system.h" // declares FCY
-#include <libpic30.h>
-
-#include "serial.h"
-#include "text.h"
-#include "music.h"
-#include "sprites.h"
-#include "drawing_helpers.h"
-#include "color_management.h"
-#include "resolution_management.h"
-#include "fb_control.h"
+#include <stdbool.h>
 
 #ifndef DEMO_MANAGEMENT_H
 #define	DEMO_MANAGEMENT_H
@@ -32,6 +17,7 @@ extern "C" {
 #define MAX_SCENES 5
 
 typedef struct {
+    bool constantScene;
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
     void (*sceneInit)();
@@ -56,8 +42,6 @@ typedef struct {
 extern STORY_STATE story_state;
 
 extern uint16_t frames;
-extern bool ledState;
-extern char jumperMessage[];
 extern char fpsTextBuffer[20];
 
 void addScene();
@@ -66,10 +50,6 @@ void drawCurrentScene();
 void checkSceneFinished();
 
 void drawFPS();
-
-void checkForJumper();
-void setupHardware();
-void statusLED();
 
 #ifdef	__cplusplus
 }

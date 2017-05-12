@@ -1,4 +1,3 @@
-
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,7 +52,9 @@ extern struct Sprite s[MAX_SPRITES];
 
 void ipu_decomp(__eds__ uint8_t *src, __eds__ uint8_t *dst, unsigned long size);
 void loadAllSprites(void);
-void drawSpriteRotation(uint16_t x, uint16_t y, uint8_t id, float rotation);
+
+// Disabled because I don't want to include math.h unless I need to...
+//void drawSpriteRotation(uint16_t x, uint16_t y, uint8_t id, float rotation);
 
 extern __prog__ uint8_t SpriteMap[] __attribute__((space(prog)));
 

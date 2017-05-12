@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
+//#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
@@ -138,25 +138,26 @@ void line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 
 }
 
-void lineFloat(float x1, float y1, float x2, float y2) {
-    //TODO: WHAT THE HELL ARE YOU DOING WITH FLOATS!?!?!?
-    unsigned int i;
-    uint16_t sizeW = 1;
-    uint16_t sizeH = 2*PIX_H;
-    double hl=fabs(x2-x1), vl=fabs(y2-y1), length=(hl>vl)?hl:vl;
-    float deltax=(x2-x1)/(float)length, deltay=(y2-y1)/(float)length;
-    for (i=0; i<(int)length; i++) {
-        unsigned long x=(int)(x1+=deltax), y=(int)(y1+=deltay);
-        if ((x<HOR_RES)&&(y<VER_RES)) {
-            //rcc_color(rand());
-//            rcc_color(0x3);
-            rcc_draw(x, y, sizeW, sizeH);
-//            rcc_draw(x,y, PIX_W,PIX_H);
-            // TODO: fix y displacement
-//            fast_pixel(x,y+6);// + i*PIX_H);
-        }
-    }
-}
+// Disabled because I don't want to include math.h unless I need to...
+//void lineFloat(float x1, float y1, float x2, float y2) {
+//    //TODO: WHAT THE HELL ARE YOU DOING WITH FLOATS!?!?!?
+//    unsigned int i;
+//    uint16_t sizeW = 1;
+//    uint16_t sizeH = 2*PIX_H;
+//    double hl=fabs(x2-x1), vl=fabs(y2-y1), length=(hl>vl)?hl:vl;
+//    float deltax=(x2-x1)/(float)length, deltay=(y2-y1)/(float)length;
+//    for (i=0; i<(int)length; i++) {
+//        unsigned long x=(int)(x1+=deltax), y=(int)(y1+=deltay);
+//        if ((x<HOR_RES)&&(y<VER_RES)) {
+//            //rcc_color(rand());
+////            rcc_color(0x3);
+//            rcc_draw(x, y, sizeW, sizeH);
+////            rcc_draw(x,y, PIX_W,PIX_H);
+//            // TODO: fix y displacement
+////            fast_pixel(x,y+6);// + i*PIX_H);
+//        }
+//    }
+//}
 
 
 void blank_background() {

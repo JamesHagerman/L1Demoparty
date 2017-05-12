@@ -2,18 +2,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
 #include "resolution_management.h"
+#include "text.h"
 #include "sprites.h"
+
+#include "music.h"
 #include "demo_management.h"
+
 #include "intro.h"
 
 // Start Intro scene:
-SCENE introScene = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
+SCENE introScene = {0, 0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
 
 static char titleText[] = "Code MESS";
 char authorText[] = "by:jamisnemo";

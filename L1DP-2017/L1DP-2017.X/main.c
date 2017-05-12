@@ -17,6 +17,7 @@
 #include "text.h"
 #include "sprites.h"
 
+#include "hardware.h"
 #include "music.h"
 #include "serial.h"
 #include "tty.h"
@@ -151,7 +152,10 @@ int main(void) {
         drawCurrentScene();
 
         // Play only if we've got that jumper on r28
-        checkForJumper();
+        checkForPauseJumper();
+        checkForTrackerJumper();
+
+
         if (story_state.storyPlaying == true) {
             frames++;
             checkSceneFinished();

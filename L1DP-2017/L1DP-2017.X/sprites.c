@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
+//#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
@@ -14,7 +14,7 @@
 #include "drawing_helpers.h"
 
 struct Sprite s[MAX_SPRITES];
-static unsigned int shade = 0;
+//static unsigned int shade = 0;
 
 void ipu_decomp(__eds__ uint8_t *src, __eds__ uint8_t *dst, unsigned long size) {
 	G1W1ADRL = (unsigned long)(src);
@@ -61,36 +61,37 @@ int static inline nrange(double a, double b) {
 	return (int)((a >= b) ? a-b : b-a);
 }
 
-void drawSpriteRotation(uint16_t x, uint16_t y, uint8_t id, float rotation) {
-	int x1,y1,x2,y2;
-	unsigned int w,h, real_x, real_y;
-	uint8_t color;
-	float r_s,r_c;
-
-	r_s = sin(rotation);
-	r_c = cos(rotation);
-
-	for (h=0; h < s[id].height; h++) {
-		for (w=0; w < s[id].width; w++) {
-			color = s[id].data[w + s[id].width*h];
-			if (color == s[id].trans) continue;
-			rcc_color(color+shade);
-
-			x1 = -(s[id].width/2-w); // negative for origin centering
-			y1 = (s[id].height/2-h);
-			x2 = x1*r_c - y1*r_s;
-			y2 = x1*r_s + y1*r_c;
-
-			real_x = x+nrange(x1,x2);
-			real_y = y + PIX_H*nrange(y1,y2);
-
-			if (real_x >= HOR_RES-1 || real_x <= 0) continue;
-			if (real_y >= VER_RES-PIX_H || real_y <= 0) continue; // PIX_H for screen bordered setup
-			//rcc_draw(real_x, real_y, 1, PIX_H);
-			fast_pixel(real_x, real_y);
-		}
-	}
-}
+// Disabled because I don't want to include math.h unless I need to...
+//void drawSpriteRotation(uint16_t x, uint16_t y, uint8_t id, float rotation) {
+//	int x1,y1,x2,y2;
+//	unsigned int w,h, real_x, real_y;
+//	uint8_t color;
+//	float r_s,r_c;
+//
+//	r_s = sin(rotation);
+//	r_c = cos(rotation);
+//
+//	for (h=0; h < s[id].height; h++) {
+//		for (w=0; w < s[id].width; w++) {
+//			color = s[id].data[w + s[id].width*h];
+//			if (color == s[id].trans) continue;
+//			rcc_color(color+shade);
+//
+//			x1 = -(s[id].width/2-w); // negative for origin centering
+//			y1 = (s[id].height/2-h);
+//			x2 = x1*r_c - y1*r_s;
+//			y2 = x1*r_s + y1*r_c;
+//
+//			real_x = x+nrange(x1,x2);
+//			real_y = y + PIX_H*nrange(y1,y2);
+//
+//			if (real_x >= HOR_RES-1 || real_x <= 0) continue;
+//			if (real_y >= VER_RES-PIX_H || real_y <= 0) continue; // PIX_H for screen bordered setup
+//			//rcc_draw(real_x, real_y, 1, PIX_H);
+//			fast_pixel(real_x, real_y);
+//		}
+//	}
+//}
 
 
 /*

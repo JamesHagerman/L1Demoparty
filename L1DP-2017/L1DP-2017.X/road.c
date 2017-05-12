@@ -2,18 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
 #include "resolution_management.h"
+#include "text.h"
 #include "sprites.h"
+
 #include "demo_management.h"
+
 #include "road.h"
 
 // Start of road scene
-SCENE roadScene = {0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
+SCENE roadScene = {0, 0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
 
 static uint8_t rotAngle = 0;
 static int currentSpriteIndex = 0;

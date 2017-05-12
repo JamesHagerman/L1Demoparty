@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <xc.h>
 #include <string.h>
-#include <math.h>
-//#include <float.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>

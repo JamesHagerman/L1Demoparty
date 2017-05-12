@@ -2,18 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
 #include "resolution_management.h"
 #include "sprites.h"
+#include "text.h"
+
 #include "demo_management.h"
+
 #include "credits.h"
 
 // Start Credits scene:
-SCENE creditsScene = {0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
+SCENE creditsScene = {0, 0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
 static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
             "Thank you Arko\n" \
             "and everyone at NSL\n" \

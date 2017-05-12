@@ -5,6 +5,8 @@
  * Created on May 17, 2015, 2:37 PM                                                         
  */
 
+#include <stdint.h>
+
 #ifndef RESOLUTION_MANAGEMENT_H
 #define	RESOLUTION_MANAGEMENT_H
 

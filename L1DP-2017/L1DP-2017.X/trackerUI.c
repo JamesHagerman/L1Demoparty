@@ -2,18 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
-#include <math.h>
 
 #include "system.h" // declares FCY
 #include <libpic30.h>
 
 #include "resolution_management.h"
+#include "text.h"
 #include "sprites.h"
+
 #include "demo_management.h"
 
 #include "trackerUI.h"
 
-SCENE trackerScene = {0, 400, &initTracker, &drawTracker, &audioTracker, "Tracker"};
+SCENE trackerScene = {1, 0, 400, &initTracker, &drawTracker, &audioTracker, "Tracker"};
 
 static char titleText[] = "Wavetable Tracker!";
 
