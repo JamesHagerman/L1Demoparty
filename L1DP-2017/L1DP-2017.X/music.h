@@ -154,6 +154,11 @@ void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend);
 void ncoInit(NCO *n, float freq, const uint8_t *wavetable);
 void ncoStep(NCO *n);
 
+extern uint8_t chan1Tracker[128];
+extern uint8_t chan2Tracker[128];
+extern uint8_t chan3Tracker[128];
+extern uint8_t chan4Tracker[128];
+
 // Song itself:
 extern const uint8_t chan1[];
 extern const uint8_t chan1Amp[];

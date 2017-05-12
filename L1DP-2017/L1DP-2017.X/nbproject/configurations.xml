@@ -17,11 +17,11 @@
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.h</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.h</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.h</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.h</itemPath>
       </logicalFolder>
       <itemPath>music.h</itemPath>
       <itemPath>system.h</itemPath>
       <itemPath>serial.h</itemPath>
-      <itemPath>particles.h</itemPath>
       <itemPath>demo_management.h</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/tty.h</itemPath>
     </logicalFolder>
@@ -44,10 +44,10 @@
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>serial.c</itemPath>
-      <itemPath>particles.c</itemPath>
       <itemPath>music.c</itemPath>
       <itemPath>demo_management.c</itemPath>
       <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/tty.c</itemPath>

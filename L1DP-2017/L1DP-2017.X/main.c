@@ -27,6 +27,7 @@
 #include "intro.h"
 #include "road.h"
 #include "credits.h"
+#include "trackerUI.h"
 
 //#include "particles.h"
 //#include "testgfx.h"
@@ -94,8 +95,9 @@ int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
 
 void loadScenes() {
     addScene(introScene);
-//    addScene(roadScene);
-//    addScene(creditsScene);
+    addScene(roadScene);
+    addScene(creditsScene);
+    addScene(trackerScene);
 }
 
 void initDemo() {

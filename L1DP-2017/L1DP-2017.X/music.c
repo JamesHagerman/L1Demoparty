@@ -22,7 +22,7 @@
 
 #define AUDIO_SAMPLE_RATE MEDIUM
 
-uint8_t bpm = 120;
+uint8_t bpm = 160;
 //uint8_t noteDivision = 4; // quarter notes
 uint8_t noteDivision = 8; // 1/8th notes
 //uint8_t noteDivision = 16; // 1/16th notes
@@ -34,6 +34,11 @@ NCO chan4Osc;
 
 uint32_t *currentPhaseTable = phaseTable44100;
 float startingFreq = AUDIO_SAMPLE_RATE;
+
+uint8_t chan1Tracker[128];
+uint8_t chan2Tracker[128];
+uint8_t chan3Tracker[128];
+uint8_t chan4Tracker[128];
 
 const uint8_t chan1[] = {
 //    D4, C4, C4, C4, D4, C4, C4, C4,

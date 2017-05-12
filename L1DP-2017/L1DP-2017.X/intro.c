@@ -15,14 +15,14 @@
 // Start Intro scene:
 SCENE introScene = {0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
 
-char titleText[] = "Code MESS";
+static char titleText[] = "Code MESS";
 char authorText[] = "by:jamisnemo";
 
 uint8_t color = 0;
 // This should be one greater than the index of the last color we care about in
 // the palette for the Crow sprite:
 uint16_t maxY = 474; // 480-PIX_H
-uint8_t clutStart = 5;
+static uint8_t clutStart = 5;
 int speed = 1;
 int dir = 1;
 int xPosition = 0;
