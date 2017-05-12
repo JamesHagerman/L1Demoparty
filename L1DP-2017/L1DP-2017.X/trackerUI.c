@@ -18,6 +18,8 @@ SCENE trackerScene = {1, 0, 400, &initTracker, &drawTracker, &audioTracker, "Tra
 
 static char titleText[] = "Wavetable Tracker!";
 
+static char trackTest[] = "\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
+
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
 
@@ -38,6 +40,7 @@ void initTracker() {
 
 void drawTracker(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
+    chr_print(trackTest, 0, 0);
 }
 
 unsigned char audioTracker(unsigned char t) {
