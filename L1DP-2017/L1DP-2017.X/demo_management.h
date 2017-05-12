@@ -44,6 +44,8 @@ extern STORY_STATE story_state;
 extern uint16_t frames;
 extern char fpsTextBuffer[20];
 
+extern int16_t trackerSceneId;
+
 void addScene();
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();

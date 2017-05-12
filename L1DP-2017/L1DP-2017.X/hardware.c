@@ -13,24 +13,25 @@
 #include "hardware.h"
 
 bool ledState = true;
-char jumperMessage[] = "Please jump R28 to\nto Ground...";
+char jumperMessage[] = "Remove jumper R18...";
+bool forceTrackerScene = false;
 
 // Demo hardware helpers:
 void checkForPauseJumper() {
-    bool jumperOn = ! PORTBbits.RB4; // high = not connected. low = jumper!
+    bool jumperOn = ! PORTBbits.RB5; // high = not connected. low = jumper!
     if (jumperOn ) {
-        story_state.storyPlaying = true;
-    } else {
         story_state.storyPlaying = false;
+    } else {
+        story_state.storyPlaying = true;
     }
 }
 
 void checkForTrackerJumper() {
-    bool jumperOn = ! PORTBbits.RB5; // high = not connected. low = jumper!
+    bool jumperOn = ! PORTBbits.RB4; // high = not connected. low = jumper!
     if (jumperOn) {
-        story_state.storyPlaying = true;
+        forceTrackerScene = true;
     } else {
-        story_state.storyPlaying = false;
+        forceTrackerScene = false;
     }
 }
 

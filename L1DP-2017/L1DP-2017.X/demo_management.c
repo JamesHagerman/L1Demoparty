@@ -4,6 +4,7 @@
 
 #include "resolution_management.h"
 #include "text.h"
+#include "hardware.h"
 
 #include "demo_management.h"
 
@@ -13,11 +14,17 @@ STORY_STATE story_state;
 uint16_t frames = 0;
 char fpsTextBuffer[20]; // Buffer for any text rendering sprintf() calls
 
+int16_t trackerSceneId = -1;
+
 // StoryState management methods:
 void addScene(SCENE newScene) {
     if (story_state.sceneCount+1 <= MAX_SCENES) {
         story_state.scenes[story_state.sceneCount] = newScene;
         story_state.sceneCount++;
+
+        if (newScene.constantScene) {
+            trackerSceneId = story_state.sceneCount - 1;
+        }
     } else {
         printf("Oops! Trying to add too many scenes!\n");
     }
@@ -54,11 +61,29 @@ void checkSceneFinished() {
     // This will check the sceneStartFrame against the frames counter and switch
     // to the next scene if it's time:
     uint8_t id = story_state.currentScene;
-    if (frames > story_state.scenes[id].sceneStartFrame + story_state.scenes[id].sceneLength) {
-        id++;
-        printf("Switching to scene: %i\n", id);
-        switchScene(id);
+    if (story_state.scenes[id].constantScene && forceTrackerScene) {
+
+    } else {
+        // Switch to the next scene either when we have hit the end of the scene
+        // OR if we're on the trackerUI scene (we only get to this if block if
+        // the jumper is on the board anyways)
+        if (frames > story_state.scenes[id].sceneStartFrame + story_state.scenes[id].sceneLength ||
+               story_state.currentScene == trackerSceneId ) {
+            id++;
+
+            // Skip the "constant" scenes (in this case, trackerUI:
+            // TODO: Manage all of this "Dual mode" stuff in a better way. Maybe having
+            // a "Demo mode" and a "Tool mode" that can be switched between using a
+            // jumper is better than trying to hook everything into the scene graph
+            if (story_state.scenes[id].constantScene) {
+                id++;
+            }
+
+            printf("Switching to scene: %i\n", id);
+            switchScene(id);
+        }
     }
+    
 
     // Make sure we reset our frame count to zero after some time. We probably
     // don't want very long scenes. And if we do, we'll just stop calling the

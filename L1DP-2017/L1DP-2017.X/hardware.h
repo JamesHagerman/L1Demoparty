@@ -15,6 +15,8 @@ extern "C" {
 extern bool ledState;
 extern char jumperMessage[];
 
+extern bool forceTrackerScene;
+
 void checkForPauseJumper();
 void checkForTrackerJumper();
 void setupHardware();

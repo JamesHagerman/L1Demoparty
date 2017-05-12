@@ -148,20 +148,25 @@ int main(void) {
         // Manage any newly available data from the serial port:
         serialStoryIndex = handleSerialInput();
 
+        // If the jumper is off, switch to tracker mode:
+        checkForTrackerJumper();
+        if (forceTrackerScene && story_state.currentScene != trackerSceneId) {
+            switchScene(trackerSceneId);
+        }
+
         // Draw the current Scene:
         drawCurrentScene();
 
         // Play only if we've got that jumper on r28
         checkForPauseJumper();
-        checkForTrackerJumper();
-
-
         if (story_state.storyPlaying == true) {
             frames++;
-            checkSceneFinished();
         } else {
-            chr_print(jumperMessage, 2, VER_RES-(21*3));
+            chr_print(jumperMessage, 2, VER_RES-(21*2));
         }
+
+        // Move onto the next scene if we need to:
+        checkSceneFinished();
 
         drawFPS(); // actually draws frames counter value
 
