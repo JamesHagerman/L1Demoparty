@@ -22,10 +22,9 @@
 
 #define AUDIO_SAMPLE_RATE MEDIUM
 
+unsigned short idx = 0; // song position
 uint8_t bpm = 160;
-//uint8_t noteDivision = 4; // quarter notes
-uint8_t noteDivision = 8; // 1/8th notes
-//uint8_t noteDivision = 16; // 1/16th notes
+uint8_t noteDivision = 8;
 
 NCO chan1Osc;
 NCO chan2Osc;
@@ -160,7 +159,7 @@ __prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
 void __attribute__((__interrupt__)) _T2Interrupt(void);
 void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
 {
-    static unsigned short idx = 0;
+//    static unsigned short idx = 0;
 
     // TODO: INTERESTING! Read off the end of the buffer for "music"...
 
@@ -254,8 +253,8 @@ void config_audio() {
     // Complete formula from BPM with Note Divisions:
     // 1/( (60*NoteDivision/BPM) /16MHz/256)
 
-    PR2 = (uint16_t) 1/(bpm*noteDivision/(float)60/4/62550); // 31250 62550
-
+//    PR2 = (uint16_t) 1/(bpm*noteDivision/(float)60/4/62550); // 31250 62550
+    setBPM(bpm, 8);
 
 //    PR2 = 0x3d09; // slower: 0x3d09 faster: 0xf0
     /* no nice macros for T2CON :( */
@@ -320,6 +319,15 @@ void setSampleRate(SAMPLE_RATES newRate) {
     }
 }
 
+void setBPM(uint8_t newBpm, uint8_t newNoteDivision) {
+    bpm = newBpm;
+    // noteDivision = 4; // quarter notes
+    // noteDivision = 8; // 1/8th notes
+    // noteDivision = 16; // 1/16th notes
+    noteDivision = newNoteDivision;
+    PR2 = (uint16_t) 1/(newBpm*noteDivision/(float)60/4/(FCY/256));
+}
+
 void ncoSetFreq(NCO *n, float freq) {
     // Set the phase step parameter of the given NCO struct based on the
     // desired value, given as a float. This changes its frequency in a phase
@@ -362,6 +370,41 @@ void ncoStep(NCO *n) {
     n->value = n->wavetable[index];
     n->accumulator += n->phase;
 }
+
+char *notes[] = {
+    "??", "??", "??", "??",
+    "??", "??", "??", "??",
+    "??", "??", "??", "??",
+    "C0", "Db0", "D0", "Eb0",
+    "E0", "F0", "Gb0", "G0",
+    "Ab0", "A0", "Bb0", "B0",
+    "C1", "Db1", "D1", "Eb1",
+    "E1", "F1", "Gb1", "G1",
+    "Ab1", "A1", "Bb1", "B1",
+    "C2", "Db2", "D2", "Eb2",
+    "E2", "F2", "Gb2", "G2",
+    "Ab2", "A2", "Bb2", "B2",
+    "C3", "Db3", "D3", "Eb3",
+    "E3", "F3", "Gb3", "G3",
+    "Ab3", "A3", "Bb3", "B3",
+    "C4", "Db4", "D4", "Eb4",
+    "E4", "F4", "Gb4", "G4",
+    "Ab4", "A4", "Bb4", "B4",
+    "C5", "Db5", "D5", "Eb5",
+    "E5", "F5", "Gb5", "G5",
+    "Ab5", "A5", "Bb5", "B5",
+    "C6", "Db6", "D6", "Eb6",
+    "E6", "F6", "Gb6", "G6",
+    "Ab6", "A6", "Bb6", "B6",
+    "C7", "Db7", "D7", "Eb7",
+    "E7", "F7", "Gb7", "G7",
+    "Ab7", "A7", "Bb7", "B7",
+    "C8", "Db8", "D8", "Eb8",
+    "E8", "F8", "Gb8", "G8",
+    "Ab8", "A8", "Bb8", "B8",
+    "??", "??", "??", "??",
+    "??", "??", "??", "??",
+};
 
 // NCO Phase table for all MIDI notes, 0-127:
 // Generated with JS script found here:

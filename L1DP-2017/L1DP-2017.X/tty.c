@@ -16,9 +16,14 @@ bool foundCtrlChar = false;
 
 // For some reasons, function pointers shouldn't be declared in the header file:
 int (*stringHandler)(unsigned char *inputBuffer, uint16_t inputSize);
+void (*inputHandler)(uint8_t inputData);
 
 void setStringHandlerCallback(int (*callback)(unsigned char *inputBuffer, uint16_t inputSize)) {
     stringHandler = callback;
+}
+
+void setInputHandlerCallback(void (*callback)(uint8_t inputData)) {
+    inputHandler = callback;
 }
 
 int handleSerialInput() {
@@ -38,7 +43,7 @@ int handleSerialInput() {
 
             //handle number chars:
             if (c == '\n' || c == '\r') {
-                // Handle the string received so far:
+                // Handle the string received so far (find this method in main.c!):
                 stringHandler(uartInputBuffer, uartInputSize);
                 uartInputSize = 0;
                 uartInputBuffer[0] = NULL; // probably don't need to do this...
@@ -71,6 +76,7 @@ int handleSerialInput() {
                             printf("Unkown control character: '%c': %x\r\n", c, c);
                             break;
                     }
+                    inputHandler((uint8_t)c);
                     foundEscChar = false;
                     foundCtrlChar = false;
                 } else {

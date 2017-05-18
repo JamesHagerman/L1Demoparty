@@ -15,7 +15,7 @@
 #include "credits.h"
 
 // Start Credits scene:
-SCENE creditsScene = {0, 0, 400, &initCredits, &drawCredits, &audioCredits, "Credits"};
+SCENE creditsScene = {0, 0, 400, &initCredits, &drawCredits, &audioCredits, &inputCredits, "Credits"};
 static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
             "Thank you Arko\n" \
             "and everyone at NSL\n" \
@@ -24,6 +24,7 @@ static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
             "\n" \
             "Never enough time.\n" \
             "Was it good for u?";
+
 void initCredits() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
@@ -35,5 +36,8 @@ void drawCredits(uint16_t frame) {
 }
 unsigned char audioCredits(unsigned char t) {
     return t & t>>8;
+}
+void inputCredits(uint8_t inputData) {
+    printf("Credits handling input: %i\n", inputData);
 }
 // End of Credits scene

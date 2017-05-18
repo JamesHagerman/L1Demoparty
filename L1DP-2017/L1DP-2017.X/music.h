@@ -120,14 +120,15 @@ extern "C" {
 #define Bb8	118
 #define B8	119
 
+extern unsigned short idx;
+extern uint8_t bpm;
+extern uint8_t noteDivision;
+
 typedef enum  {
     LOW = 11025, // 11025
     MEDIUM = 22050, // 22050
     HIGH = 44100 // 44100
 } SAMPLE_RATES;
-
-extern uint8_t bpm;
-extern uint8_t noteDivision;
 
 typedef struct {
     uint32_t accumulator;
@@ -146,6 +147,7 @@ extern float startingFreq; //
 
 void config_audio();
 void setSampleRate(SAMPLE_RATES newRate);
+void setBPM(uint8_t newBpm, uint8_t noteDivision);
 
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
@@ -158,6 +160,9 @@ extern uint8_t chan1Tracker[128];
 extern uint8_t chan2Tracker[128];
 extern uint8_t chan3Tracker[128];
 extern uint8_t chan4Tracker[128];
+
+// Note lookup:
+extern char *notes[];
 
 // Song itself:
 extern const uint8_t chan1[];

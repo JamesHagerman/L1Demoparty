@@ -16,6 +16,17 @@ extern "C" {
     
 #define MAX_SCENES 5
 
+// TODO: Move this into a ui library at some point:
+typedef struct {
+    uint8_t tabIndex;
+    uint8_t fieldId;
+    char fieldName[10];
+    void (*eventCallback)();
+    bool selected;
+    uint8_t xPos;
+    uint8_t yPos;
+} FIELD;
+
 typedef struct {
     bool constantScene;
     uint16_t sceneStartFrame;
@@ -23,6 +34,7 @@ typedef struct {
     void (*sceneInit)();
     void (*sceneDraw)(uint16_t frame);
     unsigned char (*audioBuilder)(unsigned char t);
+    void (*handleInput)(uint8_t inputData);
     char sceneName[21];
 } SCENE;
 //extern SCENE scene;
@@ -46,10 +58,11 @@ extern char fpsTextBuffer[20];
 
 extern int16_t trackerSceneId;
 
-void addScene();
+void addScene(SCENE newScene);
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
+void emitInputToScene(uint8_t inputData);
 
 void drawFPS();
 

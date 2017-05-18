@@ -16,7 +16,7 @@
 #include "intro.h"
 
 // Start Intro scene:
-SCENE introScene = {0, 0, 400, &initIntro, &drawIntro, &audioIntro, "Intro"};
+SCENE introScene = {0, 0, 400, &initIntro, &drawIntro, &audioIntro, &inputIntro, "Intro"};
 
 static char titleText[] = "Code MESS";
 char authorText[] = "by:jamisnemo";
@@ -140,6 +140,11 @@ void drawIntro(uint16_t frame) {
     }
 
 }
+
+void inputIntro(uint8_t inputData) {
+    printf("Intro handling input: %i\n", inputData);
+}
+
 unsigned char audioIntro(unsigned char t) {
     return t;
 }

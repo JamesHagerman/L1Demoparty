@@ -20,6 +20,7 @@ extern bool foundEscChar;
 extern bool foundCtrlChar;
 
 void setStringHandlerCallback(int (*callback)(unsigned char *inputBuffer, uint16_t inputSize));
+void setInputHandlerCallback(void (*callback)(uint8_t inputData));
 int handleSerialInput();
 
 #ifdef	__cplusplus

@@ -15,7 +15,7 @@
 #include "road.h"
 
 // Start of road scene
-SCENE roadScene = {0, 0, 400, &initRoad, &drawRoad, &audioRoad, "Road"};
+SCENE roadScene = {0, 0, 400, &initRoad, &drawRoad, &audioRoad, &inputRoad, "Road"};
 
 static uint8_t rotAngle = 0;
 static int currentSpriteIndex = 0;
@@ -40,6 +40,11 @@ void initRoad() {
 void drawRoad(uint16_t frame) {
     drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), currentSpriteIndex, rotAngle);
 }
+
+void inputRoad(uint8_t inputData) {
+    printf("Road handling input: %i\n", inputData);
+}
+
 unsigned char audioRoad(unsigned char t) {
     return t/2;
 }

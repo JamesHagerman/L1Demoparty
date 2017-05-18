@@ -19,6 +19,7 @@ static char creditsText[];
     
 void initCredits();
 void drawCredits(uint16_t frame);
+void inputCredits(uint8_t inputData);
 unsigned char audioCredits(unsigned char t);
 
 #ifdef	__cplusplus

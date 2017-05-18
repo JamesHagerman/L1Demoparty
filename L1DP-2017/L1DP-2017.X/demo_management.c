@@ -94,6 +94,12 @@ void checkSceneFinished() {
     }
 }
 
+void emitInputToScene(uint8_t inputData) {
+    uint8_t id = story_state.currentScene;
+    (*story_state.scenes[id].handleInput)(inputData); // Draw this scene
+}
+
+
 // Scene management methods:
 void drawFPS() {
     // TODO: Make this ACTUALLY calculate FPS!!!

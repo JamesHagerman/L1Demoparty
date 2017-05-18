@@ -93,6 +93,11 @@ int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
     return toRet;
 }
 
+void handleInputAction(uint8_t inputData) {
+    printf("Main handling input action: %i\n", inputData);
+    emitInputToScene(inputData);
+}
+
 
 void loadScenes() {
     addScene(introScene);
@@ -106,6 +111,7 @@ void initDemo() {
 
     // Configure TTY/UART input management:
     setStringHandlerCallback(handleInputString);
+    setInputHandlerCallback(handleInputAction);
 
     // Configure graphics:
     blank_background();

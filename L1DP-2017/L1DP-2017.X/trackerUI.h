@@ -16,6 +16,7 @@ extern SCENE trackerScene;
 
 void initTracker();
 void drawTracker(uint16_t frame);
+void inputTracker(uint8_t inputData);
 unsigned char audioTracker(unsigned char t);
 
 
