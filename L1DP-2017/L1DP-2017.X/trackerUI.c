@@ -42,34 +42,33 @@ void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
 }
 
 void inputTracker(EVENT_TYPE inputData) {
-    printf("Tracker handling input: %i\n", inputData);
+//    printf("Tracker handling input: %i\n", inputData);
 
     if (inputData == TAB) {
         currentMode = !currentMode;
         currentField = 0;
-    }
-    if (inputData == SPACE) {
+        printf("\rCurrent mode is: %i\n", currentMode);
+    } else if (inputData == SPACE) {
         // toggle playing
-    }
-    if (inputData == BACKSPACE) {
+        togglePlay();
+    } else if (inputData == BACKSPACE) {
         //rewind to beginning of song
-    }
-    printf("Current field is: %i\n", currentField);
-    printf("Current mode is: %i\n", currentMode);
-
-
-    if (currentMode) {
-        handleNoteInput(inputData);
+        rewindSong();
     } else {
-        handleParameterChanges(inputData);
+        if (currentMode) {
+            handleNoteInput(inputData);
+        } else {
+            handleParameterChanges(inputData);
+        }
     }
 }
 
 void handleNoteInput(EVENT_TYPE inputData) {
-    printf("Handling note input... %i\n", inputData);
+    printf("\rHandling note input... %i\n", inputData);
 }
 void handleParameterChanges(EVENT_TYPE inputData) {
-    printf("Handling paramater changes... %i\n", inputData);
+    printf("\rHandling paramater changes... %i\n", inputData);
+    printf("Current field is: %i\n", currentField);
 }
 
 static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";

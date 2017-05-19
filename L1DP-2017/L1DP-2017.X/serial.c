@@ -32,6 +32,7 @@ unsigned char txBufU2[TX_BUF_SIZE_U2];
 unsigned char *U2TXCharPtr;
 unsigned char *U2RXCharPtr;
 bool dataAvailableU2 = false;
+char c;
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
     IFS0bits.U1RXIF = 0; // Clear interrupt flag
@@ -45,9 +46,17 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
             // Read out the UART FIFO
             while(U1STAbits.URXDA == 1) { // 1 if receive buffer has data, 0 if empty
                 rxBufU1[rxSizeU1] = U1RXREG;
+                c = rxBufU1[rxSizeU1];
 
                 // TODO: Somehow control ECHO programatically:
-                U1TXREG = rxBufU1[rxSizeU1];
+                // TODO: THIS IS A MESS. We get the wrong characters echoed all the damn time!
+                //       Having to handle all the cleanup in the program is a pain...
+                // Only echo stuff we care about (printable characters not space, or newline):
+                // We echo escapes (0x1b) just so the terminal will ignore control characers...
+                if ((c >= '!' && c <= '~') || c == 0x1b) {
+                    U1TXREG = rxBufU1[rxSizeU1];
+                }
+
 //                if (rxBufU1[rxSizeU1] == '\r' || rxBufU1[rxSizeU1] == '\n') {
 //                    dataAvailableU1 = true;
 //                }

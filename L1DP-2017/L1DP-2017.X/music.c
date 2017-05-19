@@ -22,6 +22,7 @@
 
 #define AUDIO_SAMPLE_RATE MEDIUM
 
+bool isPlaying = false;
 unsigned short idx = 0; // song position
 uint8_t bpm = 160;
 uint8_t noteDivision = 8;
@@ -224,6 +225,37 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     _T1IF = 0;
 }
 
+void rewindSong() {
+    printf("Rewinding song...\n");
+    idx = 0;
+}
+
+void togglePlay() {
+    if (isPlaying) {
+        stop();
+    } else {
+        play();
+    }
+}
+
+void stop() {
+    if (isPlaying) {
+        printf("\rStopping song...\n");
+        isPlaying = false;
+        T2CONbits.TON = 0; // turn on the timer for playback
+        _TON  = 0;	// turn on the timer for DSP
+    }
+}
+
+void play() {
+    if (!isPlaying) {
+        printf("\rPlaying song...\n");
+        isPlaying = true;
+        T2CONbits.TON = 1; // turn on the timer for playback
+        _TON  = 1;	// turn on the timer for DSP
+    }
+}
+
 void config_audio() {
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
@@ -298,6 +330,8 @@ void config_audio() {
     _T1IF = 0;	// reset interrupt flag
     _T1IE = 1;	// enable the timer1 interrupt
     _TON  = 1;	// turn on the timer
+
+    isPlaying = true;
 }
 
 void setSampleRate(SAMPLE_RATES newRate) {

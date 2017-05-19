@@ -71,7 +71,7 @@ volatile uint8_t serialStoryIndex = 100;
 // No headerfile = define stuff first:
 int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
     int toRet = -1;
-    printf("Main handling input string: %s\n", inputBuffer);
+//    printf("Main handling input string: %s\n", inputBuffer);
 //    uint16_t i;
 //    for (i = 0; i < inputSize; i++) {
 //        unsigned char c = inputBuffer[i];
@@ -95,7 +95,7 @@ int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
 }
 
 void handleInputAction(EVENT_TYPE inputData) {
-    printf("Main handling input action: %i\n", inputData);
+//    printf("Main handling input action: %i\n", inputData);
     emitInputToScene(inputData);
 }
 

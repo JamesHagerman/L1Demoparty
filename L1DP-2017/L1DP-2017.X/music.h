@@ -3,6 +3,8 @@
    http://www.phy.mtu.edu/~suits/notefreqs.html
    */
 
+#include <stdbool.h>
+
 #ifndef MUSIC_H
 #define	MUSIC_H
 
@@ -120,6 +122,7 @@ extern "C" {
 #define Bb8	118
 #define B8	119
 
+extern bool isPlaying;
 extern unsigned short idx;
 extern uint8_t bpm;
 extern uint8_t noteDivision;
@@ -144,6 +147,11 @@ extern NCO chan3Osc;
 extern NCO chan4Osc;
 
 extern float startingFreq; //
+
+void rewindSong();
+void togglePlay();
+void stop();
+void play();
 
 void config_audio();
 void setSampleRate(SAMPLE_RATES newRate);

@@ -54,7 +54,10 @@ int handleSerialInput() {
                     // Remove the control code character from the text buffer:
                     uartInputSize--;
 
-                    // TODO: Make this handle more complex codes than single characters:
+                    // TODO: Improve the keyboard interface so we don't override the arrow keys!
+                    // Maybe have tab switch fields instead of arrow keys?
+                    // Maybe add "modifier key" support. That would take adding more ctrl chars support...
+                    // TODO: Make this and the control character handling use a single switch statement...
                     switch(c) {
                         case 'A':
                             // up arrow
@@ -106,7 +109,7 @@ int handleSerialInput() {
                         // Next character was not a [ so no control character found!
                         // Someone just hit escape...
                         foundEscChar = false;
-                        printf("Escape key pressed!\n");
+                        printf("\rEscape key pressed!\n");
                     }
                     
                     if (c == 0x01b) {
