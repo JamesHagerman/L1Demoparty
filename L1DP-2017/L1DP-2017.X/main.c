@@ -71,29 +71,30 @@ volatile uint8_t serialStoryIndex = 100;
 // No headerfile = define stuff first:
 int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
     int toRet = -1;
-    uint16_t i;
-    for (i = 0; i < inputSize; i++) {
-        unsigned char c = inputBuffer[i];
-
-        if (c >= '0' && c <= '9') {
-            uint16_t numberValue = (uint16_t)c - 0x30;
-            toRet = numberValue;
-        } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-            printf("A letter!: '%c: %x'\r\n", c, c);
-            if (c == 'r') {
-                printf("Restting frames\r\n");
-                frames = 0;
-            } else if (c == 'e') {
-                printf("Toggling CLUT\r\n");
-                story_state.clutState = !story_state.clutState;
-                _CLUTEN = story_state.clutState;
-            }
-        }
-    }
+    printf("Main handling input string: %s\n", inputBuffer);
+//    uint16_t i;
+//    for (i = 0; i < inputSize; i++) {
+//        unsigned char c = inputBuffer[i];
+//        if (c >= '0' && c <= '9') {
+//            uint16_t numberValue = (uint16_t)c - 0x30;
+//            toRet = numberValue;
+//        } else if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+//            printf("A letter!: '%c: %x'\r\n", c, c);
+//            if (c == 'r') {
+//                printf("Restting frames\r\n");
+//                frames = 0;
+//            } else if (c == 'e') {
+//                printf("Toggling CLUT\r\n");
+//                story_state.clutState = !story_state.clutState;
+//                _CLUTEN = story_state.clutState;
+//            }
+//        }
+//    }
+    emitInputStringToScene(inputBuffer, inputSize);
     return toRet;
 }
 
-void handleInputAction(uint8_t inputData) {
+void handleInputAction(EVENT_TYPE inputData) {
     printf("Main handling input action: %i\n", inputData);
     emitInputToScene(inputData);
 }

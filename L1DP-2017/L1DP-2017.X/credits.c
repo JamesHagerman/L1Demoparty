@@ -15,7 +15,7 @@
 #include "credits.h"
 
 // Start Credits scene:
-SCENE creditsScene = {0, 0, 400, &initCredits, &drawCredits, &audioCredits, &inputCredits, "Credits"};
+SCENE creditsScene = {"Credits", 0, 0, 400, &initCredits, &drawCredits, &audioCredits, &inputStringCredits, &inputCredits};
 static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
             "Thank you Arko\n" \
             "and everyone at NSL\n" \
@@ -37,7 +37,10 @@ void drawCredits(uint16_t frame) {
 unsigned char audioCredits(unsigned char t) {
     return t & t>>8;
 }
-void inputCredits(uint8_t inputData) {
+void inputStringCredits(unsigned char *inputBuffer, uint16_t inputSize) {
+    printf("Credits handling input string: %i, %s\n", inputSize, inputBuffer);
+}
+void inputCredits(EVENT_TYPE inputData) {
     printf("Credits handling input: %i\n", inputData);
 }
 // End of Credits scene

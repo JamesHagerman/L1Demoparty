@@ -45,6 +45,8 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
             // Read out the UART FIFO
             while(U1STAbits.URXDA == 1) { // 1 if receive buffer has data, 0 if empty
                 rxBufU1[rxSizeU1] = U1RXREG;
+
+                // TODO: Somehow control ECHO programatically:
                 U1TXREG = rxBufU1[rxSizeU1];
 //                if (rxBufU1[rxSizeU1] == '\r' || rxBufU1[rxSizeU1] == '\n') {
 //                    dataAvailableU1 = true;

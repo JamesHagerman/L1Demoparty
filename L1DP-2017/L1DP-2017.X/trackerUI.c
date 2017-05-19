@@ -16,20 +16,60 @@
 
 #include "trackerUI.h"
 
-SCENE trackerScene = {1, 0, 400, &initTracker, &drawTracker, &audioTracker, &inputTracker, "Tracker"};
+
+uint8_t fieldCount;
+FIELD sceneFields[128];
+SCENE trackerScene = {"Tracker", 1, 0, 400, &initTracker, &drawTracker, &audioTracker, &inputStringTracker, &inputTracker};
 
 uint8_t headerSize = 3;
 static char titleText[] = "Wavetable Tracker!";
 char outputBuffer[20];
 
+uint8_t currentMode = 0; // 0 is parameter change, 1 is note input mode
+
+uint8_t currentStep = 0;
+uint8_t currentChan = 0;
+
+uint8_t currentField = 0;
 
 
 void drawField(FIELD aField) {
-    printf("Tracker handling input: %s\n", aField.fieldName);
+    printf("Tracker drawing field: %s\n", aField.fieldName);
 }
 
-void inputTracker(uint8_t inputData) {
+void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
+    printf("Tracker handling input string: %s\n", inputBuffer);
+}
+
+void inputTracker(EVENT_TYPE inputData) {
     printf("Tracker handling input: %i\n", inputData);
+
+    if (inputData == TAB) {
+        currentMode = !currentMode;
+        currentField = 0;
+    }
+    if (inputData == SPACE) {
+        // toggle playing
+    }
+    if (inputData == BACKSPACE) {
+        //rewind to beginning of song
+    }
+    printf("Current field is: %i\n", currentField);
+    printf("Current mode is: %i\n", currentMode);
+
+
+    if (currentMode) {
+        handleNoteInput(inputData);
+    } else {
+        handleParameterChanges(inputData);
+    }
+}
+
+void handleNoteInput(EVENT_TYPE inputData) {
+    printf("Handling note input... %i\n", inputData);
+}
+void handleParameterChanges(EVENT_TYPE inputData) {
+    printf("Handling paramater changes... %i\n", inputData);
 }
 
 static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
@@ -58,6 +98,9 @@ void initTracker() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
 
+    // Reset which field we're on...
+    currentField = 0;
+    
     // TODO: Add all of this to a Color API
     _CLUTEN = 0; // disable CLUT before we swap colors
     // TODO: Figure out our synthwave color scheme!

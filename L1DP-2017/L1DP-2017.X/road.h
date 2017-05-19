@@ -18,7 +18,8 @@ extern SCENE roadScene;
 
 void initRoad();
 void drawRoad(uint16_t frame);
-void inputRoad(uint8_t inputData);
+void inputStringRoad(unsigned char *inputBuffer, uint16_t inputSize);
+void inputRoad(EVENT_TYPE inputData);
 unsigned char audioRoad(unsigned char t);
 
 #ifdef	__cplusplus

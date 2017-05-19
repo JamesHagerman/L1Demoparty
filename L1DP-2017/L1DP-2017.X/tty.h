@@ -14,13 +14,24 @@
 extern "C" {
 #endif
 
+typedef enum {
+    None = -1,
+    UP = 0,
+    DOWN,
+    LEFT,
+    RIGHT,
+    TAB,
+    SPACE,
+    BACKSPACE
+} EVENT_TYPE;
+
 extern uint8_t uartInputSize;
 extern unsigned char uartInputBuffer[128];
 extern bool foundEscChar;
 extern bool foundCtrlChar;
 
 void setStringHandlerCallback(int (*callback)(unsigned char *inputBuffer, uint16_t inputSize));
-void setInputHandlerCallback(void (*callback)(uint8_t inputData));
+void setInputHandlerCallback(void (*callback)(EVENT_TYPE inputData));
 int handleSerialInput();
 
 #ifdef	__cplusplus

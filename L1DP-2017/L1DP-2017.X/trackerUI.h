@@ -15,8 +15,13 @@ extern "C" {
 extern SCENE trackerScene;
 
 void initTracker();
+void handleNoteInput(EVENT_TYPE inputData);
+void handleParameterChanges(EVENT_TYPE inputData);
+
+
 void drawTracker(uint16_t frame);
-void inputTracker(uint8_t inputData);
+void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize);
+void inputTracker(EVENT_TYPE inputData);
 unsigned char audioTracker(unsigned char t);
 
 

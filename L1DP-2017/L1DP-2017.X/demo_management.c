@@ -49,7 +49,7 @@ void switchScene(uint8_t nextScene) {
     story_state.scenes[nextScene].sceneStartFrame = frames;
     
     // Init this scene by envoking its init function pointer:
-    (*story_state.scenes[nextScene].sceneInit)(); 
+    (*story_state.scenes[nextScene].sceneInit)();
 }
 
 void drawCurrentScene() {
@@ -94,7 +94,12 @@ void checkSceneFinished() {
     }
 }
 
-void emitInputToScene(uint8_t inputData) {
+void emitInputStringToScene(unsigned char *inputBuffer, uint16_t inputSize) {
+    uint8_t id = story_state.currentScene;
+    (*story_state.scenes[id].handleStringInput)(inputBuffer, inputSize);
+}
+
+void emitInputToScene(EVENT_TYPE inputData) {
     uint8_t id = story_state.currentScene;
     (*story_state.scenes[id].handleInput)(inputData); // Draw this scene
 }

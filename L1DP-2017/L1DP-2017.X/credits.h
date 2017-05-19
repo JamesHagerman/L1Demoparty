@@ -19,7 +19,8 @@ static char creditsText[];
     
 void initCredits();
 void drawCredits(uint16_t frame);
-void inputCredits(uint8_t inputData);
+void inputStringCredits(unsigned char *inputBuffer, uint16_t inputSize);
+void inputCredits(EVENT_TYPE inputData);
 unsigned char audioCredits(unsigned char t);
 
 #ifdef	__cplusplus

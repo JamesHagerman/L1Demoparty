@@ -6,6 +6,7 @@
  */
 
 #include <stdbool.h>
+#include "tty.h"
 
 #ifndef DEMO_MANAGEMENT_H
 #define	DEMO_MANAGEMENT_H
@@ -16,7 +17,7 @@ extern "C" {
     
 #define MAX_SCENES 5
 
-// TODO: Move this into a ui library at some point:
+// TODO: Move this stuff into a ui library at some point:
 typedef struct {
     uint8_t tabIndex;
     uint8_t fieldId;
@@ -28,14 +29,15 @@ typedef struct {
 } FIELD;
 
 typedef struct {
+    char sceneName[21];
     bool constantScene;
     uint16_t sceneStartFrame;
     uint16_t sceneLength;
     void (*sceneInit)();
     void (*sceneDraw)(uint16_t frame);
     unsigned char (*audioBuilder)(unsigned char t);
-    void (*handleInput)(uint8_t inputData);
-    char sceneName[21];
+    void (*handleStringInput)(unsigned char *inputBuffer, uint16_t inputSize);
+    void (*handleInput)(EVENT_TYPE inputData);
 } SCENE;
 //extern SCENE scene;
 
@@ -62,7 +64,8 @@ void addScene(SCENE newScene);
 void switchScene(uint8_t nextScene);
 void drawCurrentScene();
 void checkSceneFinished();
-void emitInputToScene(uint8_t inputData);
+void emitInputStringToScene(unsigned char *inputBuffer, uint16_t inputSize);
+void emitInputToScene(EVENT_TYPE inputData);
 
 void drawFPS();
 

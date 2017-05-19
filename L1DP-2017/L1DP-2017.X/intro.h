@@ -18,7 +18,8 @@ extern SCENE introScene;
 
 void initIntro();
 void drawIntro(uint16_t frame);
-void inputIntro(uint8_t inputData);
+void inputStringIntro(unsigned char *inputBuffer, uint16_t inputSize);
+void inputIntro(EVENT_TYPE inputData);
 unsigned char audioIntro(unsigned char t);
 
 #ifdef	__cplusplus
