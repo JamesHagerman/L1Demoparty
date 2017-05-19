@@ -173,21 +173,21 @@ extern uint8_t chan4Tracker[128];
 extern char *notes[];
 
 // Song itself:
-extern const uint8_t chan1[];
-extern const uint8_t chan1Amp[];
-extern const uint8_t chan2[];
-extern const uint8_t chan2Amp[];
-extern const uint8_t chan3[];
-extern const uint8_t chan3Amp[];
-extern const uint8_t chan4[];
-extern const uint8_t chan4Amp[];
-extern __prog__ const uint32_t song[] __attribute__((space(prog)));
+extern uint8_t chan1[];
+extern uint8_t chan1Amp[];
+extern uint8_t chan2[];
+extern uint8_t chan2Amp[];
+extern uint8_t chan3[];
+extern uint8_t chan3Amp[];
+extern uint8_t chan4[];
+extern uint8_t chan4Amp[];
+//extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
 // NCO Phase table:
 extern uint32_t *currentPhaseTable;
-extern uint32_t phaseTable44100[];
+//extern uint32_t phaseTable44100[];
 extern uint32_t phaseTable22050[];
-extern uint32_t phaseTable11025[];
+//extern uint32_t phaseTable11025[];
 
 // Big wave tables:
 //extern __prog__ const uint8_t sinetable[] __attribute__((space(prog)));

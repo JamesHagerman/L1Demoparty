@@ -25,13 +25,17 @@ uint8_t headerSize = 3;
 static char titleText[] = "Wavetable Tracker!";
 char outputBuffer[20];
 
+// TODO: Add another mode that allows you to change volume per step
 uint8_t currentMode = 0; // 0 is parameter change, 1 is note input mode
 
 uint8_t currentStep = 0;
 uint8_t currentChan = 0;
-
 uint8_t currentField = 0;
 
+static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
+
+// TODO: Make a Color API so we don't have to calculate this:
+static uint8_t clutStart = 5;
 
 void drawField(FIELD aField) {
     printf("Tracker drawing field: %s\n", aField.fieldName);
@@ -47,7 +51,11 @@ void inputTracker(EVENT_TYPE inputData) {
     if (inputData == TAB) {
         currentMode = !currentMode;
         currentField = 0;
-        printf("\rCurrent mode is: %i\n", currentMode);
+        if (currentMode) {
+            printf("\rParameter mode...\n");
+        } else {
+            printf("\rNote mode...\n");
+        }
     } else if (inputData == SPACE) {
         // toggle playing
         togglePlay();
@@ -71,26 +79,50 @@ void handleParameterChanges(EVENT_TYPE inputData) {
     printf("Current field is: %i\n", currentField);
 }
 
-static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
-
-// TODO: Make a Color API so we don't have to calculate this:
-static uint8_t clutStart = 5;
-
 void drawHeader(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
     sprintf(outputBuffer, "\npos\n%03i", idx);
     chr_print(outputBuffer, 0, 0);
     sprintf(outputBuffer, "\nbpm/div\n%03i/%02i",bpm, noteDivision);
     chr_print(outputBuffer, 16, 0);
+    sprintf(outputBuffer, "| 01| 02| 03| 04");
+    chr_print(outputBuffer, 16, charHeight*4);
+
+    // TODO: Add Channel volume control+mute field...
+
+}
+
+void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
+    char *toDraw;
+    uint16_t xOffset = 0;
+    uint16_t yOffset = 0;
+
+    // draw channel one note:
+    toDraw = notes[noteValue];
+    sprintf(outputBuffer, "%s", toDraw);
+    chr_print(outputBuffer, xOffset, yOffset);
 }
 
 void drawNotes() {
-    char *toDraw;
+//    uint8_t i;
+//    for (i = 0; i < 3; i++) {
+    drawNote(chan1[idx+0], 0, 0);
+//        drawNote(chan2[idx], 1);
+//        drawNote(chan3[idx], 2);
+//        drawNote(chan4[idx], 3);
+//    }
+}
 
-    // draw channel one note:
-    toDraw = notes[(chan1[idx])];
-    sprintf(outputBuffer, "\n\n\n%s", toDraw);
-    chr_print(outputBuffer, 0, 0);
+void drawSteps() {
+    uint8_t i;
+    uint16_t xOffset = 0;
+    uint16_t yOffset = charHeight*5; // Define where the steps start from
+
+    for(i = 0; i < 17; i++) {
+        sprintf(outputBuffer, "%03i", idx+i);
+        chr_print(outputBuffer, xOffset, yOffset);
+        yOffset = yOffset + charHeight;
+    }
 }
 
 void initTracker() {
@@ -112,10 +144,10 @@ void initTracker() {
 }
 
 void drawTracker(uint16_t frame) {
-    chr_print(trackTest, 0, 0);
+//    chr_print(trackTest, 0, 0);
     drawHeader(frame);
-
-    drawNotes();
+    drawSteps();
+//    drawNotes();
 }
 
 unsigned char audioTracker(unsigned char t) {

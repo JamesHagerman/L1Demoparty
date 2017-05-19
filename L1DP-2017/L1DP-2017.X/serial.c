@@ -49,8 +49,8 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
                 c = rxBufU1[rxSizeU1];
 
                 // TODO: Somehow control ECHO programatically:
-                // TODO: THIS IS A MESS. We get the wrong characters echoed all the damn time!
-                //       Having to handle all the cleanup in the program is a pain...
+                // TODO: THIS IS A MESS. We get the wrong characters echoed all 
+                // the damn time! It would be better to just NOT ECHO CONTROL CHARS
                 // Only echo stuff we care about (printable characters not space, or newline):
                 // We echo escapes (0x1b) just so the terminal will ignore control characers...
                 if ((c >= '!' && c <= '~') || c == 0x1b) {

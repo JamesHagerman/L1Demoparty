@@ -12,6 +12,8 @@
 #include "color_management.h"
 #include "resolution_management.h"
 
+uint8_t charHeight;
+int maxCharHeight;
 void config_chr(void) {
     while(_CMDFUL) continue;
     G1CMDL = 0xFF; // white
@@ -39,10 +41,14 @@ void config_chr(void) {
     G1CMDL = (HOR_RES & 0xF)<<12 | VER_RES;
     G1CMDH = CHR_TXTAREAEND | (HOR_RES >>4);
     Nop();
+
+    // Characters are 21 REAL pixels tall, and 6 REAL pixels MAXIMUM wide.
+    charHeight = FontStart[6];
+    maxCharHeight = ((int)VER_RES)-charHeight;
 }
 
-// Characters are 21 REAL pixels tall, and 6 REAL pixels MAXIMUM wide.
-int maxCharHeight = ((int)VER_RES)-21;
+
+
 void chr_print(char *c, uint16_t x, uint16_t y) {
 
     if (y > maxCharHeight) {
@@ -71,7 +77,7 @@ void chr_print(char *c, uint16_t x, uint16_t y) {
     }
 }
 
-uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
+uint8_t const FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0x00,           // Font ID
     0x00,           // Font information:  1 bit per pixel, Characters zero degress rotation
     0x20, 0x00,     // First Character
