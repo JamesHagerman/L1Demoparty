@@ -16,7 +16,6 @@
 
 #include "trackerUI.h"
 
-
 SCENE trackerScene = {"Tracker", 1, 0, 400, &initTracker, &drawTracker, &audioTracker, &inputStringTracker, &inputTracker};
 
 uint8_t headerSize = 3;
@@ -32,6 +31,8 @@ int currentChan = 0;
 int currentField = 0;
 uint8_t fieldCount = 3;
 FIELD sceneFields[128];
+
+
 
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
@@ -97,11 +98,21 @@ void handleParameterChanges(EVENT_TYPE inputData) {
 //        currentStep++;
 //    } else
 
-
-
-
-
-
+    switch (currentField) {
+        case 0: // BPM
+            if (inputData == UP) {
+                increaseBPM();
+            } else if (inputData == DOWN) {
+                decreaseBPM();
+            } else
+            break;
+        case 1: // division
+            break;
+        case 2: // length
+            break;
+        default:
+            break;
+    }
 
 
     if (inputData == LEFT && currentField-1 >= 0) {
@@ -113,6 +124,8 @@ void handleParameterChanges(EVENT_TYPE inputData) {
 
 void drawHeader(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
+
+    // TODO: Maybe move each of these into drawField() or use the FIELD
 
     // Print song position:
     sprintf(outputBuffer, "\npos\n%03u", idx);
@@ -146,6 +159,8 @@ void drawHeader(uint16_t frame) {
     // Don't use sprintf() unless you NEED FOR FORMAT TEXT! You need a third
     // parameter or you get a crazy error if optimization is off!
     // sprintf(outputBuffer, "| A | B | C | D |");
+
+    // TODO: Highlight the current channel:
     chr_print("| A | B | C | D |", 16, charHeight*4);
 
 }

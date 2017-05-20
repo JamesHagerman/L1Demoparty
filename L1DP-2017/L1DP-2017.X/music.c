@@ -29,6 +29,8 @@ unsigned short idx = 0; // song position
 uint8_t bpm = 160;
 uint8_t noteDivision = 8;
 
+uint8_t maxBPM = 250;
+
 uint8_t chanCount = 4;
 NCO chan1Osc;
 NCO chan2Osc;
@@ -414,6 +416,20 @@ void setBPM(uint8_t newBpm, uint8_t newNoteDivision) {
     // noteDivision = 16; // 1/16th notes
     noteDivision = newNoteDivision;
     PR2 = (uint16_t) 1/(newBpm*noteDivision/(float)60/4/(FCY/256));
+}
+
+void increaseBPM() {
+    if (bpm+1 < maxBPM) {
+        uint8_t newBpm = bpm + 1;
+        setBPM(newBpm, noteDivision);
+    }
+}
+
+void decreaseBPM() {
+    if (bpm-+1 > 1) {
+        uint8_t newBpm = bpm - 1;
+        setBPM(newBpm, noteDivision);
+    }
 }
 
 void ncoSetFreq(NCO *n, float freq) {
