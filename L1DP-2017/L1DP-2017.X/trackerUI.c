@@ -85,17 +85,18 @@ void drawHeader(uint16_t frame) {
     chr_print(outputBuffer, 0, 0);
     sprintf(outputBuffer, "\nbpm/div\n%03i/%02i",bpm, noteDivision);
     chr_print(outputBuffer, 16, 0);
-    sprintf(outputBuffer, "| 01| 02| 03| 04");
+    sprintf(outputBuffer, "| A | B | C | D |");
     chr_print(outputBuffer, 16, charHeight*4);
 
+    // TODO: Add Song Length field
     // TODO: Add Channel volume control+mute field...
 
 }
 
 void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
     char *toDraw;
-    uint16_t xOffset = 0;
-    uint16_t yOffset = 0;
+    uint16_t xOffset = 18+(14*channel);
+    uint16_t yOffset = charHeight*5+(charHeight*step); // Define where the notes start from
 
     // draw channel one note:
     toDraw = notes[noteValue];
@@ -104,13 +105,13 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
 }
 
 void drawNotes() {
-//    uint8_t i;
-//    for (i = 0; i < 3; i++) {
-    drawNote(chan1[idx+0], 0, 0);
-//        drawNote(chan2[idx], 1);
-//        drawNote(chan3[idx], 2);
-//        drawNote(chan4[idx], 3);
-//    }
+    uint8_t i;
+    for (i = 0; i < 17; i++) {
+        drawNote(chan1[idx+i], 0, 0+i);
+        drawNote(chan2[idx+i], 1, 0+i);
+        drawNote(chan3[idx+i], 2, 0+i);
+        drawNote(chan4[idx+i], 3, 0+i);
+    }
 }
 
 void drawSteps() {
@@ -147,7 +148,7 @@ void drawTracker(uint16_t frame) {
 //    chr_print(trackTest, 0, 0);
     drawHeader(frame);
     drawSteps();
-//    drawNotes();
+    drawNotes();
 }
 
 unsigned char audioTracker(unsigned char t) {

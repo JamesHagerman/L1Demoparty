@@ -61,20 +61,8 @@ uint8_t chan4Tracker[128];
 // any part that repeats could reduce my DATA load... Then I'd have to switch
 // between playing from heap, and playing from user-modifiable arrays...
 //
-
-
-
-
-
-
 // Probably too much work for a demo but it might get us there. Now I need to
 // figure out how much memory load this thing has WHILE RUNNING
-
-
-
-
-
-
 //
 // Shorten or remove some wave tables... But I still need to consider a drum table
 // Bassline can repeat or at least be shorter
@@ -136,10 +124,10 @@ uint8_t chan3Amp[] = {
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
 };
 
 uint8_t chan4[] = {
@@ -156,10 +144,14 @@ uint8_t chan4Amp[] = {
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1
+//    1,1,1,1,1,1,1,1,
+//    1,1,1,1,1,1,1,1,
+//    1,1,1,1,1,1,1,1,
+//    1,1,1,1,1,1,1,1,
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,
 };
 
 // Setting up some tied notes:

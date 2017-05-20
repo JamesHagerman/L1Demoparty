@@ -13,6 +13,7 @@
 #include "resolution_management.h"
 
 uint8_t charHeight;
+uint8_t charWidth = 4;
 int maxCharHeight;
 void config_chr(void) {
     while(_CMDFUL) continue;

@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 extern uint8_t charHeight;
+extern uint8_t charWidth;
 extern int maxCharHeight;
 
 void config_chr(void);
