@@ -35,8 +35,6 @@ bool dataAvailableU2 = false;
 char c;
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
-    IFS0bits.U1RXIF = 0; // Clear interrupt flag
-    
     //Check for UART receive overrun
     if(U1STAbits.OERR == 1) {
         U1STAbits.OERR = 0;
@@ -68,6 +66,7 @@ void __attribute__((__interrupt__, no_auto_psv)) _U1RXInterrupt( void ) {
             // grab from U1RXREG;
         }
     }
+    IFS0bits.U1RXIF = 0; // Clear interrupt flag
 }
 
 void __attribute__((__interrupt__, no_auto_psv)) _U1TXInterrupt(void) {

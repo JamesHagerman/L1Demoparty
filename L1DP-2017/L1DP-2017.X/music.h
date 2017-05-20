@@ -123,7 +123,7 @@ extern "C" {
 #define B8	119
 
 extern bool isPlaying;
-extern unsigned short idx;
+extern short idx;
 extern uint8_t bpm;
 extern uint8_t noteDivision;
 

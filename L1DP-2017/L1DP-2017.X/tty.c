@@ -33,7 +33,7 @@ int handleSerialInput() {
     EVENT_TYPE eventType = None;
     uint16_t i;
     if (dataAvailableU1) {
-//        printf("Got %i chars of data: %s\r\n", rxSize, rx1Buf);
+//        printf("Got %i chars of data\r\n", rxSizeU1);
         dataAvailableU1 = false;
 
         for (i = 0; i < rxSizeU1; i++) {
@@ -109,24 +109,27 @@ int handleSerialInput() {
                         // Next character was not a [ so no control character found!
                         // Someone just hit escape...
                         foundEscChar = false;
-                        printf("\rEscape key pressed!\n");
+                        printf("\rEscape key pressed! Didn't find a control character\n");
                     }
                     
                     if (c == 0x01b) {
                         // Escape found... look out for a 0x5b on the next pass!
+//                        printf("\rESCAPE FOUND. Looking for a [ in the next char...\n");
                         foundEscChar = true;
                     }
                 }
             }
         }
-
+        
         if (foundEscChar) {
             // No more characters, so we don't have a control character.
             // Someone just hit escape...
             foundEscChar = false;
-            printf("Escape key pressed!\r\n");
+            printf("Escape key pressed!\r\n"); // No more data left to be a control character
         }
 
+        // Next pass, we want an empty buffer:
+        uartInputSize = 0;
         reset_buffer();
     }
 

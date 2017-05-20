@@ -73,6 +73,13 @@ void inputTracker(EVENT_TYPE inputData) {
 
 void handleNoteInput(EVENT_TYPE inputData) {
     printf("\rHandling note input... %i\n", inputData);
+
+    // Handle position change (and bound check idx in one go!)
+    if (inputData == UP && idx-1 >= 0 ) {
+        idx--;
+    } else if (inputData == DOWN && idx+1 <= 15 ) {
+        idx++;
+    }
 }
 void handleParameterChanges(EVENT_TYPE inputData) {
     printf("\rHandling paramater changes... %i\n", inputData);
@@ -81,12 +88,16 @@ void handleParameterChanges(EVENT_TYPE inputData) {
 
 void drawHeader(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
-    sprintf(outputBuffer, "\npos\n%03i", idx);
+    sprintf(outputBuffer, "\npos\n%03u", idx);
     chr_print(outputBuffer, 0, 0);
     sprintf(outputBuffer, "\nbpm/div\n%03i/%02i",bpm, noteDivision);
     chr_print(outputBuffer, 16, 0);
-    sprintf(outputBuffer, "| A | B | C | D |");
-    chr_print(outputBuffer, 16, charHeight*4);
+
+    // THIS BREAKS THE COMPILER!
+    // Don't use sprintf() unless you NEED FOR FORMAT TEXT! You need a third
+    // parameter or you get a crazy error if optimization is off!
+    // sprintf(outputBuffer, "| A | B | C | D |");
+    chr_print("| A | B | C | D |", 16, charHeight*4);
 
     // TODO: Add Song Length field
     // TODO: Add Channel volume control+mute field...
@@ -105,6 +116,7 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
 }
 
 void drawNotes() {
+    
     uint8_t i;
     for (i = 0; i < 17; i++) {
         drawNote(chan1[idx+i], 0, 0+i);

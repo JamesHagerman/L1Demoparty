@@ -27,7 +27,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=L1DP-2017.X
 
 # Active Configuration
-DEFAULTCONF=default_optimizations_on
+DEFAULTCONF=no_optimizations
 CONF=${DEFAULTCONF}
 
 # All Configurations

@@ -23,7 +23,7 @@
 #define AUDIO_SAMPLE_RATE MEDIUM
 
 bool isPlaying = false;
-unsigned short idx = 0; // song position
+short idx = 0; // song position
 uint8_t bpm = 160;
 uint8_t noteDivision = 8;
 
