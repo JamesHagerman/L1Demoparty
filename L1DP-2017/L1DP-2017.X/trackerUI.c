@@ -17,8 +17,6 @@
 #include "trackerUI.h"
 
 
-uint8_t fieldCount;
-FIELD sceneFields[128];
 SCENE trackerScene = {"Tracker", 1, 0, 400, &initTracker, &drawTracker, &audioTracker, &inputStringTracker, &inputTracker};
 
 uint8_t headerSize = 3;
@@ -30,9 +28,10 @@ uint8_t currentMode = 0; // 0 is parameter change, 1 is note input mode
 
 int currentStep = 0;
 int currentChan = 0;
-uint8_t currentField = 0;
 
-static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
+int currentField = 0;
+uint8_t fieldCount = 3;
+FIELD sceneFields[128];
 
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
@@ -75,7 +74,7 @@ void handleNoteInput(EVENT_TYPE inputData) {
     printf("\rHandling note input... %i\n", inputData);
 
     // Handle position change (and bound check idx in one go!)
-    if (inputData == UP && currentStep-1 >= 0 ) {
+    if (inputData == UP && currentStep-1 >= 0) {
         currentStep--;
     } else if (inputData == DOWN && currentStep+1 <= 31 ) {
         currentStep++;
@@ -88,23 +87,56 @@ void handleNoteInput(EVENT_TYPE inputData) {
 void handleParameterChanges(EVENT_TYPE inputData) {
     printf("\rHandling paramater changes... %i\n", inputData);
     printf("Current field is: %i\n", currentField);
+
+    // Handle position change (and bound check idx in one go!)
+//    if (inputData == UP && currentStep-1 >= 0) {
+//        currentStep--;
+//    } else if (inputData == DOWN && currentStep+1 <= 31 ) {
+//        currentStep++;
+//    } else
+    if (inputData == LEFT && currentField-1 >= 0) {
+        currentField--;
+    } else if (inputData == RIGHT && currentField+1 <= fieldCount-1) {
+        currentField++;
+    }
 }
 
 void drawHeader(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
+
+    // Print song position:
     sprintf(outputBuffer, "\npos\n%03u", idx);
     chr_print(outputBuffer, 0, 0);
-    sprintf(outputBuffer, "\nbpm/div\n%03i/%02i",bpm, noteDivision);
+
+    // Print BPM field:
+    if (currentField == 0 && !currentMode) {
+        setTextColor(0xf0);
+    }
+    sprintf(outputBuffer, "\nbpm\n%03i",bpm);
     chr_print(outputBuffer, 16, 0);
+    setTextColor(0xff);
+
+    // Print Division field:
+    if (currentField == 1 && !currentMode) {
+        setTextColor(0xf0);
+    }
+    sprintf(outputBuffer, "\ndiv\n%02i", noteDivision);
+    chr_print(outputBuffer, 32, 0);
+    setTextColor(0xff);
+
+    // Print song length field:
+    if (currentField == 2 && !currentMode) {
+        setTextColor(0xf0);
+    }
+    sprintf(outputBuffer, "\nlength\n %03i", songLength);
+    chr_print(outputBuffer, 48, 0);
+    setTextColor(0xff);
 
     // THIS BREAKS THE COMPILER!
     // Don't use sprintf() unless you NEED FOR FORMAT TEXT! You need a third
     // parameter or you get a crazy error if optimization is off!
     // sprintf(outputBuffer, "| A | B | C | D |");
     chr_print("| A | B | C | D |", 16, charHeight*4);
-
-    // TODO: Add Song Length field
-    // TODO: Add Channel volume control+mute field...
 
 }
 
@@ -116,7 +148,7 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
     // draw channel one note:
     toDraw = notes[noteValue];
 
-    if (channel == currentChan && step == currentStep) {
+    if (channel == currentChan && step == currentStep && currentMode) {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "%s", toDraw);
@@ -165,12 +197,14 @@ void initTracker() {
 }
 
 void drawTracker(uint16_t frame) {
-//    chr_print(trackTest, 0, 0);
 
+    // Draw the bird just so we have some proof that the text is transparent:
     drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), 1, 0);
 
     drawHeader(frame);
     drawSteps();
+
+    // TODO: Add Channel volume control+mute collection based on a third mode...
     drawNotes();
 }
 

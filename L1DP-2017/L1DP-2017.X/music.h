@@ -122,6 +122,7 @@ extern "C" {
 #define Bb8	118
 #define B8	119
 
+extern int songLength;
 extern bool isPlaying;
 extern unsigned short idx;
 extern uint8_t bpm;
