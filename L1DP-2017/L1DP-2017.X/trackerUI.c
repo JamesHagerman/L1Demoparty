@@ -88,12 +88,22 @@ void handleParameterChanges(EVENT_TYPE inputData) {
     printf("\rHandling paramater changes... %i\n", inputData);
     printf("Current field is: %i\n", currentField);
 
+
+
     // Handle position change (and bound check idx in one go!)
 //    if (inputData == UP && currentStep-1 >= 0) {
 //        currentStep--;
 //    } else if (inputData == DOWN && currentStep+1 <= 31 ) {
 //        currentStep++;
 //    } else
+
+
+
+
+
+
+
+
     if (inputData == LEFT && currentField-1 >= 0) {
         currentField--;
     } else if (inputData == RIGHT && currentField+1 <= fieldCount-1) {
@@ -140,10 +150,10 @@ void drawHeader(uint16_t frame) {
 
 }
 
-void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
+void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step, uint8_t screenPos) {
     char *toDraw;
     uint16_t xOffset = 18+(14*channel);
-    uint16_t yOffset = charHeight*5+(charHeight*step); // Define where the notes start from
+    uint16_t yOffset = charHeight*5+(charHeight*screenPos); // Define where the notes start from
 
     // draw channel one note:
     toDraw = notes[noteValue];
@@ -159,10 +169,10 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
 void drawNotes() {
     uint8_t i;
     for (i = 0; i < 17; i++) {
-        drawNote(chan1[idx+i], 0, 0+i);
-        drawNote(chan2[idx+i], 1, 0+i);
-        drawNote(chan3[idx+i], 2, 0+i);
-        drawNote(chan4[idx+i], 3, 0+i);
+        drawNote(chan1[idx+i], 0, idx+i, i);
+        drawNote(chan2[idx+i], 1, idx+i, i);
+        drawNote(chan3[idx+i], 2, idx+i, i);
+        drawNote(chan4[idx+i], 3, idx+i, i);
     }
 }
 
