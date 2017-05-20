@@ -67,6 +67,7 @@
 // Variable declarations:
 char projectName[] = "Code MESS";
 volatile uint8_t serialStoryIndex = 100;
+bool demoStart = false;
 
 // No headerfile = define stuff first:
 int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
@@ -167,9 +168,15 @@ int main(void) {
         // Play only if we've got that jumper on r28
         checkForPauseJumper();
         if (story_state.storyPlaying == true) {
+            demoStart = true;
             frames++;
         } else {
             chr_print(jumperMessage, 2, VER_RES-(21*2));
+        }
+
+        // TODO: Do this in a better way. Track "Demo Started" instead of this:
+        if (demoStart && story_state.currentScene != trackerSceneId) {
+            play();
         }
 
         // Move onto the next scene if we need to:

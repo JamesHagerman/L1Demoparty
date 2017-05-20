@@ -48,7 +48,13 @@ void config_chr(void) {
     maxCharHeight = ((int)VER_RES)-charHeight;
 }
 
-
+void setTextColor(uint8_t fontColor) {
+    // TODO: Make sure to hook this into the CLUT in a sane way
+    while(_CMDFUL) continue;
+    G1CMDL = fontColor & 0xFF;
+    G1CMDH = CHR_FGCOLOR;
+    Nop();
+}
 
 void chr_print(char *c, uint16_t x, uint16_t y) {
 

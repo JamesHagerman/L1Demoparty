@@ -28,8 +28,8 @@ char outputBuffer[20];
 // TODO: Add another mode that allows you to change volume per step
 uint8_t currentMode = 0; // 0 is parameter change, 1 is note input mode
 
-uint8_t currentStep = 0;
-uint8_t currentChan = 0;
+int currentStep = 0;
+int currentChan = 0;
 uint8_t currentField = 0;
 
 static char trackTest[] = "\n\n\n\n    | 01| 02| 03| 04\n000 Eb3 D4  G3 D2 \n001\n002\n003\n004\n005\n006\n007\n008\n";
@@ -75,10 +75,14 @@ void handleNoteInput(EVENT_TYPE inputData) {
     printf("\rHandling note input... %i\n", inputData);
 
     // Handle position change (and bound check idx in one go!)
-    if (inputData == UP && idx-1 >= 0 ) {
-        idx--;
-    } else if (inputData == DOWN && idx+1 <= 15 ) {
-        idx++;
+    if (inputData == UP && currentStep-1 >= 0 ) {
+        currentStep--;
+    } else if (inputData == DOWN && currentStep+1 <= 31 ) {
+        currentStep++;
+    } else if (inputData == LEFT && currentChan-1 >= 0) {
+        currentChan--;
+    } else if (inputData == RIGHT && currentChan+1 <= chanCount-1) {
+        currentChan++;
     }
 }
 void handleParameterChanges(EVENT_TYPE inputData) {
@@ -111,12 +115,16 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step) {
 
     // draw channel one note:
     toDraw = notes[noteValue];
+
+    if (channel == currentChan && step == currentStep) {
+        setTextColor(0xf0);
+    }
     sprintf(outputBuffer, "%s", toDraw);
     chr_print(outputBuffer, xOffset, yOffset);
+    setTextColor(0xff);
 }
 
 void drawNotes() {
-    
     uint8_t i;
     for (i = 0; i < 17; i++) {
         drawNote(chan1[idx+i], 0, 0+i);
@@ -158,6 +166,9 @@ void initTracker() {
 
 void drawTracker(uint16_t frame) {
 //    chr_print(trackTest, 0, 0);
+
+    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), 1, 0);
+
     drawHeader(frame);
     drawSteps();
     drawNotes();

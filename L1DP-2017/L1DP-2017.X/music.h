@@ -123,7 +123,7 @@ extern "C" {
 #define B8	119
 
 extern bool isPlaying;
-extern short idx;
+extern unsigned short idx;
 extern uint8_t bpm;
 extern uint8_t noteDivision;
 
@@ -141,6 +141,7 @@ typedef struct {
     uint8_t amplitude;
 } NCO;
 
+extern uint8_t chanCount;
 extern NCO chan1Osc;
 extern NCO chan2Osc;
 extern NCO chan3Osc;

@@ -23,10 +23,11 @@
 #define AUDIO_SAMPLE_RATE MEDIUM
 
 bool isPlaying = false;
-short idx = 0; // song position
+unsigned short idx = 0; // song position
 uint8_t bpm = 160;
 uint8_t noteDivision = 8;
 
+uint8_t chanCount = 4;
 NCO chan1Osc;
 NCO chan2Osc;
 NCO chan3Osc;
@@ -380,8 +381,8 @@ void config_audio() {
     _T1IE = 1;	// enable the timer1 interrupt
 //    _TON  = 1;	// turn on the timer
 
-    // Start playing saved song!
-    play();
+    // We won't start playing until the demo is started
+//    play();
 }
 
 void setSampleRate(SAMPLE_RATES newRate) {
