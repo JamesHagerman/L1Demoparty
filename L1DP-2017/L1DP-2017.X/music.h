@@ -160,6 +160,8 @@ void setSampleRate(SAMPLE_RATES newRate);
 void setBPM(uint8_t newBpm, uint8_t noteDivision);
 void increaseBPM();
 void decreaseBPM();
+void increaseDiv();
+void decreaseDiv();
 
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);

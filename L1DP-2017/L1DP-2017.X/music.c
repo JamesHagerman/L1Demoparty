@@ -419,16 +419,24 @@ void setBPM(uint8_t newBpm, uint8_t newNoteDivision) {
 }
 
 void increaseBPM() {
-    if (bpm+1 < maxBPM) {
-        uint8_t newBpm = bpm + 1;
-        setBPM(newBpm, noteDivision);
+    if (bpm+1 <= maxBPM) {
+        setBPM(bpm + 1, noteDivision);
     }
 }
 
 void decreaseBPM() {
-    if (bpm-+1 > 1) {
-        uint8_t newBpm = bpm - 1;
-        setBPM(newBpm, noteDivision);
+    if (bpm-1 >= 60) {
+        setBPM(bpm - 1, noteDivision);
+    }
+}
+void increaseDiv() {
+    if (noteDivision+1 <= 32) {
+        setBPM(bpm, noteDivision + 1);
+    }
+}
+void decreaseDiv() {
+    if (noteDivision-1 > 0) {
+        setBPM(bpm, noteDivision - 1);
     }
 }
 

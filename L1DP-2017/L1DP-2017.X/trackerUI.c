@@ -87,16 +87,6 @@ void handleNoteInput(EVENT_TYPE inputData) {
 }
 void handleParameterChanges(EVENT_TYPE inputData) {
     printf("\rHandling paramater changes... %i\n", inputData);
-    printf("Current field is: %i\n", currentField);
-
-
-
-    // Handle position change (and bound check idx in one go!)
-//    if (inputData == UP && currentStep-1 >= 0) {
-//        currentStep--;
-//    } else if (inputData == DOWN && currentStep+1 <= 31 ) {
-//        currentStep++;
-//    } else
 
     switch (currentField) {
         case 0: // BPM
@@ -104,9 +94,14 @@ void handleParameterChanges(EVENT_TYPE inputData) {
                 increaseBPM();
             } else if (inputData == DOWN) {
                 decreaseBPM();
-            } else
+            }
             break;
         case 1: // division
+            if (inputData == UP) {
+                increaseDiv();
+            } else if (inputData == DOWN) {
+                decreaseDiv();
+            }
             break;
         case 2: // length
             break;
@@ -114,12 +109,13 @@ void handleParameterChanges(EVENT_TYPE inputData) {
             break;
     }
 
-
     if (inputData == LEFT && currentField-1 >= 0) {
-        currentField--;
+        currentField -= 1;
     } else if (inputData == RIGHT && currentField+1 <= fieldCount-1) {
-        currentField++;
+        currentField += 1;
     }
+    printf("Current field is: %i\n", currentField);
+
 }
 
 void drawHeader(uint16_t frame) {
