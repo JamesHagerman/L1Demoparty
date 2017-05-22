@@ -23,13 +23,16 @@
 #define AUDIO_SAMPLE_RATE MEDIUM
 
 int songLength = 32;
-
 bool isPlaying = false;
 unsigned short idx = 0; // song position
 uint8_t bpm = 160;
 uint8_t noteDivision = 8;
 
+int maxSongLength = 128;
 uint8_t maxBPM = 250;
+uint8_t maxNoteDivision = 32;
+
+bool fuckIt = false;
 
 uint8_t chanCount = 4;
 NCO chan1Osc;
@@ -57,6 +60,17 @@ uint8_t chan4Tracker[128];
 // Brings the total to about 86608 instead of 87376 That shaves off 768 bytes
 //
 // I have 98304 maximum bytes in DATA memory... 87548 words in program memory...
+// Lower 30k of DATA is "non eds" and the upper 60k is EDS internal to the chip.
+//
+// In MPLABX, both Program memory and Data memory are viewable. Data memory is
+// actually called "File Registers" though. I'm not sure if this includes EDS.
+//
+// Reading from PROGRAM memory is easy with the PSV (Program space visibility)
+// flag __psv_
+
+// But writing to Program memory, is difficult. I'd have to burn flash to update
+// the values. Probably not a good idea unless I want to save the song on the
+// device itself.
 //
 // But wait! What if 128 bars is fine for the demo, then add an "upload" method
 // to just load it into RAM?
@@ -82,7 +96,7 @@ uint8_t chan4Tracker[128];
 //
 // Upside is I have a LOT of space for sprites!!
 
-uint8_t chan1[] = {
+uint8_t chan1[128] = {
 //    D4, C4, C4, C4, D4, C4, C4, C4,
 //    D4, C4, B3, B3, B3, B3, B3, B3,
 //    B3, B3, B3, B3, B3, B3,
@@ -92,14 +106,14 @@ uint8_t chan1[] = {
     D5, C5, G4, C5, D5, C5, G4, C5
 };
 
-uint8_t chan1Amp[] = {
+uint8_t chan1Amp[128] = {
     1,1,1,1,2,2,2,2,
     3,3,3,3,4,4,4,4,
     5,5,5,5,6,6,6,6,
     7,7,7,7,8,8,8,8,
 };
 
-uint8_t chan2[] = {
+uint8_t chan2[128] = {
 //    Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,
 //    F3, F3, D3, D3, D3, D3, D3, D3,
 //    D3, D3, D3, D3, D3, D3,
@@ -108,14 +122,14 @@ uint8_t chan2[] = {
     Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,
     Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,
 };
-uint8_t chan2Amp[] = {
+uint8_t chan2Amp[128] = {
     1,1,1,1,2,2,2,2,
     3,3,3,3,4,4,4,4,
     5,5,5,5,6,6,6,6,
     7,7,7,7,8,8,8,8,
 };
 
-uint8_t chan3[] = {
+uint8_t chan3[128] = {
 //    G3, G3, G3, G3, G3, G3, G3, G3,
 //    Ab3,Ab3,G3, G3, G3, G3, G3, G3,
 //    G3, G3, G3, G3, G3, G3,
@@ -124,7 +138,7 @@ uint8_t chan3[] = {
     D5, C5, G5, D5, D5, C5, G5, D5,
     D5, C5, G5, D5, D5, C5, G5, D5
 };
-uint8_t chan3Amp[] = {
+uint8_t chan3Amp[128] = {
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
@@ -135,7 +149,7 @@ uint8_t chan3Amp[] = {
     2,2,2,2,2,2,2,2,
 };
 
-uint8_t chan4[] = {
+uint8_t chan4[128] = {
 //    D2, C2, C2, C2, D2, C2, C2, C2,
 //    D2, C2, B1, B1, B1, B1, B1, B1,
 //    B1, B1, B1, B1, B1, B1,
@@ -144,7 +158,7 @@ uint8_t chan4[] = {
     D5, C5, G5, D5, D5, C5, G5, D5,
     D5, C5, G5, D5, D5, C5, G5, D5
 };
-uint8_t chan4Amp[] = {
+uint8_t chan4Amp[128] = {
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
 //    8,8,8,8,8,8,8,8,
@@ -159,17 +173,18 @@ uint8_t chan4Amp[] = {
     2,2,2,2,2,2,2,2,
 };
 
+// TODO: Get this working
 // Setting up some tied notes:
 //               not tied     tied
 // Channel 1:      1            2
 // Channel 2:      4            8
 // Channel 3:      16           32
 // Channel 4:      64           128
-const uint8_t chanTie[] = {
-    21,  22, 21,  0,  0, 21,  0, 21,
-    0, 21,  0,  0, 21,  0,  0, 21,
-    0,  0, 21,  0,  0, 21,
-};
+//uint8_t chanTie[128] = {
+//    21,  22, 21,  0,  0, 21,  0, 21,
+//    0, 21,  0,  0, 21,  0,  0, 21,
+//    0,  0, 21,  0,  0, 21,
+//};
 
 //__prog__ const uint32_t song[] __attribute__((space(prog), section("SONG"))) = {
 ////    69
@@ -247,9 +262,12 @@ void __attribute__((__interrupt__, auto_psv)) _T2Interrupt(void)
     }
 #else
     // For chan1[] and it's friends
-    if(idx == sizeof(chan1) / sizeof(chan1[0])) {
-        idx = 0;
+    if (!fuckIt) {
+        if(idx >= songLength) {
+            idx = 0;
+        }
     }
+    
 #endif
     _T2IF = 0;
 }
@@ -311,6 +329,10 @@ void play() {
 }
 
 void config_audio() {
+
+    // LOL:
+    fuckIt = false;
+
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
     ncoInit(&chan1Osc, startingFreq, sinetable);
@@ -423,20 +445,33 @@ void increaseBPM() {
         setBPM(bpm + 1, noteDivision);
     }
 }
-
 void decreaseBPM() {
     if (bpm-1 >= 60) {
         setBPM(bpm - 1, noteDivision);
     }
 }
 void increaseDiv() {
-    if (noteDivision+1 <= 32) {
+    if (noteDivision+1 <= maxNoteDivision) {
         setBPM(bpm, noteDivision + 1);
     }
 }
 void decreaseDiv() {
     if (noteDivision-1 > 0) {
         setBPM(bpm, noteDivision - 1);
+    }
+}
+
+void setSongLength(uint8_t newLength) {
+    songLength = newLength;
+}
+void increaseSongLength() {
+    if (songLength+1 <= maxSongLength) {
+        setSongLength(songLength+1);
+    }
+}
+void decreaseSongLength() {
+    if (songLength-1 > 0) {
+        setSongLength(songLength-1);
     }
 }
 

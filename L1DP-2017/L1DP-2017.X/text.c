@@ -84,7 +84,7 @@ void chr_print(char *c, uint16_t x, uint16_t y) {
     }
 }
 
-uint8_t const FontStart[] __attribute__((space(eds), section("FONTS") )) = {
+uint8_t FontStart[] __attribute__((space(eds), section("FONTS") )) = {
     0x00,           // Font ID
     0x00,           // Font information:  1 bit per pixel, Characters zero degress rotation
     0x20, 0x00,     // First Character

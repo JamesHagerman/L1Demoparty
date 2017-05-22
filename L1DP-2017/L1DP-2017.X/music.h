@@ -128,6 +128,12 @@ extern unsigned short idx;
 extern uint8_t bpm;
 extern uint8_t noteDivision;
 
+extern int maxSongLength;
+extern uint8_t maxBPM;
+extern uint8_t maxNoteDivision;
+
+extern bool fuckIt;
+
 typedef enum  {
     LOW = 11025, // 11025
     MEDIUM = 22050, // 22050
@@ -163,6 +169,11 @@ void decreaseBPM();
 void increaseDiv();
 void decreaseDiv();
 
+void setSongLength(uint8_t newLength);
+void increaseSongLength();
+void decreaseSongLength();
+
+
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
 void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend);
@@ -179,14 +190,14 @@ extern uint8_t chan4Tracker[128];
 extern char *notes[];
 
 // Song itself:
-extern uint8_t chan1[];
-extern uint8_t chan1Amp[];
-extern uint8_t chan2[];
-extern uint8_t chan2Amp[];
-extern uint8_t chan3[];
-extern uint8_t chan3Amp[];
-extern uint8_t chan4[];
-extern uint8_t chan4Amp[];
+extern uint8_t chan1[128];
+extern uint8_t chan1Amp[128];
+extern uint8_t chan2[128];
+extern uint8_t chan2Amp[128];
+extern uint8_t chan3[128];
+extern uint8_t chan3Amp[128];
+extern uint8_t chan4[128];
+extern uint8_t chan4Amp[128];
 //extern __prog__ const uint32_t song[] __attribute__((space(prog)));
 
 // NCO Phase table:

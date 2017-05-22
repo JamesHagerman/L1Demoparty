@@ -42,7 +42,13 @@ void drawField(FIELD aField) {
 }
 
 void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
-    printf("Tracker handling input string: %s\n", inputBuffer);
+    printf("\nTracker handling input string: '%s'\n", inputBuffer);
+    
+    char *fuck = "fuck";
+    if ( strcmp((char *)inputBuffer, fuck)) {
+        printf("Fine, fuck it. I'll do what I want.\n");
+        fuckIt = true;
+    }
 }
 
 void inputTracker(EVENT_TYPE inputData) {
@@ -104,6 +110,11 @@ void handleParameterChanges(EVENT_TYPE inputData) {
             }
             break;
         case 2: // length
+            if (inputData == UP) {
+                increaseSongLength();
+            } else if (inputData == DOWN) {
+                decreaseSongLength();
+            }
             break;
         default:
             break;
