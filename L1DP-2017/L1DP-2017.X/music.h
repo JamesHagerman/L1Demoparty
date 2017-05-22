@@ -172,7 +172,7 @@ void decreaseDiv();
 void setSongLength(uint8_t newLength);
 void increaseSongLength();
 void decreaseSongLength();
-
+void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave);
 
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);

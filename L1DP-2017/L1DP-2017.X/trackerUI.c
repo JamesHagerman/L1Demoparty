@@ -23,7 +23,7 @@ static char titleText[] = "Wavetable Tracker!";
 char outputBuffer[20];
 
 // TODO: Add another mode that allows you to change volume per step
-uint8_t currentMode = 0; // 0 is parameter change, 1 is note input mode
+uint8_t currentMode = 0; // 0 is note input mode, 1 is params change mode
 
 int currentStep = 0;
 int currentChan = 0;
@@ -32,7 +32,7 @@ int currentField = 0;
 uint8_t fieldCount = 3;
 FIELD sceneFields[128];
 
-
+uint8_t currentOctave = 4;
 
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
@@ -45,7 +45,7 @@ void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
     printf("\nTracker handling input string: '%s'\n", inputBuffer);
     
     char *fuck = "fuck";
-    if ( strcmp((char *)inputBuffer, fuck)) {
+    if ( strcmp((char *)inputBuffer, fuck) == 0) {
         printf("Fine, fuck it. I'll do what I want.\n");
         fuckIt = true;
     }
@@ -58,9 +58,9 @@ void inputTracker(EVENT_TYPE inputData) {
         currentMode = !currentMode;
         currentField = 0;
         if (currentMode) {
-            printf("\rParameter mode...\n");
-        } else {
             printf("\rNote mode...\n");
+        } else {
+            printf("\rParameter mode...\n");
         }
     } else if (inputData == SPACE) {
         // toggle playing
@@ -77,6 +77,57 @@ void inputTracker(EVENT_TYPE inputData) {
     }
 }
 
+uint8_t keyLookup(uint8_t keyIndex) {
+    switch (keyIndex) {
+        case 'a':
+            return 12;
+        case 'w':
+            return 13;
+        case 's':
+            return 14;
+        case 'e':
+            return 15;
+        case 'd':
+            return 16;
+        case 'f':
+            return 17;
+        case 't':
+            return 18;
+        case 'g':
+            return 19;
+        case 'y':
+            return 20;
+        case 'h':
+            return 21;
+        case 'u':
+            return 22;
+        case 'j':
+            return 23;
+        case 'k':
+            return 24;
+        case 'o':
+            return 25;
+        case 'l':
+            return 26;
+        // End notes
+
+        // Handle octave change:
+        case 'z':
+            break;
+        case 'x':
+            break;
+
+        // Handle amplitude per step change:
+        case 'c':
+            break;
+        case 'v':
+            break;
+        default:
+            break;
+    }
+    return 255;
+}
+
 void handleNoteInput(EVENT_TYPE inputData) {
     printf("\rHandling note input... %i\n", inputData);
 
@@ -89,6 +140,17 @@ void handleNoteInput(EVENT_TYPE inputData) {
         currentChan--;
     } else if (inputData == RIGHT && currentChan+1 <= chanCount-1) {
         currentChan++;
+    }
+
+    if (inputData >= 'a' && inputData <= 'z') {
+        uint8_t noteValue = keyLookup(inputData);
+        printf("\rLooks like you hit a key... %u\n", noteValue);
+
+        if (noteValue <= 26) {
+            changeNote(currentChan, currentStep, noteValue, currentOctave);
+        } else {
+            printf("\r You didn't hit a note, but one of the commands...\n");
+        }
     }
 }
 void handleParameterChanges(EVENT_TYPE inputData) {
@@ -122,11 +184,11 @@ void handleParameterChanges(EVENT_TYPE inputData) {
 
     if (inputData == LEFT && currentField-1 >= 0) {
         currentField -= 1;
+        printf("Current field is: %i\n", currentField);
     } else if (inputData == RIGHT && currentField+1 <= fieldCount-1) {
         currentField += 1;
+        printf("Current field is: %i\n", currentField);
     }
-    printf("Current field is: %i\n", currentField);
-
 }
 
 void drawHeader(uint16_t frame) {

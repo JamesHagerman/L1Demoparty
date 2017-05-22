@@ -50,7 +50,26 @@ int handleSerialInput() {
             } else {
 //                printf("Found character: '%c': %x\r\n", c, c);
                 
-                if ((foundEscChar && foundCtrlChar) || c == '\t' || c == ' ' || c == 0x7f) {
+                if ((foundEscChar && foundCtrlChar) || c == '\t' || c == ' ' || c == 0x7f ||
+//                        strchr("asdfghjkl", c) || strchr("wetyuo", c) ||
+//                        strchr("zx", c) || strchr("cv", c) ) {
+
+                        // Notes (white keys)
+//                        c == 'a' || c == 's' || c == 'd' || c == 'f' ||
+//                        c == 'g' || c == 'h' || c == 'j' || c == 'k' || c == 'l' ||
+//                        // Notes (black keys)
+//                        c == 'w' || c == 'e' || c == 't' || c == 'y' ||
+//                        c == 'u' || c == 'o' ||
+//
+//                        // Octave
+//                        c == 'z' || c == 'x' ||
+//                        // Amplitude
+//                        c == 'c' || c == 'v'
+                        
+                        // da fuck i thinkin
+                        (c >= 'a' && c <= 'z')
+
+                        ) {
                     // Remove the control code character from the text buffer:
                     uartInputSize--;
 
@@ -94,6 +113,32 @@ int handleSerialInput() {
 //                            printf("backspace pressed!\n");
                             eventType = BACKSPACE;
                             break;
+
+                        // TODO: JUST USE FRIGGIN NUMBERS HERE!!!!!!!
+                        case 'a':
+                        case 's':
+                        case 'd':
+                        case 'f':
+                        case 'g':
+                        case 'h':
+                        case 'j':
+                        case 'k':
+                        case 'l':
+                        case 'w':
+                        case 'e':
+                        case 't':
+                        case 'y':
+                        case 'u':
+                        case 'o':
+
+                        case 'z':
+                        case 'x':
+
+                        case 'c':
+                        case 'v':
+                            eventType = c;
+                            break;
+
                         default:
                             printf("Unkown control character: '%c': %x\n", c, c);
                             break;
