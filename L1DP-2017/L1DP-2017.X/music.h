@@ -145,6 +145,7 @@ typedef struct {
     uint32_t phase;
     uint8_t value;
     const uint8_t *wavetable;
+    uint8_t wavetableIndex;
     uint8_t amplitude;
 } NCO;
 
@@ -173,12 +174,15 @@ void setSongLength(uint8_t newLength);
 void increaseSongLength();
 void decreaseSongLength();
 void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp);
+void increaseWavetableIndex(uint8_t chan);
+void decreaseWavetableIndex(uint8_t chan);
+char* getChanWavetableName(uint8_t chan);
 
 void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
 void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend);
 
-void ncoInit(NCO *n, float freq, const uint8_t *wavetable);
+void ncoInit(NCO *n, float freq, uint8_t wavetableIndex);
 void ncoStep(NCO *n);
 
 extern uint8_t chan1Tracker[128];
@@ -207,6 +211,9 @@ extern uint32_t phaseTable22050[];
 //extern uint32_t phaseTable11025[];
 
 // Big wave tables:
+extern const uint8_t waveTableCount;
+extern const uint8_t *wavetables[];
+extern char *wavetableNames[];
 //extern __prog__ const uint8_t sinetable[] __attribute__((space(prog)));
 //extern __prog__ const uint8_t zigzagtable[] __attribute__((space(prog)));
 //extern __prog__ const uint8_t saw[] __attribute__((space(prog)));

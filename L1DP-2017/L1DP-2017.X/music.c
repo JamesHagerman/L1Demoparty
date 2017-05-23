@@ -343,10 +343,10 @@ void config_audio() {
 
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, sinetable);
-    ncoInit(&chan2Osc, startingFreq, sinetable);
-    ncoInit(&chan3Osc, startingFreq, sinetable);
-    ncoInit(&chan4Osc, startingFreq, sinetable);
+    ncoInit(&chan1Osc, startingFreq, 0);
+    ncoInit(&chan2Osc, startingFreq, 0);
+    ncoInit(&chan3Osc, startingFreq, 0);
+    ncoInit(&chan4Osc, startingFreq, 0);
 
     // Set up timer for stepping through song:
     //
@@ -514,6 +514,41 @@ void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_
     ampChanToChange[step] = amp;
 }
 
+void setWavetable(NCO *n, uint8_t wavetableIndex) {
+    n->wavetable = wavetables[wavetableIndex];
+    n->wavetableIndex = wavetableIndex;
+}
+NCO* findChanNCO(uint8_t chan) {
+    switch(chan) {
+        case 0:
+            return &chan1Osc;
+        case 1:
+            return &chan2Osc;
+        case 2:
+            return &chan3Osc;
+        case 3:
+            return &chan4Osc;
+        default:
+            return &chan1Osc;
+    }
+}
+void increaseWavetableIndex(uint8_t chan) {
+    NCO *n = findChanNCO(chan);
+    if (n->wavetableIndex+1 < waveTableCount) {
+        setWavetable(n, n->wavetableIndex+1);
+    }
+}
+void decreaseWavetableIndex(uint8_t chan) {
+    NCO *n = findChanNCO(chan);
+    if (n->wavetableIndex-1 >= 0) {
+        setWavetable(n, n->wavetableIndex-1);
+    }
+}
+char* getChanWavetableName(uint8_t chan) {
+    NCO *n = findChanNCO(chan);
+    return wavetableNames[n->wavetableIndex];
+}
+
 void ncoSetFreq(NCO *n, float freq) {
     // Set the phase step parameter of the given NCO struct based on the
     // desired value, given as a float. This changes its frequency in a phase
@@ -535,11 +570,11 @@ void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend) {
     n->amplitude = amplitude;
 }
 
-void ncoInit(NCO *n, float freq, const uint8_t *wavetable ) {
+void ncoInit(NCO *n, float freq, uint8_t wavetableIndex) {
     // Initialize the oscillator data structure and set the target frequency
     // Frequency must be positive (although I don't check this).
     n->accumulator = 0;
-    n->wavetable = wavetable;
+    setWavetable(n, wavetableIndex);
     n->value = n->wavetable[0];
     n->amplitude = 0; // bit shift amount for final volume
     ncoSetFreq(n, freq);
@@ -704,6 +739,24 @@ uint32_t phaseTable22050[] = {
 //    411085400.0520798, 435529809.9553739, 461427760.1113046, 488865682.5210697
 //};
 
+const uint8_t waveTableCount = 6;
+const uint8_t *wavetables[] = {
+    sinetable,
+    zigzagtable,
+    saw,
+    pulse50,
+    pulse75,
+    noise
+};
+char *wavetableNames[] = {
+  "sine",
+  "zzag",
+  "saw",
+  "p50",
+  "p75",
+  "nse"
+};
+
 //__prog__ const uint8_t sinetable[] __attribute__((space(prog), section("SINE"))) = {
 const uint8_t sinetable[] = {
 0x7f, 0x83, 0x86, 0x89, 0x8c, 0x8f, 0x92, 0x95,
@@ -739,8 +792,6 @@ const uint8_t sinetable[] = {
 0x4f, 0x52, 0x55, 0x58, 0x5a, 0x5d, 0x61, 0x64,
 0x67, 0x6a, 0x6d, 0x70, 0x73, 0x76, 0x79, 0x7c
 };
-
-
 //__prog__ const unsigned char zigzagtable[] __attribute__((space(prog), section("ZIGZAG"))) = {
 const unsigned char zigzagtable[] = {
 0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9, 0xf8,

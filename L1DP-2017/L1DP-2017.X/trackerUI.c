@@ -214,9 +214,9 @@ void handleParameterChanges(EVENT_TYPE inputData) {
         case 5: // Chan3 wavetable
         case 6: // Chan4 wavetable
             if (inputData == UP) {
-                increaseSongLength();
+                increaseWavetableIndex(currentField-3);
             } else if (inputData == DOWN) {
-                decreaseSongLength();
+                decreaseWavetableIndex(currentField-3);
             }
             break;
         default:
@@ -268,29 +268,29 @@ void drawAmpHeader() {
     if (currentField == 3 && !currentMode) {
         setTextColor(0xf0);
     }
-//    sprintf(outputBuffer, "|sine", );
-    chr_print("|sine", 9, charHeight*4);
+    sprintf(outputBuffer, "|%s", getChanWavetableName(0));
+    chr_print(outputBuffer, 9, charHeight*4);
     setTextColor(0xff);
 
     if (currentField == 4 && !currentMode) {
         setTextColor(0xf0);
     }
-//    sprintf(outputBuffer, "|saw", );
-    chr_print("|saw", 27, charHeight*4);
+    sprintf(outputBuffer, "|%s", getChanWavetableName(1));
+    chr_print(outputBuffer, 27, charHeight*4);
     setTextColor(0xff);
 
     if (currentField == 5 && !currentMode) {
         setTextColor(0xf0);
     }
-//    sprintf(outputBuffer, "|sq75", );
-    chr_print("|sq75", 45, charHeight*4);
+    sprintf(outputBuffer, "|%s", getChanWavetableName(2));
+    chr_print(outputBuffer, 45, charHeight*4);
     setTextColor(0xff);
 
     if (currentField == 6 && !currentMode) {
         setTextColor(0xf0);
     }
-//    sprintf(outputBuffer, "|nse", );
-    chr_print("|nse", 63, charHeight*4);
+    sprintf(outputBuffer, "|%s", getChanWavetableName(3));
+    chr_print(outputBuffer, 63, charHeight*4);
     setTextColor(0xff);
 }
 
