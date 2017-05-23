@@ -31,7 +31,7 @@ int currentChan = 0;
 int currentField = 0;
 uint8_t fieldCount = 7;
 FIELD sceneFields[128];
-int viewOffset = 0;
+uint8_t viewOffset = 0;
 bool followPlayback = true;
 
 uint8_t currentOctave = 4;
@@ -81,6 +81,10 @@ void inputTracker(EVENT_TYPE inputData) {
             handleNoteInput(inputData);
         }
     }
+}
+
+void toggleFollow() {
+    followPlayback = !followPlayback;
 }
 
 uint8_t keyLookup(uint8_t keyIndex) {
@@ -141,6 +145,23 @@ uint8_t keyLookup(uint8_t keyIndex) {
             }
             break;
 
+        // Handle if the note display follows the song playback
+        case 'm':
+            toggleFollow();
+            break;
+
+
+
+            // TODO: Add handler to quickly set volumes on notes using numkeys
+
+
+
+
+
+
+
+
+
 //        case 'b':
 //            derp--;
 //            break;
@@ -166,12 +187,20 @@ void handleNoteInput(EVENT_TYPE inputData) {
     // Handle position change (and bound check idx in one go!)
     if (inputData == UP && currentStep-1 >= 0) {
         currentStep--;
-    } else if (inputData == DOWN && currentStep+1 <= 31 ) {
+    } else if (inputData == DOWN && currentStep+1 < songLength ) {
         currentStep++;
     } else if (inputData == LEFT && currentChan-1 >= 0) {
         currentChan--;
     } else if (inputData == RIGHT && currentChan+1 <= chanCount-1) {
         currentChan++;
+    }
+
+    // todo: check followPlayback
+    if (currentStep > viewOffset+16) {
+        viewOffset++;
+    }
+    if (currentStep < viewOffset) {
+        viewOffset--;
     }
 
     if (inputData >= 'a' && inputData <= 'z') {
@@ -246,7 +275,7 @@ void drawParamHeader() {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "\n/%02i", noteDivision);
-    chr_print(outputBuffer, 41, 0);
+    chr_print(outputBuffer, 43, 0);
     setTextColor(0xff);
 
     // Print song length field:
@@ -254,43 +283,42 @@ void drawParamHeader() {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "\nlen:%02X", songLength);
-    chr_print(outputBuffer, 57, 0);
+    chr_print(outputBuffer, 58, 0);
     setTextColor(0xff);
 }
 
 void drawNoteHeader() {
-    sprintf(outputBuffer, "\noct:%i amp:%i", currentOctave, currentAmp);
-    chr_print(outputBuffer, 16, 0);
+    sprintf(outputBuffer, "\noct:%i amp:%i fol:%i", currentOctave, currentAmp, followPlayback);
+    chr_print(outputBuffer, 13, 0);
 }
 
 void drawAmpHeader() {
-//    chr_print("|sine|saw|sq75|nse |", 9, charHeight*4);
     if (currentField == 3 && !currentMode) {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "|%s", getChanWavetableName(0));
-    chr_print(outputBuffer, 9, charHeight*4);
+    chr_print(outputBuffer, 9, charHeight*3);
     setTextColor(0xff);
 
     if (currentField == 4 && !currentMode) {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "|%s", getChanWavetableName(1));
-    chr_print(outputBuffer, 27, charHeight*4);
+    chr_print(outputBuffer, 27, charHeight*3);
     setTextColor(0xff);
 
     if (currentField == 5 && !currentMode) {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "|%s", getChanWavetableName(2));
-    chr_print(outputBuffer, 45, charHeight*4);
+    chr_print(outputBuffer, 45, charHeight*3);
     setTextColor(0xff);
 
     if (currentField == 6 && !currentMode) {
         setTextColor(0xf0);
     }
     sprintf(outputBuffer, "|%s", getChanWavetableName(3));
-    chr_print(outputBuffer, 63, charHeight*4);
+    chr_print(outputBuffer, 63, charHeight*3);
     setTextColor(0xff);
 }
 
@@ -308,7 +336,7 @@ void drawHeader(uint16_t frame) {
     // Don't use sprintf() unless you NEED FOR FORMAT TEXT! You need a third
     // parameter or you get a crazy error if optimization is off!
     // sprintf(outputBuffer, "| A | B | C | D |");
-    chr_print("| A  | B  | C  | D  |", 9, charHeight*3);
+    chr_print("| A  | B  | C  | D  |", 9, charHeight*2);
     drawAmpHeader();
 
     // TODO: Maybe move each of these into drawField() or use the FIELD
@@ -320,9 +348,6 @@ void drawHeader(uint16_t frame) {
         case 1:
             drawNoteHeader();
             break;
-        case 2:
-            break;
-            drawAmpHeader();
         default:
             break;
     }
@@ -353,11 +378,17 @@ void drawNote(uint8_t noteValue, uint8_t ampValue, uint8_t channel, uint8_t step
 
 void drawNotes() {
     uint8_t i;
+    uint8_t offset;
     for (i = 0; i < 17; i++) {
-        drawNote(chan1[idx+i], chan1Amp[idx+i], 0, idx+i, i);
-        drawNote(chan2[idx+i], chan2Amp[idx+i], 1, idx+i, i);
-        drawNote(chan3[idx+i], chan3Amp[idx+i], 2, idx+i, i);
-        drawNote(chan4[idx+i], chan4Amp[idx+i], 3, idx+i, i);
+        if (followPlayback) {
+            offset = idx+i;
+        } else {
+            offset = i + viewOffset;
+        }
+        drawNote(chan1[offset], chan1Amp[offset], 0, offset, i);
+        drawNote(chan2[offset], chan2Amp[offset], 1, offset, i);
+        drawNote(chan3[offset], chan3Amp[offset], 2, offset, i);
+        drawNote(chan4[offset], chan4Amp[offset], 3, offset, i);
     }
 }
 
@@ -365,10 +396,24 @@ void drawSteps() {
     uint8_t i;
     uint16_t xOffset = 0;
     uint16_t yOffset = charHeight*5; // Define where the steps start from
+    uint8_t offset;
 
     for(i = 0; i < 17; i++) {
-        sprintf(outputBuffer, "%02x", idx+i);
+        if (followPlayback) {
+            offset = idx+i;
+            if (i == 0) {
+                setTextColor(0xf0);
+            }
+        } else {
+            offset = i + viewOffset;
+            if (offset == idx) {
+                setTextColor(0xf0);
+            }
+        }
+
+        sprintf(outputBuffer, "%02x", offset);
         chr_print(outputBuffer, xOffset, yOffset);
+        setTextColor(0xff);
         yOffset = yOffset + charHeight;
     }
 }
