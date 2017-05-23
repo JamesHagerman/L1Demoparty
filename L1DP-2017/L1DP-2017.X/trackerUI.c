@@ -37,8 +37,8 @@ bool followPlayback = true;
 uint8_t currentOctave = 4;
 uint8_t currentAmp = 2;
 
-//uint8_t derp = 14;
-//uint8_t lerp = 18;
+//uint8_t derp = 32;
+//uint8_t lerp = 48;
 
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
@@ -148,11 +148,12 @@ uint8_t keyLookup(uint8_t keyIndex) {
 //            derp++;
 //            break;
 //        case 'q':
-//            lerp++;
-//            break;
-//        case 'r':
 //            lerp--;
 //            break;
+//        case 'r':
+//            lerp++;
+//            break;
+
         default:
             break;
     }
@@ -236,34 +237,30 @@ void drawParamHeader() {
     if (currentField == 0 && !currentMode) {
         setTextColor(0xf0);
     }
-    sprintf(outputBuffer, "\nbpm\n%03i",bpm);
-    chr_print(outputBuffer, 16, 0);
+    sprintf(outputBuffer, "\nbpm:%03i",bpm);
+    chr_print(outputBuffer, 13, 0);
     setTextColor(0xff);
 
     // Print Division field:
     if (currentField == 1 && !currentMode) {
         setTextColor(0xf0);
     }
-    sprintf(outputBuffer, "\ndiv\n%02i", noteDivision);
-    chr_print(outputBuffer, 32, 0);
+    sprintf(outputBuffer, "\n/%02i", noteDivision);
+    chr_print(outputBuffer, 41, 0);
     setTextColor(0xff);
 
     // Print song length field:
     if (currentField == 2 && !currentMode) {
         setTextColor(0xf0);
     }
-    sprintf(outputBuffer, "\nlength\n %03i", songLength);
-    chr_print(outputBuffer, 48, 0);
+    sprintf(outputBuffer, "\nlen:%02X", songLength);
+    chr_print(outputBuffer, 57, 0);
     setTextColor(0xff);
 }
 
 void drawNoteHeader() {
-    sprintf(outputBuffer, "\noctave: %i", currentOctave);
+    sprintf(outputBuffer, "\noct:%i amp:%i", currentOctave, currentAmp);
     chr_print(outputBuffer, 16, 0);
-    sprintf(outputBuffer, "\n\n amp: -%i", currentAmp);
-    chr_print(outputBuffer, 16, 0);
-
-//    printf("ugh %i, %i\n", derp, lerp);
 }
 
 void drawAmpHeader() {
@@ -300,8 +297,10 @@ void drawAmpHeader() {
 void drawHeader(uint16_t frame) {
     chr_print(titleText, 0, 0); // x, y are bounded in chr_print
 
+//    printf("ugh %i, %i\n", derp, lerp);
+
     // Print song position:
-    sprintf(outputBuffer, "\npos\n%03u", idx);
+    sprintf(outputBuffer, "\npos\n%02x  ", idx);
     chr_print(outputBuffer, 0, 0);
 
     // Print chan headers:
