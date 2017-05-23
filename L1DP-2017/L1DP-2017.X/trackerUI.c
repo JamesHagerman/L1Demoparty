@@ -29,10 +29,16 @@ int currentStep = 0;
 int currentChan = 0;
 
 int currentField = 0;
-uint8_t fieldCount = 3;
+uint8_t fieldCount = 7;
 FIELD sceneFields[128];
+int viewOffset = 0;
+bool followPlayback = true;
 
 uint8_t currentOctave = 4;
+uint8_t currentAmp = 2;
+
+//uint8_t derp = 14;
+//uint8_t lerp = 18;
 
 // TODO: Make a Color API so we don't have to calculate this:
 static uint8_t clutStart = 5;
@@ -69,10 +75,10 @@ void inputTracker(EVENT_TYPE inputData) {
         //rewind to beginning of song
         rewindSong();
     } else {
-        if (currentMode) {
-            handleNoteInput(inputData);
-        } else {
+        if (currentMode == 0){
             handleParameterChanges(inputData);
+        } else if (currentMode == 1) {
+            handleNoteInput(inputData);
         }
     }
 }
@@ -113,15 +119,40 @@ uint8_t keyLookup(uint8_t keyIndex) {
 
         // Handle octave change:
         case 'z':
+            if (currentOctave-1 >= 0) {
+                currentOctave-=1;
+            }
             break;
         case 'x':
+            if (currentOctave+1 <= 8) {
+                currentOctave+=1;
+            }
             break;
 
         // Handle amplitude per step change:
         case 'c':
+            if (currentAmp+1 <= 8) {
+                currentAmp+=1;
+            }
             break;
         case 'v':
+            if (currentAmp-1 >= 0) {
+                currentAmp-=1;
+            }
             break;
+
+//        case 'b':
+//            derp--;
+//            break;
+//        case 'n':
+//            derp++;
+//            break;
+//        case 'q':
+//            lerp++;
+//            break;
+//        case 'r':
+//            lerp--;
+//            break;
         default:
             break;
     }
@@ -147,12 +178,11 @@ void handleNoteInput(EVENT_TYPE inputData) {
         printf("\rLooks like you hit a key... %u\n", noteValue);
 
         if (noteValue <= 26) {
-            changeNote(currentChan, currentStep, noteValue, currentOctave);
-        } else {
-            printf("\r You didn't hit a note, but one of the commands...\n");
+            changeNote(currentChan, currentStep, noteValue, currentOctave, currentAmp);
         }
     }
 }
+
 void handleParameterChanges(EVENT_TYPE inputData) {
     printf("\rHandling paramater changes... %i\n", inputData);
 
@@ -178,6 +208,16 @@ void handleParameterChanges(EVENT_TYPE inputData) {
                 decreaseSongLength();
             }
             break;
+        case 3: // Chan1 wavetable
+        case 4: // Chan2 wavetable
+        case 5: // Chan3 wavetable
+        case 6: // Chan4 wavetable
+            if (inputData == UP) {
+                increaseSongLength();
+            } else if (inputData == DOWN) {
+                decreaseSongLength();
+            }
+            break;
         default:
             break;
     }
@@ -191,15 +231,7 @@ void handleParameterChanges(EVENT_TYPE inputData) {
     }
 }
 
-void drawHeader(uint16_t frame) {
-    chr_print(titleText, 0, 0); // x, y are bounded in chr_print
-
-    // TODO: Maybe move each of these into drawField() or use the FIELD
-
-    // Print song position:
-    sprintf(outputBuffer, "\npos\n%03u", idx);
-    chr_print(outputBuffer, 0, 0);
-
+void drawParamHeader() {
     // Print BPM field:
     if (currentField == 0 && !currentMode) {
         setTextColor(0xf0);
@@ -223,25 +255,95 @@ void drawHeader(uint16_t frame) {
     sprintf(outputBuffer, "\nlength\n %03i", songLength);
     chr_print(outputBuffer, 48, 0);
     setTextColor(0xff);
+}
 
+void drawNoteHeader() {
+    sprintf(outputBuffer, "\noctave: %i", currentOctave);
+    chr_print(outputBuffer, 16, 0);
+    sprintf(outputBuffer, "\n\n amp: -%i", currentAmp);
+    chr_print(outputBuffer, 16, 0);
+
+//    printf("ugh %i, %i\n", derp, lerp);
+}
+
+void drawAmpHeader() {
+//    chr_print("|sine|saw|sq75|nse |", 9, charHeight*4);
+    if (currentField == 3 && !currentMode) {
+        setTextColor(0xf0);
+    }
+//    sprintf(outputBuffer, "|sine", );
+    chr_print("|sine", 9, charHeight*4);
+    setTextColor(0xff);
+
+    if (currentField == 4 && !currentMode) {
+        setTextColor(0xf0);
+    }
+//    sprintf(outputBuffer, "|saw", );
+    chr_print("|saw", 27, charHeight*4);
+    setTextColor(0xff);
+
+    if (currentField == 5 && !currentMode) {
+        setTextColor(0xf0);
+    }
+//    sprintf(outputBuffer, "|sq75", );
+    chr_print("|sq75", 45, charHeight*4);
+    setTextColor(0xff);
+
+    if (currentField == 6 && !currentMode) {
+        setTextColor(0xf0);
+    }
+//    sprintf(outputBuffer, "|nse", );
+    chr_print("|nse", 63, charHeight*4);
+    setTextColor(0xff);
+}
+
+void drawHeader(uint16_t frame) {
+    chr_print(titleText, 0, 0); // x, y are bounded in chr_print
+
+    // Print song position:
+    sprintf(outputBuffer, "\npos\n%03u", idx);
+    chr_print(outputBuffer, 0, 0);
+
+    // Print chan headers:
     // THIS BREAKS THE COMPILER!
     // Don't use sprintf() unless you NEED FOR FORMAT TEXT! You need a third
     // parameter or you get a crazy error if optimization is off!
     // sprintf(outputBuffer, "| A | B | C | D |");
+    chr_print("| A  | B  | C  | D  |", 9, charHeight*3);
+    drawAmpHeader();
 
-    // TODO: Highlight the current channel:
-    chr_print("| A | B | C | D |", 16, charHeight*4);
+    // TODO: Maybe move each of these into drawField() or use the FIELD
 
+    switch(currentMode){
+        case 0:
+            drawParamHeader();
+            break;
+        case 1:
+            drawNoteHeader();
+            break;
+        case 2:
+            break;
+            drawAmpHeader();
+        default:
+            break;
+    }
+    
 }
 
-void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step, uint8_t screenPos) {
+
+void drawNote(uint8_t noteValue, uint8_t ampValue, uint8_t channel, uint8_t step, uint8_t screenPos) {
     char *toDraw;
-    uint16_t xOffset = 18+(14*channel);
+    uint16_t xOffset = 14+(18*channel);
     uint16_t yOffset = charHeight*5+(charHeight*screenPos); // Define where the notes start from
 
-    // draw channel one note:
-    toDraw = notes[noteValue];
+    // draw channel amp:
+    setTextColor(0x1e);
+    sprintf(outputBuffer, "%i", ampValue);
+    chr_print(outputBuffer, xOffset-4, yOffset);
+    setTextColor(0xff);
 
+    // draw channel note:
+    toDraw = notes[noteValue];
     if (channel == currentChan && step == currentStep && currentMode) {
         setTextColor(0xf0);
     }
@@ -253,10 +355,10 @@ void drawNote(uint8_t noteValue, uint8_t channel, uint8_t step, uint8_t screenPo
 void drawNotes() {
     uint8_t i;
     for (i = 0; i < 17; i++) {
-        drawNote(chan1[idx+i], 0, idx+i, i);
-        drawNote(chan2[idx+i], 1, idx+i, i);
-        drawNote(chan3[idx+i], 2, idx+i, i);
-        drawNote(chan4[idx+i], 3, idx+i, i);
+        drawNote(chan1[idx+i], chan1Amp[idx+i], 0, idx+i, i);
+        drawNote(chan2[idx+i], chan2Amp[idx+i], 1, idx+i, i);
+        drawNote(chan3[idx+i], chan3Amp[idx+i], 2, idx+i, i);
+        drawNote(chan4[idx+i], chan4Amp[idx+i], 3, idx+i, i);
     }
 }
 
@@ -266,7 +368,7 @@ void drawSteps() {
     uint16_t yOffset = charHeight*5; // Define where the steps start from
 
     for(i = 0; i < 17; i++) {
-        sprintf(outputBuffer, "%03i", idx+i);
+        sprintf(outputBuffer, "%02x", idx+i);
         chr_print(outputBuffer, xOffset, yOffset);
         yOffset = yOffset + charHeight;
     }

@@ -483,20 +483,25 @@ void decreaseSongLength() {
     }
 }
 
-void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave) {
+void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp) {
     uint8_t *chanToChange;
+    uint8_t *ampChanToChange;
     switch (chan) {
         case 0:
             chanToChange = chan1;
+            ampChanToChange = chan1Amp;
             break;
         case 1:
             chanToChange = chan2;
+            ampChanToChange = chan2Amp;
             break;
         case 2:
             chanToChange = chan3;
+            ampChanToChange = chan3Amp;
             break;
         case 3:
             chanToChange = chan4;
+            ampChanToChange = chan4Amp;
             break;
         default:
             printf("\rI... I don't have that channel!!\n");
@@ -506,6 +511,7 @@ void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave) {
     printf("CHANGING NOTE!, %u: %u\n", note, octave);
     // Set new note and octave value at selected step:
     chanToChange[step] = note+(12*octave);
+    ampChanToChange[step] = amp;
 }
 
 void ncoSetFreq(NCO *n, float freq) {

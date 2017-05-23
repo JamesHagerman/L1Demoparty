@@ -114,33 +114,33 @@ int handleSerialInput() {
                             eventType = BACKSPACE;
                             break;
 
-                        // TODO: JUST USE FRIGGIN NUMBERS HERE!!!!!!!
-                        case 'a':
-                        case 's':
-                        case 'd':
-                        case 'f':
-                        case 'g':
-                        case 'h':
-                        case 'j':
-                        case 'k':
-                        case 'l':
-                        case 'w':
-                        case 'e':
-                        case 't':
-                        case 'y':
-                        case 'u':
-                        case 'o':
-
-                        case 'z':
-                        case 'x':
-
-                        case 'c':
-                        case 'v':
-                            eventType = c;
-                            break;
+//                        case 'a':
+//                        case 's':
+//                        case 'd':
+//                        case 'f':
+//                        case 'g':
+//                        case 'h':
+//                        case 'j':
+//                        case 'k':
+//                        case 'l':
+//                        case 'w':
+//                        case 'e':
+//                        case 't':
+//                        case 'y':
+//                        case 'u':
+//                        case 'o':
+//
+//                        case 'z':
+//                        case 'x':
+//
+//                        case 'c':
+//                        case 'v':
+//                            eventType = c;
+//                            break;
 
                         default:
-                            printf("Unkown control character: '%c': %x\n", c, c);
+//                            printf("Unkown control character: '%c': %x\n", c, c);
+                            eventType = c;
                             break;
                     }
                     inputHandler(eventType);
