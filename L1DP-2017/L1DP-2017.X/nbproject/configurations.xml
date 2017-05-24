@@ -14,10 +14,9 @@
         <itemPath>text.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="scenes" projectFiles="true">
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.h</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.h</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro2017.h</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits2017.h</itemPath>
       </logicalFolder>
       <itemPath>music.h</itemPath>
       <itemPath>system.h</itemPath>
@@ -42,10 +41,9 @@
         <itemPath>text.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="scenes" projectFiles="true">
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/road.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits.c</itemPath>
         <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.c</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro2017.c</itemPath>
+        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits2017.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>serial.c</itemPath>
@@ -261,6 +259,7 @@
         <property key="UART 3" value="true"/>
         <property key="UART 4" value="true"/>
         <property key="UCNFG1" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

@@ -25,9 +25,8 @@
 #include "demo_management.h"
 
 // Include all scene definitions:
-#include "intro.h"
-#include "road.h"
-#include "credits.h"
+#include "intro2017.h"
+#include "credits2017.h"
 #include "trackerUI.h"
 
 //#include "particles.h"
@@ -102,9 +101,10 @@ void handleInputAction(EVENT_TYPE inputData) {
 
 
 void loadScenes() {
-    addScene(introScene);
-    addScene(roadScene);
-    addScene(creditsScene);
+    // access the SCENE by including it's header file
+    // NOTE: BE SURE TO REMOVE SCENES WE ARE NOT USING FROM THE PROJECT!!
+    addScene(intro2017);
+//    addScene(credits2017);
     addScene(trackerScene);
 }
 

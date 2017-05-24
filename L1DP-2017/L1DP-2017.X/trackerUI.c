@@ -32,7 +32,7 @@ int currentField = 0;
 uint8_t fieldCount = 7;
 FIELD sceneFields[128];
 uint8_t viewOffset = 0;
-bool followPlayback = false;
+bool followPlayback = true;
 
 uint8_t currentOctave = 4;
 uint8_t currentAmp = 2;
@@ -456,7 +456,7 @@ void initTracker() {
 void drawTracker(uint16_t frame) {
 
     // Draw the bird just so we have some proof that the text is transparent:
-    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), 1, 0);
+//    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), 1, 0);
 
     drawHeader(frame);
     drawSteps();
