@@ -220,6 +220,8 @@ extern uint32_t phaseTable22050[];
 extern const uint8_t waveTableCount;
 extern const uint8_t *wavetables[];
 extern char *wavetableNames[];
+
+// TODO: Leave these in program space, then copy them into ram
 //extern __prog__ const uint8_t sinetable[] __attribute__((space(prog)));
 //extern __prog__ const uint8_t zigzagtable[] __attribute__((space(prog)));
 //extern __prog__ const uint8_t saw[] __attribute__((space(prog)));
@@ -233,6 +235,7 @@ extern const uint8_t saw[];
 extern const uint8_t pulse50[];
 extern const uint8_t pulse75[];
 extern const uint8_t noise[];
+extern const uint8_t drum[];
 
 #ifdef	__cplusplus
 }

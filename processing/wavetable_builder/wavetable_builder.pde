@@ -34,14 +34,14 @@ void setup() {
     //hexOut = round(iAdj);
     
     // PWM
-    int iAdj = round(map(i, 0, tableSize, 0, 255));
-    if (i <= tableSize*0.5) {
-      val = 255;
-    } else {
-      val = 0;
-    }
-    point(i, val);
-    hexOut = round(val);
+    //int iAdj = round(map(i, 0, tableSize, 0, 255));
+    //if (i <= tableSize*0.5) {
+    //  val = 255;
+    //} else {
+    //  val = 0;
+    //}
+    //point(i, val);
+    //hexOut = round(val);
 
     // Noise
     //int iAdj = round(map(i, 0, tableSize, 0, 255));
@@ -49,6 +49,11 @@ void setup() {
     //point(i, val);
     //hexOut = round(val);
     
+    // Drum
+    float degrees = map(i, 0, tableSize/4, 0, 360);
+    val = (255-i/2)*cos(radians(degrees-90));
+    point(i, zeroDb - val);
+    hexOut = round(map(val, -(255/2), (255/2), 0, 255)); // Convert our height to a 0-255 range int:
     
     
 //    System.out.printf("%f\n", val);
