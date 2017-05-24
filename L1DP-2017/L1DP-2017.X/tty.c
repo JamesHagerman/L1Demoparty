@@ -67,7 +67,8 @@ int handleSerialInput() {
 //                        c == 'c' || c == 'v'
                         
                         // da fuck i thinkin
-                        (c >= 'a' && c <= 'z')
+                        (c >= 'a' && c <= 'z') ||
+                        (c >= '0' && c <= '9')
 
                         ) {
                     // Remove the control code character from the text buffer:
@@ -113,30 +114,6 @@ int handleSerialInput() {
 //                            printf("backspace pressed!\n");
                             eventType = BACKSPACE;
                             break;
-
-//                        case 'a':
-//                        case 's':
-//                        case 'd':
-//                        case 'f':
-//                        case 'g':
-//                        case 'h':
-//                        case 'j':
-//                        case 'k':
-//                        case 'l':
-//                        case 'w':
-//                        case 'e':
-//                        case 't':
-//                        case 'y':
-//                        case 'u':
-//                        case 'o':
-//
-//                        case 'z':
-//                        case 'x':
-//
-//                        case 'c':
-//                        case 'v':
-//                            eventType = c;
-//                            break;
 
                         default:
 //                            printf("Unkown control character: '%c': %x\n", c, c);

@@ -88,6 +88,7 @@ void toggleFollow() {
 }
 
 uint8_t keyLookup(uint8_t keyIndex) {
+    uint8_t newAmp;
     switch (keyIndex) {
         case 'a':
             return 12;
@@ -145,23 +146,28 @@ uint8_t keyLookup(uint8_t keyIndex) {
             }
             break;
 
-        // Handle if the note display follows the song playback
-        case 'm':
+        case 'n': // Print song to uart for manually saving:
+            printSongForSave();
+            break;
+        
+        case 'm': // Handle if the note display follows the song playback
             toggleFollow();
             break;
 
+        case '1': // set current note amplitude to 1 (full volume)
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8': // set current note amplitude to 8 (turn note off)
+            newAmp = keyIndex - 48;
+            changeAmplitude(currentChan, currentStep, newAmp);
+            break;
 
-
-            // TODO: Add handler to quickly set volumes on notes using numkeys
-
-
-
-
-
-
-
-
-
+        // TODO: Add shifted numkeys handler to set octaves
+            
 //        case 'b':
 //            derp--;
 //            break;
@@ -182,7 +188,8 @@ uint8_t keyLookup(uint8_t keyIndex) {
 }
 
 void handleNoteInput(EVENT_TYPE inputData) {
-    printf("\rHandling note input... %i\n", inputData);
+//    printf("\rHandling note input... %i\n", inputData);
+    printf("\r\n");
 
     // Handle position change (and bound check idx in one go!)
     if (inputData == UP && currentStep-1 >= 0) {
@@ -203,9 +210,9 @@ void handleNoteInput(EVENT_TYPE inputData) {
         viewOffset--;
     }
 
-    if (inputData >= 'a' && inputData <= 'z') {
+    if ((inputData >= 'a' && inputData <= 'z') || (inputData >= '0' && inputData <= '9')) {
         uint8_t noteValue = keyLookup(inputData);
-        printf("\rLooks like you hit a key... %u\n", noteValue);
+//        printf("\rLooks like you hit a key... %u\n", noteValue);
 
         if (noteValue <= 26) {
             changeNote(currentChan, currentStep, noteValue, currentOctave, currentAmp);
@@ -214,7 +221,8 @@ void handleNoteInput(EVENT_TYPE inputData) {
 }
 
 void handleParameterChanges(EVENT_TYPE inputData) {
-    printf("\rHandling paramater changes... %i\n", inputData);
+//    printf("\rHandling paramater changes... %i\n", inputData);
+    printf("\r\n");
 
     switch (currentField) {
         case 0: // BPM

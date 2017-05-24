@@ -483,35 +483,95 @@ void decreaseSongLength() {
     }
 }
 
-void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp) {
-    uint8_t *chanToChange;
-    uint8_t *ampChanToChange;
+uint8_t* findAmpChan(uint8_t chan) {
+    uint8_t *ampChanToChange = NULL;
     switch (chan) {
         case 0:
-            chanToChange = chan1;
             ampChanToChange = chan1Amp;
             break;
         case 1:
-            chanToChange = chan2;
             ampChanToChange = chan2Amp;
             break;
         case 2:
-            chanToChange = chan3;
             ampChanToChange = chan3Amp;
             break;
         case 3:
-            chanToChange = chan4;
             ampChanToChange = chan4Amp;
             break;
         default:
             printf("\rI... I don't have that channel!!\n");
-            return;
+            break;
     }
+    return ampChanToChange;
+}
 
+uint8_t* findNoteChan(uint8_t chan) {
+    uint8_t *chanToChange = NULL;
+    switch (chan) {
+        case 0:
+            chanToChange = chan1;
+            break;
+        case 1:
+            chanToChange = chan2;
+            break;
+        case 2:
+            chanToChange = chan3;
+            break;
+        case 3:
+            chanToChange = chan4;
+            break;
+        default:
+            printf("\rI... I don't have that channel!!\n");
+            break;
+    }
+    return chanToChange;
+}
+
+void changeAmplitude(uint8_t chan, uint8_t step, uint8_t amp) {
+    uint8_t *ampChanToChange = findAmpChan(chan);
+    ampChanToChange[step] = amp;
+}
+
+void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp) {
+    uint8_t *chanToChange = findNoteChan(chan);
+    uint8_t *ampChanToChange = findAmpChan(chan);
     printf("CHANGING NOTE!, %u: %u\n", note, octave);
     // Set new note and octave value at selected step:
     chanToChange[step] = note+(12*octave);
     ampChanToChange[step] = amp;
+}
+
+void printSongForSave() {
+    uint8_t noteValue = 0;
+    uint8_t *noteChan = NULL;
+    uint8_t *ampChan = NULL;
+
+    printf("\nTrying to print song to terminal to... \"save\" it!\n");
+    printf("Note: you may want to do this a few times. Terminal output is iffy and might drop stuff.\n\n");
+
+    // iterators:
+    uint8_t channelToPrint;
+    uint8_t stepToPrint;
+    for (channelToPrint = 0; channelToPrint < chanCount; channelToPrint++) {
+        printf("\n\nPrinting channel %i:\n", channelToPrint+1);
+        noteChan = findNoteChan(channelToPrint);
+        ampChan = findAmpChan(channelToPrint);
+        
+        // Print notes:
+        printf(" Printing notes:\n");
+        for (stepToPrint = 0; stepToPrint < songLength; stepToPrint++) {
+            noteValue = noteChan[stepToPrint];
+            printf("\"%s\",", notes[noteValue]);
+        }
+
+        // Print Amplitude values:
+        printf("\n Amplitude values:\n");
+        for (stepToPrint = 0; stepToPrint < songLength; stepToPrint++) {
+            printf("%i,", ampChan[stepToPrint]);
+        }
+    }
+
+    printf("\nDone!\n");
 }
 
 void setWavetable(NCO *n, uint8_t wavetableIndex) {

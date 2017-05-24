@@ -173,7 +173,13 @@ void decreaseDiv();
 void setSongLength(uint8_t newLength);
 void increaseSongLength();
 void decreaseSongLength();
+
+uint8_t* findAmpChan(uint8_t chan);
+uint8_t* findNoteChan(uint8_t chan);
+void changeAmplitude(uint8_t chan, uint8_t step, uint8_t amp);
 void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp);
+void printSongForSave();
+
 void increaseWavetableIndex(uint8_t chan);
 void decreaseWavetableIndex(uint8_t chan);
 char* getChanWavetableName(uint8_t chan);
