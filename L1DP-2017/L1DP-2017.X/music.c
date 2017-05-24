@@ -97,44 +97,18 @@ uint8_t chan4Tracker[128];
 // Upside is I have a LOT of space for sprites!!
 
 uint8_t chan1[128] = {
-//    D4, C4, C4, C4, D4, C4, C4, C4,
-//    D4, C4, B3, B3, B3, B3, B3, B3,
-//    B3, B3, B3, B3, B3, B3,
-    D5, C5, G4, C5, D5, C5, G4, C5,
-    D5, C5, G4, C5, D5, C5, G4, C5,
-    D5, C5, G4, C5, D5, C5, G4, C5,
-    D5, C5, G4, C5, D5, C5, G4, C5
+    C4,Db4,E4,F4,G4,Ab4,G4,F4,E4,C4,G4,G4,G4,G4,G4,G4,D5,C5,G4,C5,D5,C5,G4,C5,D5,C5,G4,C5,D5,C5,G4,C5
 };
 
 uint8_t chan1Amp[128] = {
-//    1,1,1,1,2,2,2,2,
-//    3,3,3,3,4,4,4,4,
-//    5,5,5,5,6,6,6,6,
-//    7,7,7,7,8,8,8,8,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
+    2,2,2,2,2,2,2,2,2,2,2,2,2,3,4,5,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
 };
 
 uint8_t chan2[128] = {
-//    Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,Eb3,
-//    F3, F3, D3, D3, D3, D3, D3, D3,
-//    D3, D3, D3, D3, D3, D3,
-     C4, C4, C4, C4, C4, C4, C4, C4,
-    Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,
-    Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,Ab3,
-    Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,
+    C4,C4,C4,C4,C4,C4,C4,C4,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,Bb3,G4,G4,G4,G4,G4,Ab4,Ab4,Ab4,Ab4,F4,F4,F4,E4,E4,E4,Db4,C4
 };
 uint8_t chan2Amp[128] = {
-//    1,1,1,1,2,2,2,2,
-//    3,3,3,3,4,4,4,4,
-//    5,5,5,5,6,6,6,6,
-//    7,7,7,7,8,8,8,8,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
-    2,2,2,2,2,2,2,2,
+    8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 };
 
 uint8_t chan3[128] = {
@@ -158,27 +132,10 @@ uint8_t chan3Amp[128] = {
 };
 
 uint8_t chan4[128] = {
-//    D2, C2, C2, C2, D2, C2, C2, C2,
-//    D2, C2, B1, B1, B1, B1, B1, B1,
-//    B1, B1, B1, B1, B1, B1,
-    D5, C5, G5, D5, D5, C5, G5, D5,
-    D5, C5, G5, D5, D5, C5, G5, D5,
-    D5, C5, G5, D5, D5, C5, G5, D5,
-    D5, C5, G5, D5, D5, C5, G5, D5
+    C0,C5,C3,C3,C0,C0,C3,D5,C0,C5,C0,D5,C0,C0,C0,D5,C0,C5,C0,C0,C0,C0,C0,D5,C0,C5,C0,D5,D5,C0,C0,D5
 };
 uint8_t chan4Amp[128] = {
-    8,8,8,8,8,8,8,8,
-    8,8,8,8,8,8,8,8,
-    8,8,8,8,8,8,8,8,
-    8,8,8,8,8,8,8,8
-//    1,1,1,1,1,1,1,1,
-//    1,1,1,1,1,1,1,1,
-//    1,1,1,1,1,1,1,1,
-//    1,1,1,1,1,1,1,1,
-//    2,2,2,2,2,2,2,2,
-//    2,2,2,2,2,2,2,2,
-//    2,2,2,2,2,2,2,2,
-//    2,2,2,2,2,2,2,2,
+    2,8,2,8,8,2,2,8,2,8,2,8,8,2,2,8,2,8,2,8,8,2,2,8,2,8,2,8,8,2,2,8
 };
 
 // TODO: Get this working
@@ -343,10 +300,10 @@ void config_audio() {
 
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, 0);
-    ncoInit(&chan2Osc, startingFreq, 0);
+    ncoInit(&chan1Osc, startingFreq, 1);
+    ncoInit(&chan2Osc, startingFreq, 2);
     ncoInit(&chan3Osc, startingFreq, 0);
-    ncoInit(&chan4Osc, startingFreq, 0);
+    ncoInit(&chan4Osc, startingFreq, 5);
 
     // Set up timer for stepping through song:
     //
@@ -556,18 +513,26 @@ void printSongForSave() {
         printf("\n\nPrinting channel %i:\n", channelToPrint+1);
         noteChan = findNoteChan(channelToPrint);
         ampChan = findAmpChan(channelToPrint);
-        
+
+        printf("Channel was using wavetable: %s\n", getChanWavetableName(channelToPrint));
+
         // Print notes:
-        printf(" Printing notes:\n");
+        printf("Printing notes:\n\t");
         for (stepToPrint = 0; stepToPrint < songLength; stepToPrint++) {
             noteValue = noteChan[stepToPrint];
-            printf("\"%s\",", notes[noteValue]);
+            printf("%s,", notes[noteValue]);
+//            if (stepToPrint%4 == 3) {
+//                printf("\n\t");
+//            }
         }
 
         // Print Amplitude values:
-        printf("\n Amplitude values:\n");
+        printf("\n Amplitude values:\n\t");
         for (stepToPrint = 0; stepToPrint < songLength; stepToPrint++) {
             printf("%i,", ampChan[stepToPrint]);
+//            if (stepToPrint%4 == 3) {
+//                printf("\n\t");
+//            }
         }
     }
 
@@ -809,12 +774,12 @@ const uint8_t *wavetables[] = {
     noise
 };
 char *wavetableNames[] = {
-  "sine",
-  "zzag",
-  "saw",
-  "p50",
-  "p75",
-  "nse"
+  "sine", // 0
+  "zzag", // 1
+  "saw",  // 2
+  "p50",  // 3
+  "p75",  // 4
+  "nse"   // 5
 };
 
 //__prog__ const uint8_t sinetable[] __attribute__((space(prog), section("SINE"))) = {

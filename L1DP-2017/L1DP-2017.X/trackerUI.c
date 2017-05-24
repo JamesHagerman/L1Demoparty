@@ -32,7 +32,7 @@ int currentField = 0;
 uint8_t fieldCount = 7;
 FIELD sceneFields[128];
 uint8_t viewOffset = 0;
-bool followPlayback = true;
+bool followPlayback = false;
 
 uint8_t currentOctave = 4;
 uint8_t currentAmp = 2;
@@ -369,9 +369,14 @@ void drawNote(uint8_t noteValue, uint8_t ampValue, uint8_t channel, uint8_t step
     uint16_t yOffset = charHeight*5+(charHeight*screenPos); // Define where the notes start from
 
     // draw channel amp:
+
     setTextColor(0x1e);
-    sprintf(outputBuffer, "%i", ampValue);
-    chr_print(outputBuffer, xOffset-4, yOffset);
+    if (ampValue != 8) {
+        sprintf(outputBuffer, "%i", ampValue);
+        chr_print(outputBuffer, xOffset-4, yOffset);
+    } else {
+        chr_print("-", xOffset-4, yOffset);
+    }
     setTextColor(0xff);
 
     // draw channel note:
@@ -379,8 +384,12 @@ void drawNote(uint8_t noteValue, uint8_t ampValue, uint8_t channel, uint8_t step
     if (channel == currentChan && step == currentStep && currentMode) {
         setTextColor(0xf0);
     }
-    sprintf(outputBuffer, "%s", toDraw);
-    chr_print(outputBuffer, xOffset, yOffset);
+    if (ampValue != 8) {
+        sprintf(outputBuffer, "%s", toDraw);
+        chr_print(outputBuffer, xOffset, yOffset);
+    } else {
+        chr_print("--", xOffset, yOffset);
+    }
     setTextColor(0xff);
 }
 
