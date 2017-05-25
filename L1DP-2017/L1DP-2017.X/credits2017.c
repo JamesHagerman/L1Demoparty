@@ -21,8 +21,11 @@ static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
             "that helps make\n" \
             "LayerOne happen!\n" \
             "\n" \
-            "Never enough time.\n" \
-            "Was it good for u?";
+            "Hope the music was\n" \
+            "alright!\n\n" \
+            "PLEASE make a demo\n" \
+            "and show up DG/JK\n" \
+            "next year!!";
 
 static void init() {
     int sceneId = story_state.currentScene;

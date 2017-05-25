@@ -186,7 +186,7 @@ int main(void) {
         // Move onto the next scene if we need to:
         checkSceneFinished();
 
-        drawFPS(); // actually draws frames counter value
+//        drawFPS(); // actually draws frames counter value
 
         // End frame drawing
         frameEnd();

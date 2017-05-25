@@ -13,13 +13,12 @@
 #include "music.h"
 
 #include "demo_management.h"
-
+#include "shared.h"
 #include "trackerUI.h"
 
-SCENE trackerScene = {"Tracker", 1, 0, 400, &initTracker, &drawTracker, &audioTracker, &inputStringTracker, &inputTracker};
 
 uint8_t headerSize = 3;
-static char titleText[] = "Wavetable Tracker!";
+static char trackerTitleText[] = "Wavetable Tracker!";
 char outputBuffer[20];
 
 // TODO: Add another mode that allows you to change volume per step
@@ -40,14 +39,11 @@ uint8_t currentAmp = 2;
 //uint8_t derp = 32;
 //uint8_t lerp = 48;
 
-// TODO: Make a Color API so we don't have to calculate this:
-static uint8_t clutStart = 5;
-
 void drawField(FIELD aField) {
     printf("Tracker drawing field: %s\n", aField.fieldName);
 }
 
-void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
+static void inputString(unsigned char *inputBuffer, uint16_t inputSize) {
     printf("\nTracker handling input string: '%s'\n", inputBuffer);
     
     char *fuck = "fuck";
@@ -57,7 +53,7 @@ void inputStringTracker(unsigned char *inputBuffer, uint16_t inputSize) {
     }
 }
 
-void inputTracker(EVENT_TYPE inputData) {
+static void input(EVENT_TYPE inputData) {
 //    printf("Tracker handling input: %i\n", inputData);
 
     if (inputData == TAB) {
@@ -331,7 +327,7 @@ void drawAmpHeader() {
 }
 
 void drawHeader(uint16_t frame) {
-    chr_print(titleText, 0, 0); // x, y are bounded in chr_print
+    chr_print(trackerTitleText, 0, 0); // x, y are bounded in chr_print
 
 //    printf("ugh %i, %i\n", derp, lerp);
 
@@ -435,7 +431,7 @@ void drawSteps() {
     }
 }
 
-void initTracker() {
+static void init() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
 
@@ -453,10 +449,51 @@ void initTracker() {
     _CLUTEN = 1; // enable the CLUT for this scene
 }
 
-void drawTracker(uint16_t frame) {
+static void draw(uint16_t frame) {
 
     // Draw the bird just so we have some proof that the text is transparent:
 //    drawSprite(2, VER_RES-(25*PIX_H)-(20*PIX_H), 1, 0);
+
+//    if (frame != 0 ) {
+//        // NOTE: We have to be careful because i goes to VER_RES, but we can't
+//        // draw on the 480th row. So we have to go until 1 pixel short!
+//        for (i = 0; i < (VER_RES-sizeH); i+=sizeH) {
+//            color = chan1Osc.value;
+//            if (color < clutStart) {
+//                color = clutStart;
+//            }
+//            newValue = map(chan1Osc.value, 0, 0xff, 0, HOR_RES/4);
+//            rcc_color(color);
+//            rcc_draw(newValue, i, sizeW, sizeH);
+//        }
+//        for (i = 0; i < (VER_RES-sizeH); i+=sizeH) {
+//            color = chan2Osc.value;
+//            if (color < clutStart) {
+//                color = clutStart;
+//            }
+//            newValue = map(chan2Osc.value, 0, 0xff, 0, HOR_RES/4);
+//            rcc_color(color);
+//            rcc_draw(newValue+(HOR_RES/4), i, sizeW, sizeH);
+//        }
+//        for (i = 0; i < (VER_RES-sizeH); i+=sizeH) {
+//            color = chan3Osc.value;
+//            if (color < clutStart) {
+//                color = clutStart;
+//            }
+//            newValue = map(chan3Osc.value, 0, 0xff, 0, HOR_RES/4);
+//            rcc_color(color);
+//            rcc_draw(newValue+(HOR_RES/4)*2, i, sizeW, sizeH);
+//        }
+//        for (i = 0; i < (VER_RES-sizeH); i+=sizeH) {
+//            color = chan4Osc.value;
+//            if (color < clutStart) {
+//                color = clutStart;
+//            }
+//            newValue = map(chan4Osc.value, 0, 0xff, 0, HOR_RES/4);
+//            rcc_color(color);
+//            rcc_draw(newValue+(HOR_RES/4)*3, i, sizeW, sizeH);
+//        }
+//    }
 
     drawHeader(frame);
     drawSteps();
@@ -465,6 +502,8 @@ void drawTracker(uint16_t frame) {
     drawNotes();
 }
 
-unsigned char audioTracker(unsigned char t) {
+static unsigned char audio(unsigned char t) {
     return t;
 }
+
+SCENE trackerScene = {"Tracker", 1, 0, 400, &init, &draw, &audio, &inputString, &input};
