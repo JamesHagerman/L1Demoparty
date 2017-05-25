@@ -9,6 +9,7 @@
 #include "resolution_management.h"
 #include "sprites.h"
 #include "text.h"
+#include "music.h" // declares our sine table (and other stuff)
 
 #include "demo_management.h"
 
@@ -26,6 +27,12 @@ static char creditsText[] = "\n\n\n\n\n\n\n\n\n\n\n" \
 static void init() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
+
+    // Unmute the audio channels we want to play
+    unmuteChannel(0);
+    unmuteChannel(1);
+    unmuteChannel(3);
+
     _CLUTEN = 0; // enable the CLUT for this scene
 }
 static void draw(uint16_t frame) {

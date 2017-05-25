@@ -5,7 +5,7 @@
 #include "resolution_management.h"
 #include "text.h"
 #include "hardware.h"
-
+#include "music.h"
 #include "demo_management.h"
 
 #define MAX_SCENE_LENGTH 2500 // in frames
@@ -69,18 +69,22 @@ void checkSceneFinished() {
         // the jumper is on the board anyways)
         if (frames > story_state.scenes[id].sceneStartFrame + story_state.scenes[id].sceneLength ||
                story_state.currentScene == trackerSceneId ) {
-            id++;
 
-            // Skip the "constant" scenes (in this case, trackerUI:
-            // TODO: Manage all of this "Dual mode" stuff in a better way. Maybe having
-            // a "Demo mode" and a "Tool mode" that can be switched between using a
-            // jumper is better than trying to hook everything into the scene graph
-            if (story_state.scenes[id].constantScene) {
+            // Only switch scenes when song loops, regardless of scene length
+            if (idx >= songLength-1) {
                 id++;
-            }
 
-            printf("Switching to scene: %i\n", id);
-            switchScene(id);
+                // Skip the "constant" scenes (in this case, trackerUI:
+                // TODO: Manage all of this "Dual mode" stuff in a better way. Maybe having
+                // a "Demo mode" and a "Tool mode" that can be switched between using a
+                // jumper is better than trying to hook everything into the scene graph
+                if (story_state.scenes[id].constantScene) {
+                    id++;
+                }
+
+                printf("Switching to scene: %i\n", id);
+                switchScene(id);
+            }
         }
     }
     

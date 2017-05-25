@@ -8,8 +8,6 @@
 #include <libpic30.h>
 
 #include "drawing_helpers.h"
-
-#include "color_management.h"
 #include "resolution_management.h"
 
 //float angle, x[8], y[8], z[8], rx[8], ry[8], rz[8], scrx[8], scry[8];

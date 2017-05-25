@@ -117,9 +117,9 @@ uint8_t chan3[128] = {
 uint8_t chan3Amp[128] = {
     2,8,2,2,2,8,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 };
-
+//
 uint8_t chan4[128] = {
-     C2,C1,Gb8,C3,C0,C2,Gb8,D5,C2,C1,Gb8,D5,C0,C2,Gb8,D5,C2,C1,Gb8,C0,C0,C2,Gb8,D5,C2,C1,Gb8,D5,D5,C2,Gb8,D5
+     C2,C1,C3,C3,C0,C2,C3,D5,C2,C1,C3,D5,C0,C2,C3,D5,C2,C1,C3,C0,C0,C2,C3,D5,C2,C1,C3,D5,D5,C2,C3,D5
 };
 uint8_t chan4Amp[128] = {
      1,1,2,8,8,1,2,8,1,1,2,8,8,1,2,8,1,1,1,8,8,1,2,8,1,1,2,8,8,2,2,8
@@ -238,10 +238,10 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
     // Divide the values by the number of channels just to be sure we have
     // enough headroom when they're all full scale peak to peak:
-    sample  = chan1Osc.value >> chan1Osc.amplitude;
-    sample += chan2Osc.value >> chan2Osc.amplitude;
-    sample += chan3Osc.value >> chan3Osc.amplitude;
-    sample += chan4Osc.value >> chan4Osc.amplitude;
+    sample  = (chan1Osc.value >> chan1Osc.amplitude) * chan1Osc.mute;
+    sample += (chan2Osc.value >> chan2Osc.amplitude) * chan2Osc.mute;
+    sample += (chan3Osc.value >> chan3Osc.amplitude) * chan3Osc.mute;
+    sample += (chan4Osc.value >> chan4Osc.amplitude) * chan4Osc.mute;
 
     // Spit the mixed value to the audio port:
     PORTB=(sample<<8); // shift is to get to the right pins
@@ -287,10 +287,10 @@ void config_audio() {
 
     // Setup NCO for DDS:
     // TODO: Build these in a more sane way (so we can switch freq/phase any time)
-    ncoInit(&chan1Osc, startingFreq, 1);
-    ncoInit(&chan2Osc, startingFreq, 4);
-    ncoInit(&chan3Osc, startingFreq, 2);
-    ncoInit(&chan4Osc, startingFreq, 6);
+    ncoInit(&chan1Osc, startingFreq, 1, 1);
+    ncoInit(&chan2Osc, startingFreq, 2, 1);
+    ncoInit(&chan3Osc, startingFreq, 0, 1);
+    ncoInit(&chan4Osc, startingFreq, 6, 1);
 
 //    "sine", // 0
 //    "zzag", // 1
@@ -493,6 +493,15 @@ void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_
     ampChanToChange[step] = amp;
 }
 
+void muteChannel(uint8_t chan) {
+    NCO *n = findChanNCO(chan);
+    n->mute = 0;
+}
+void unmuteChannel(uint8_t chan) {
+    NCO *n = findChanNCO(chan);
+    n->mute = 1;
+}
+
 void printSongForSave() {
     uint8_t noteValue = 0;
     uint8_t *noteChan = NULL;
@@ -590,13 +599,14 @@ void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend) {
     n->amplitude = amplitude;
 }
 
-void ncoInit(NCO *n, float freq, uint8_t wavetableIndex) {
+void ncoInit(NCO *n, float freq, uint8_t wavetableIndex, uint8_t muteLevel) {
     // Initialize the oscillator data structure and set the target frequency
     // Frequency must be positive (although I don't check this).
     n->accumulator = 0;
     setWavetable(n, wavetableIndex);
     n->value = n->wavetable[0];
     n->amplitude = 0; // bit shift amount for final volume
+    n->mute = muteLevel;
     ncoSetFreq(n, freq);
 }
 

@@ -147,6 +147,7 @@ typedef struct {
     const uint8_t *wavetable;
     uint8_t wavetableIndex;
     uint8_t amplitude;
+    uint8_t mute;
 } NCO;
 
 extern uint8_t chanCount;
@@ -178,8 +179,11 @@ uint8_t* findAmpChan(uint8_t chan);
 uint8_t* findNoteChan(uint8_t chan);
 void changeAmplitude(uint8_t chan, uint8_t step, uint8_t amp);
 void changeNote(uint8_t chan, uint8_t step, uint8_t note, uint8_t octave, uint8_t amp);
+void muteChannel(uint8_t chan);
+void unmuteChannel(uint8_t chan);
 void printSongForSave();
 
+NCO* findChanNCO(uint8_t chan);
 void increaseWavetableIndex(uint8_t chan);
 void decreaseWavetableIndex(uint8_t chan);
 char* getChanWavetableName(uint8_t chan);
@@ -188,7 +192,7 @@ void ncoSetFreq(NCO *n, float freq);
 void ncoSetPhase(NCO *n, uint32_t phase, uint8_t bend);
 void ncoSetNote(NCO *n, uint8_t note, uint8_t amplitude, uint8_t bend);
 
-void ncoInit(NCO *n, float freq, uint8_t wavetableIndex);
+void ncoInit(NCO *n, float freq, uint8_t wavetableIndex, uint8_t muteLevel);
 void ncoStep(NCO *n);
 
 extern uint8_t chan1Tracker[128];

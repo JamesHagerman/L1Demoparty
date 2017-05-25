@@ -26,6 +26,8 @@
 
 // Include all scene definitions:
 #include "intro2017.h"
+#include "addDrums.h"
+#include "allTracks.h"
 #include "credits2017.h"
 #include "trackerUI.h"
 
@@ -104,7 +106,9 @@ void loadScenes() {
     // access the SCENE by including it's header file
     // NOTE: BE SURE TO REMOVE SCENES WE ARE NOT USING FROM THE PROJECT!!
     addScene(intro2017);
-//    addScene(credits2017);
+    addScene(addDrums);
+    addScene(allTracks);
+    addScene(credits2017);
     addScene(trackerScene);
 }
 

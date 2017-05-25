@@ -8,8 +8,6 @@
 #include <libpic30.h>
 
 #include "text.h"
-
-#include "color_management.h"
 #include "resolution_management.h"
 
 uint8_t charHeight;
