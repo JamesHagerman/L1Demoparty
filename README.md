@@ -5,9 +5,25 @@ This is a collection of all my Layerone Demoparty Entries. They're mine. Don't p
 But use this code as a starter for your own demo!
 
 
-## Current Demo
+## 2017 Audio Tracker
 
-Nothing here yet...
+For 2017, I wanted to turn the demoboard into some sort of synthesizer. After realizing that the board isn't wired for USB Host support, and after realizing that running it as a USB Slave wouldn't be that useful for a stand alone project (or demo for that matter), I decided to try writing an old school tracker.
+
+Trackers are historic. They were really the first form of Digital Audio Workstation available to many people. Almost all of the good video game music (not to mention modern 8bit music) was written using a tracker.
+
+But I'm new to trackers. I had to start from the ground up.
+
+First, I had to build an audio engine. I had used wavetables in the past on this board, but it used a pretty rough, slow engine. A couple of writeups and youtube videos on Direct Digital Synthesis and phase accumulators later, I had a much better wavetable audio engine!
+
+And the best part was that I figured out I could run 4 channels of WT audio and STILL have plenty of processing time left over for graphics!
+
+After figuring out how to send serial commands to the board's UART, I was able to write the tracker interface itself (which took the most time, honestly).
+
+Once that was done, I used the tracker to write a simple song, spent a little time making the audio control some simple graphics, and called it a day.
+
+Here's the final entry in all it's glory. (Excuse the language, we were all a bit tipsy at that point):
+
+https://www.youtube.com/watch?v=fUCvhj4NFEg&t=6m44s
 
 ## Past Demos
 
@@ -20,6 +36,10 @@ This year, I wanted to get closer to something of a useable "demo party builder"
 I suck at pixel art and so just pushed the animation speed up to 11 and got as many colors fading as I could behind my crappy art.
 
 I was happy to see how fast this little board could push pixels!
+
+Here's the video:
+
+https://www.youtube.com/watch?v=nEnQhmWmAyQ&feature=youtu.be&t=5m24s
 
 #### Serial Setup
 
@@ -40,6 +60,10 @@ For the 2015 L1 Demoparty
 The plan was to have somewhat more than a story and cool effects... but I just literally ran out of time while dicking with all the possible animation options. And I had about 2 weeks to complete it.
 
 So there are holes... but I feel like a got a lot working in such a short time!
+
+Here's the video:
+
+https://www.youtube.com/watch?v=Cu7p3W2zKgY
 
 ## Processing Scripts (possibly also C++, sorry)
 
