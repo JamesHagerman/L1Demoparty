@@ -4,6 +4,22 @@ This is a collection of all my Layerone Demoparty Entries. They're mine. Don't p
 
 But use this code as a starter for your own demo!
 
+## 2018 UNKNOWN
+
+For 2018, I'm moving on. While working with Arko's board has been a blast, a challenge, and a learning experience beyond most others rings I've thrown my hat into, I need another challenge.
+
+Partially, this is due to prior commitments. Partially, this is due to not knowing if I'll even be there in LA for L1 this year as I no longer live in the area.
+
+But mostly, it's beacuse there's no way to compete against datagram and jk's demo from last year! Those dudes finally threw down on how this is supposed to be done. And I just ain't worthy afaict
+
+Arko said the wildcard is open again this year, and since I had fun on that last year, maybe I'll do so again this year.
+
+"Chase the beam", they said...
+
+Well, okay then!
+
+
+## Past Demos
 
 ## 2017 Audio Tracker
 
@@ -25,9 +41,8 @@ Here's the final entry in all it's glory. (Excuse the language, we were all a bi
 
 https://www.youtube.com/watch?v=fUCvhj4NFEg&t=6m44s
 
-## Past Demos
 
-### CodeCrow
+### 2016 CodeCrow
 
 For the 2016 L1 Demoparty
 
@@ -53,7 +68,7 @@ NOTE: If you're trying to get Serial working, CHECK THE DOCS DIRECTORY for the `
 
 The jumper near R28 and Ground (the pair closest to the audio output) can be used to stop part of the animation. It's most useful to make sure the VGA display has gotten it's act together before starting your demo. Or, just to have fun with the various colors of the animation!
 
-### Hexadecimal Aliens
+### 2015 Hexadecimal Aliens
 
 For the 2015 L1 Demoparty
 
