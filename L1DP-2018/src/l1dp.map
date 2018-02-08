@@ -439,19 +439,19 @@ OUTPUT(l1dp.elf elf32-littlearm)
  .debug_line    0x0000000000000841      0x2b5 ../libopencm3//lib/libopencm3_stm32f4.a(rcc_common_all.o)
  .debug_line    0x0000000000000af6      0x2e2 ../libopencm3//lib/libopencm3_stm32f4.a(vector.o)
 
-.debug_str      0x0000000000000000     0xcb0f
- .debug_str     0x0000000000000000      0x7ee main.o
-                                        0x8bd (size before relaxing)
- .debug_str     0x00000000000007ee        0xe button_boot.o
-                                        0x8a8 (size before relaxing)
- .debug_str     0x00000000000007fc     0x6384 ../libopencm3//lib/libopencm3_stm32f4.a(gpio_common_all.o)
-                                       0x651d (size before relaxing)
- .debug_str     0x0000000000006b80       0x8a ../libopencm3//lib/libopencm3_stm32f4.a(gpio_common_f0234.o)
-                                       0x653f (size before relaxing)
- .debug_str     0x0000000000006c0a     0x34ba ../libopencm3//lib/libopencm3_stm32f4.a(rcc_common_all.o)
-                                       0x8cd5 (size before relaxing)
- .debug_str     0x000000000000a0c4     0x2a4b ../libopencm3//lib/libopencm3_stm32f4.a(vector.o)
-                                       0x6b80 (size before relaxing)
+.debug_str      0x0000000000000000     0xcb65
+ .debug_str     0x0000000000000000      0x819 main.o
+                                        0x8e8 (size before relaxing)
+ .debug_str     0x0000000000000819        0xe button_boot.o
+                                        0x8d3 (size before relaxing)
+ .debug_str     0x0000000000000827     0x63af ../libopencm3//lib/libopencm3_stm32f4.a(gpio_common_all.o)
+                                       0x6548 (size before relaxing)
+ .debug_str     0x0000000000006bd6       0x8a ../libopencm3//lib/libopencm3_stm32f4.a(gpio_common_f0234.o)
+                                       0x656a (size before relaxing)
+ .debug_str     0x0000000000006c60     0x34ba ../libopencm3//lib/libopencm3_stm32f4.a(rcc_common_all.o)
+                                       0x8d00 (size before relaxing)
+ .debug_str     0x000000000000a11a     0x2a4b ../libopencm3//lib/libopencm3_stm32f4.a(vector.o)
+                                       0x6bab (size before relaxing)
 
 .comment        0x0000000000000000       0x7e
  .comment       0x0000000000000000       0x7e main.o
