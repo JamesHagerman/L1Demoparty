@@ -14,19 +14,19 @@
         <itemPath>text.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="scenes" projectFiles="true">
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro2017.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits2017.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/addDrums.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/shared.h</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/allTracks.h</itemPath>
+        <itemPath>addDrums.h</itemPath>
+        <itemPath>allTracks.h</itemPath>
+        <itemPath>credits2017.h</itemPath>
+        <itemPath>intro2017.h</itemPath>
+        <itemPath>shared.h</itemPath>
+        <itemPath>trackerUI.h</itemPath>
       </logicalFolder>
       <itemPath>music.h</itemPath>
       <itemPath>system.h</itemPath>
       <itemPath>serial.h</itemPath>
       <itemPath>demo_management.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/tty.h</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/hardware.h</itemPath>
+      <itemPath>hardware.h</itemPath>
+      <itemPath>tty.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -44,19 +44,19 @@
         <itemPath>text.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="scenes" projectFiles="true">
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/trackerUI.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/intro2017.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/credits2017.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/addDrums.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/shared.c</itemPath>
-        <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/allTracks.c</itemPath>
+        <itemPath>addDrums.c</itemPath>
+        <itemPath>allTracks.c</itemPath>
+        <itemPath>credits2017.c</itemPath>
+        <itemPath>intro2017.c</itemPath>
+        <itemPath>shared.c</itemPath>
+        <itemPath>trackerUI.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>serial.c</itemPath>
       <itemPath>music.c</itemPath>
       <itemPath>demo_management.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/tty.c</itemPath>
-      <itemPath>C:/Users/jamis/Desktop/my_root/Development/Circuits/PIC/L1Demoparty/L1DP-2017/L1DP-2017.X/hardware.c</itemPath>
+      <itemPath>hardware.c</itemPath>
+      <itemPath>tty.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -64,6 +64,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default_optimizations_on" type="2">
