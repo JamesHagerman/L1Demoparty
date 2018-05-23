@@ -137,7 +137,8 @@ extern bool fuckIt;
 typedef enum  {
     LOW = 11025, // 11025
     MEDIUM = 22050, // 22050
-    HIGH = 44100 // 44100
+    HIGH = 44100, // 44100
+    MAX = 16000000 // 16MHz
 } SAMPLE_RATES;
 
 typedef struct {
@@ -216,8 +217,9 @@ extern uint8_t chan4Amp[128];
 
 // NCO Phase table:
 extern uint32_t *currentPhaseTable;
-//extern uint32_t phaseTable44100[];
-extern uint32_t phaseTable22050[];
+//extern uint32_t phaseTableMAX[];
+extern uint32_t phaseTable44100[];
+//extern uint32_t phaseTable22050[];
 //extern uint32_t phaseTable11025[];
 
 // Big wave tables:

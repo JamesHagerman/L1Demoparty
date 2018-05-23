@@ -24,6 +24,7 @@ static void init() {
     // Mute the channels we don't want to play in this scene:
     muteChannel(0);
     muteChannel(1);
+//    muteChannel(2); // used to NOT be muted...
     muteChannel(3);
 
     // Force bpm to stupid:
