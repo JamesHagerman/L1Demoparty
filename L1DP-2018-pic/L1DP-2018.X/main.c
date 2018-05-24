@@ -1,6 +1,6 @@
-// Untitled
+// USB
 // by: jamisnemo
-// for: LayerOne Demoparty 2017
+// for: LayerOne Demoparty 2018
 // chip: PIC24FJ256DA206
 //
 #include <stdbool.h>
@@ -9,6 +9,12 @@
 #include <xc.h>
 #include "system.h" // declares FCY
 #include <libpic30.h>
+
+// WOOOW
+#include "app_device_audio_midi.h"
+//#include "app_led_usb_status.h"
+#include "usb_device.h"
+#include "usb_device_midi.h"
 
 #include "resolution_management.h"
 #include "fb_control.h"
@@ -63,10 +69,11 @@
 #pragma config GCP = OFF                // General Segment Code Protect (Code protection is disabled)
 #pragma config JTAGEN = OFF             // JTAG Port Enable (JTAG port is disabled)
 
+
 //=========
 
 // Variable declarations:
-char projectName[] = "Code MESS";
+char projectName[] = "USB DAWG!";
 volatile uint8_t serialStoryIndex = 100;
 bool demoStart = false;
 
@@ -141,6 +148,11 @@ void initDemo() {
 int main(void) {
     // Setup the hardware before anything else:
     setupHardware();
+    
+    // Setup USB state machine:
+    SYSTEM_Initialize(SYSTEM_STATE_USB_START);
+    USBDeviceInit();
+    USBDeviceAttach();
 
     // Start of the demo!!!!!!!!!!!!!!!
     printf("Welcome to project: %s!\r\n", projectName);
@@ -154,8 +166,28 @@ int main(void) {
 
     // Start drawing the demo. This is the main loop:
     while (1) {
-        frameStart();
+        frameStart(); // Nothing should go before this!
         // Start frame drawing:
+        
+        // Handle some hardware stuff:
+        // No idea where to put this...
+        #if defined(USB_POLLING)
+            // Interrupt or polling method.  If using polling, must call
+            // this function periodically.  This function will take care
+            // of processing and responding to SETUP transactions
+            // (such as during the enumeration process when you first
+            // plug in).  USB hosts require that USB devices should accept
+            // and process SETUP packets in a timely fashion.  Therefore,
+            // when using polling, this function should be called
+            // regularly (such as once every 1.8ms or faster** [see
+            // inline code comments in usb_device.c for explanation when
+            // "or faster" applies])  In most cases, the USBDeviceTasks()
+            // function does not take very long to execute (ex: <100
+            // instruction cycles) before it returns.
+            USBDeviceTasks();
+        #endif
+        // Do whatever MIDI USB crap we need to do:
+        APP_DeviceAudioMIDITasks();
 
         // Manage any newly available data from the serial port:
         serialStoryIndex = handleSerialInput();
@@ -189,7 +221,7 @@ int main(void) {
 //        drawFPS(); // actually draws frames counter value
 
         // End frame drawing
-        frameEnd();
+        frameEnd(); // Nothing should go after this!
     }
 
     return 0; // Never hit.
