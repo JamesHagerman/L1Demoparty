@@ -70,6 +70,8 @@ static void input(EVENT_TYPE inputData) {
     } else if (inputData == BACKSPACE) {
         //rewind to beginning of song
         rewindSong();
+    } else if (inputData == 'b') {
+        printUsage();
     } else {
         if (currentMode == 0){
             handleParameterChanges(inputData);
@@ -262,7 +264,7 @@ void handleParameterChanges(EVENT_TYPE inputData) {
     } else if (inputData == RIGHT && currentField+1 <= fieldCount-1) {
         currentField += 1;
         printf("Current field is: %i\n", currentField);
-    }
+    } 
 }
 
 void drawParamHeader() {
@@ -431,10 +433,45 @@ void drawSteps() {
     }
 }
 
+void printUsage() {
+    printf("\r\n\r\n ---- TRACKER USAGE ----\r\n");
+    printf("    Space = play/pause\r\n");
+    printf("Backspace = rewind\r\n");
+    printf("      Tab = Toggle mode\r\n");
+    printf("        b = Print Usage\r\n");
+   
+    printf("\r\nAvailable Modes:\r\n");
+    printf("  Parameter Edit: BPM, Division, Loop Length, Wave\r\n");
+    printf("  Pattern Edit: Octave, Note, Amplitude, Toggle Follow, etc.\r\n");
+    
+    printf("\r\nParameter Edit Controls:\r\n");
+    printf("  Left/Right Arrows = Select Parameter\r\n");
+    printf("     Up/Down Arrows = change parameter value\r\n");
+    
+    printf("\r\nPattern Edit Controls:\r\n");
+    printf("    Home Row = White keys\r\n");
+    printf("  QWERTY Row = Black keys\r\n");
+    printf("         1-7 = Amplitude (1 loudest)\r\n");
+    printf("           8 = Clear note\r\n");
+    printf("         z/x = Octave Up/Down\r\n");
+    printf("         c/v = Amplitude Up/Down\r\n");
+    printf("           n = Print song to UART\r\n");
+    printf("           m = Toggle Follow\r\n");
+}
+
 static void init() {
     int sceneId = story_state.currentScene;
     printf("Initing scene %i: %s\n", sceneId, story_state.scenes[sceneId].sceneName);
 
+    // Print the Tracker usage message to UART:
+    printUsage();
+
+    // Unmute all channels:
+    unmuteChannel(0);
+    unmuteChannel(1);
+    unmuteChannel(2);
+    unmuteChannel(3);
+    
     // Reset which field we're on...
     currentField = 0;
     

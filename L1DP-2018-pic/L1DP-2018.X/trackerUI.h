@@ -14,6 +14,7 @@ extern "C" {
 
 extern SCENE trackerScene;
 
+void printUsage();
 void handleNoteInput(EVENT_TYPE inputData);
 void handleParameterChanges(EVENT_TYPE inputData);
 

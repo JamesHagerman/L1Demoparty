@@ -163,6 +163,11 @@ void config_uart(unsigned long baudRate) {
     
     __delay_ms(100);
     printf("\n\nUART should be working at 115200 baud now!\r\n");
+    printf("\n\nTo Access the Tracker UI:\r\n");
+    printf("jump R28 to ground\r\n");
+    printf("RX is R7\r\n");
+    printf("TX is R6\r\n\r\n");
+    printf("b key to print Tracker Usage\r\n");
 }
 
 void reset_buffer() {
