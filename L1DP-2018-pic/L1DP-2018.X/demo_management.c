@@ -15,6 +15,7 @@ uint16_t frames = 0;
 char fpsTextBuffer[20]; // Buffer for any text rendering sprintf() calls
 
 int16_t trackerSceneId = -1;
+int16_t synthSceneId = -1;
 
 // StoryState management methods:
 void addScene(SCENE newScene) {
@@ -22,8 +23,15 @@ void addScene(SCENE newScene) {
         story_state.scenes[story_state.sceneCount] = newScene;
         story_state.sceneCount++;
 
-        if (newScene.constantScene) {
+        // Save index of tracker and synth scenes so we can switch to either of
+        // them manually later if conditions are right
+        if (newScene.constantScene && newScene.sceneName[0] == 'T') {
             trackerSceneId = story_state.sceneCount - 1;
+            printf("Okay, found tracker scene...\r\n");
+        }
+        if (newScene.constantScene && newScene.sceneName[0] == 'S') {
+            printf("Okay, found synth scene...\r\n");
+            synthSceneId = story_state.sceneCount - 1;
         }
     } else {
         printf("Oops! Trying to add too many scenes!\n");
@@ -32,7 +40,7 @@ void addScene(SCENE newScene) {
 void switchScene(uint8_t nextScene) {
     if (nextScene >= story_state.sceneCount) {
         // TODO: Handle this more gracefully...
-        printf("Tried to switch to an invalid scene. Restarting demo...\n\n");
+        printf("Tried to switch to an invalid scene (%i). Restarting demo...\n\n", nextScene);
         
         // Reset after we reach the end of the last scene:
         nextScene = 0;

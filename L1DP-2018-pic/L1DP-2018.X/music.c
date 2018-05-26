@@ -34,6 +34,16 @@ uint8_t maxNoteDivision = 32;
 
 bool fuckIt = false;
 
+// 0 will mean "Not currently playing. Whatever
+// Note, this might mean we can't play note 0
+uint8_t osc1CurrentNote = 0;
+uint8_t osc2CurrentNote = 0;
+uint8_t osc3CurrentNote = 0;
+uint8_t osc4CurrentNote = 0;
+// Tracks the next osc that should play
+uint8_t nextToPlay = 0;
+bool lastCrow = false;
+
 uint8_t chanCount = 4;
 NCO chan1Osc;
 NCO chan2Osc;
@@ -266,8 +276,13 @@ void stop() {
     if (isPlaying) {
         printf("\rStopping song...\n");
         isPlaying = false;
-        T2CONbits.TON = 0; // turn on the timer for playback
-        _TON  = 0;	// turn on the timer for DSP
+        T2CONbits.TON = 0; // turn off the timer for playback
+//        _TON  = 0;	// turn off the timer for DSP
+        
+        ncoSetNote(&chan1Osc, 127, 8, 0);
+        ncoSetNote(&chan2Osc, 127, 8, 0);
+        ncoSetNote(&chan3Osc, 127, 8, 0);
+        ncoSetNote(&chan4Osc, 127, 8, 0);
     }
 }
 
@@ -280,8 +295,111 @@ void play() {
     }
 }
 
-void config_audio() {
+void allowSynth() {
+    printf("\rStopping song, allowing DSP playback...\n");
+    isPlaying = false;
+    T2CONbits.TON = 0; // turn off the timer for playback
+    _TON  = 1;	// turn on the timer for DSP
+    
+//    "sine", // 0
+//    "zzag", // 1
+//    "saw",  // 2
+//    "p50",  // 3
+//    "p75",  // 4
+//    "nse",  // 5
+//    "drm"   // 6
+    
+    setWavetable(&chan1Osc, 2);
+    setWavetable(&chan2Osc, 2);
+    setWavetable(&chan3Osc, 2);
+    setWavetable(&chan4Osc, 2);
+}
 
+void allNoteOff() {
+    ncoSetNote(&chan1Osc, 0, 8, 0);
+    ncoSetNote(&chan2Osc, 0, 8, 0);
+    ncoSetNote(&chan3Osc, 0, 8, 0);
+    ncoSetNote(&chan4Osc, 0, 8, 0);
+}
+
+void noteOn(uint8_t note) {
+    // Increment which synth should be played next
+    nextToPlay += 1;
+    if (nextToPlay > 4) {
+        nextToPlay = 1;
+    }
+    lastCrow = !lastCrow;
+    
+    // Find a non-playing osc
+    if (osc1CurrentNote == 0) {
+        ncoSetNote(&chan1Osc, note, 2, 0);
+        osc1CurrentNote = note;
+        return;
+    } else if (osc2CurrentNote == 0) {
+        ncoSetNote(&chan2Osc, note, 2, 0);
+        osc2CurrentNote = note;
+        return;
+    } else if (osc3CurrentNote == 0) {
+        ncoSetNote(&chan3Osc, note, 2, 0);
+        osc3CurrentNote = note;
+        return;
+    } else if (osc4CurrentNote == 0) {
+        ncoSetNote(&chan4Osc, note, 2, 0);
+        osc4CurrentNote = note;
+        return;
+    } else {
+        // If all synths are playing, repurpose the next osc in line:
+        switch(nextToPlay) {
+            case 1:
+                ncoSetNote(&chan1Osc, note, 2, 0);
+                osc1CurrentNote = note;
+                break;
+            case 2:
+                ncoSetNote(&chan2Osc, note, 2, 0);
+                osc2CurrentNote = note;
+                break;
+            case 3:
+                ncoSetNote(&chan3Osc, note, 2, 0);
+                osc3CurrentNote = note;
+                break;
+            case 4:
+                ncoSetNote(&chan4Osc, note, 2, 0);
+                osc4CurrentNote = note;
+                break;
+        }
+    }
+    
+    // Update firstPlayedNote if we need to... tbd
+}
+
+void noteOff(uint8_t note) {
+    // Find the osc playing the current note and stop it:
+    if (note == osc1CurrentNote) {
+        ncoSetNote(&chan1Osc, note, 8, 0);
+        osc1CurrentNote = 0;
+        return;
+    }
+    if (note == osc2CurrentNote) {
+        ncoSetNote(&chan2Osc, note, 8, 0);
+        osc2CurrentNote = 0;
+        return;
+    }
+    if (note == osc3CurrentNote) {
+        ncoSetNote(&chan3Osc, note, 8, 0);
+        osc3CurrentNote = 0;
+        return;
+    }
+    if (note == osc4CurrentNote) {
+        ncoSetNote(&chan4Osc, note, 8, 0);
+        osc4CurrentNote = 0;
+        return;
+    }
+    
+    // uh oh... this doesnt' work
+//    allNoteOff();
+}
+
+void config_audio() {
     // LOL:
     fuckIt = false;
 

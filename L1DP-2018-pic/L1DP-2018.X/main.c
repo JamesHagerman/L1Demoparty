@@ -29,6 +29,7 @@
 #include "tty.h"
 
 #include "demo_management.h"
+#include "shared.h"
 
 // Include all scene definitions:
 #include "intro2017.h"
@@ -36,6 +37,7 @@
 #include "allTracks.h"
 #include "credits2017.h"
 #include "trackerUI.h"
+#include "synth.h"
 
 //#include "particles.h"
 //#include "testgfx.h"
@@ -77,6 +79,9 @@ char projectName[] = "USB DAWG!";
 volatile uint8_t serialStoryIndex = 100;
 bool demoStart = false;
 
+// Set the tracker/synth mode globally:
+uint8_t currentMode = 2; // 0 is note input mode, 1 is params change mode, 2 is synth mode
+
 // No headerfile = define stuff first:
 int handleInputString(unsigned char *inputBuffer, uint16_t inputSize) {
     int toRet = -1;
@@ -117,6 +122,7 @@ void loadScenes() {
     addScene(allTracks);
     addScene(credits2017);
     addScene(trackerScene);
+    addScene(synthScene);
 }
 
 void initDemo() {
@@ -166,37 +172,56 @@ int main(void) {
 
     // Start drawing the demo. This is the main loop:
     while (1) {
-        frameStart(); // Nothing should go before this!
+        if (story_state.currentScene == synthSceneId) {
+            
+            // No idea where to put this...
+            #if defined(USB_POLLING)
+                // Interrupt or polling method.  If using polling, must call
+                // this function periodically.  This function will take care
+                // of processing and responding to SETUP transactions
+                // (such as during the enumeration process when you first
+                // plug in).  USB hosts require that USB devices should accept
+                // and process SETUP packets in a timely fashion.  Therefore,
+                // when using polling, this function should be called
+                // regularly (such as once every 1.8ms or faster** [see
+                // inline code comments in usb_device.c for explanation when
+                // "or faster" applies])  In most cases, the USBDeviceTasks()
+                // function does not take very long to execute (ex: <100
+                // instruction cycles) before it returns.
+                USBDeviceTasks();
+            #endif
+            if((USBGetDeviceState() < CONFIGURED_STATE) || (USBIsDeviceSuspended() == true)) {
+                //Either the device is not configured or we are suspended,
+                // so we don't want to execute any USB related application code
+                continue;   //go back to the top of the while loop
+            } else {
+                //Otherwise we are free to run USB and non-USB related user 
+                //application code.
+                // Do whatever MIDI USB crap we need to do:
+                APP_DeviceAudioMIDITasks();
+            }
+        }
+        
+        // Nothing should go before this except the USB init loop!
+        frameStart(); 
         // Start frame drawing:
         
         // Handle some hardware stuff:
-        // No idea where to put this...
-        #if defined(USB_POLLING)
-            // Interrupt or polling method.  If using polling, must call
-            // this function periodically.  This function will take care
-            // of processing and responding to SETUP transactions
-            // (such as during the enumeration process when you first
-            // plug in).  USB hosts require that USB devices should accept
-            // and process SETUP packets in a timely fashion.  Therefore,
-            // when using polling, this function should be called
-            // regularly (such as once every 1.8ms or faster** [see
-            // inline code comments in usb_device.c for explanation when
-            // "or faster" applies])  In most cases, the USBDeviceTasks()
-            // function does not take very long to execute (ex: <100
-            // instruction cycles) before it returns.
-            USBDeviceTasks();
-        #endif
-        // Do whatever MIDI USB crap we need to do:
-        APP_DeviceAudioMIDITasks();
-
         // Manage any newly available data from the serial port:
         serialStoryIndex = handleSerialInput();
-
-        // If the jumper is off, switch to tracker mode:
+        // If the jumper is off, switch to tracker mode. We start on Synth Mode
+        // because that's what's new and cool and will allow headless operation!
         checkForTrackerJumper();
-        if (forceTrackerScene && story_state.currentScene != trackerSceneId) {
-            switchScene(trackerSceneId);
+        if (forceTrackerScene) {
+//            printf("Current Tracker mode: %i\r\n", currentMode);
+            if ((currentMode == 0 || currentMode == 1) && story_state.currentScene != trackerSceneId) {
+                switchScene(trackerSceneId);
+            } else if(currentMode == 2 && story_state.currentScene != synthSceneId) {
+                switchScene(synthSceneId);
+            }
         }
+        
+
 
         // Draw the current Scene:
         drawCurrentScene();
@@ -211,7 +236,7 @@ int main(void) {
         }
 
         // TODO: Do this in a better way. Track "Demo Started" instead of this:
-        if (demoStart && story_state.currentScene != trackerSceneId) {
+        if (demoStart && story_state.currentScene != trackerSceneId && story_state.currentScene != synthSceneId) {
             play();
         }
 

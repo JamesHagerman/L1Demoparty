@@ -20,6 +20,7 @@
         <itemPath>intro2017.h</itemPath>
         <itemPath>shared.h</itemPath>
         <itemPath>trackerUI.h</itemPath>
+        <itemPath>synth.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="usb" projectFiles="true">
         <itemPath>usb.h</itemPath>
@@ -63,6 +64,7 @@
         <itemPath>intro2017.c</itemPath>
         <itemPath>shared.c</itemPath>
         <itemPath>trackerUI.c</itemPath>
+        <itemPath>synth.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="usb" projectFiles="true">
         <itemPath>usb_device.c</itemPath>

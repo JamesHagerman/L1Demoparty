@@ -28,6 +28,8 @@ extern uint16_t i, j, sizeW, sizeH, vertOffset;
 extern uint16_t screenCenterY;
 extern uint8_t newValue;
 
+extern uint8_t currentMode;
+
 
 #ifdef	__cplusplus
 }

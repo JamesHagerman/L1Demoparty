@@ -19,12 +19,15 @@ please contact mla_licensing@microchip.com
 
 /** INCLUDES *******************************************************/
 #include <stdint.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 #include "system.h"
 
 #include "usb.h"
 #include "usb_device_midi.h"
+
+#include "music.h"
 
 
 /** VARIABLES ******************************************************/
@@ -123,21 +126,71 @@ void APP_DeviceAudioMIDISOFHandler()
 ********************************************************************/
 void APP_DeviceAudioMIDITasks()
 {
-    /* If the device is not configured yet, or the device is suspended, then
-     * we don't need to run the demo since we can't send any data.
-     */
-    if( (USBGetDeviceState() < CONFIGURED_STATE) ||
-        (USBIsDeviceSuspended() == true))
-    {
-        return;
-    }
-
     if(!USBHandleBusy(USBRxHandle))
     {
         //We have received a MIDI packet from the host, process it and then
         //  prepare to receive the next packet
 
         //INSERT MIDI PROCESSING CODE HERE
+        // Jamis is doing just that. Chill out!
+        
+//        printf("Midi packet arrived: '%i'-'%i'-'%i'\r\n", ReceivedDataBuffer[0], ReceivedDataBuffer[1], ReceivedDataBuffer[2]);
+//        printf("  expect garbage: '%i' '%i' '%i'\r\n", ReceivedDataBuffer[3], ReceivedDataBuffer[4], ReceivedDataBuffer[5]);
+        
+        midiData.DATA_0 = ReceivedDataBuffer[0]; // note on or off
+        midiData.DATA_1 = ReceivedDataBuffer[2]; // pitch
+        midiData.DATA_2 = ReceivedDataBuffer[3]; // velocity
+        
+        // Handle CC on modulation channel
+        if (midiData.DATA_0 == 11 && ReceivedDataBuffer[2] == 1) {
+            if (midiData.DATA_2 >=0 && midiData.DATA_2 <20) {
+                setWavetable(&chan1Osc, 0);
+                setWavetable(&chan2Osc, 0);
+                setWavetable(&chan3Osc, 0);
+                setWavetable(&chan4Osc, 0);
+            } else if (midiData.DATA_2 >=20 && midiData.DATA_2 <40) {
+                setWavetable(&chan1Osc, 1);
+                setWavetable(&chan2Osc, 1);
+                setWavetable(&chan3Osc, 1);
+                setWavetable(&chan4Osc, 1);
+            } else if (midiData.DATA_2 >=40 && midiData.DATA_2 <50) {
+                setWavetable(&chan1Osc, 2);
+                setWavetable(&chan2Osc, 2);
+                setWavetable(&chan3Osc, 2);
+                setWavetable(&chan4Osc, 2);
+            } else if (midiData.DATA_2 >=50 && midiData.DATA_2 <60) {
+                setWavetable(&chan1Osc, 3);
+                setWavetable(&chan2Osc, 3);
+                setWavetable(&chan3Osc, 3);
+                setWavetable(&chan4Osc, 3);
+            } else if (midiData.DATA_2 >=60 && midiData.DATA_2 <70) {
+                setWavetable(&chan1Osc, 4);
+                setWavetable(&chan2Osc, 4);
+                setWavetable(&chan3Osc, 4);
+                setWavetable(&chan4Osc, 4);
+            } else if (midiData.DATA_2 >=70 && midiData.DATA_2 <80) {
+                setWavetable(&chan1Osc, 5);
+                setWavetable(&chan2Osc, 5);
+                setWavetable(&chan3Osc, 5);
+                setWavetable(&chan4Osc, 5);
+            } else if (midiData.DATA_2 >=80 && midiData.DATA_2 <=127) {
+                setWavetable(&chan1Osc, 6);
+                setWavetable(&chan2Osc, 6);
+                setWavetable(&chan3Osc, 6);
+                setWavetable(&chan4Osc, 6);
+            }
+        }
+        
+        // TODO: Handle pitch bend!!!
+        
+        // Try to parse the midi packet:
+        if (midiData.DATA_0 == 0x09) {
+            // Note On
+            noteOn(midiData.DATA_1);
+        } else if (midiData.DATA_0 == 0x08) {
+            // Note Off
+            noteOff(midiData.DATA_1);
+        } // todo: Manage other midi message types
 
         //Get ready for next packet (this will overwrite the old data)
         USBRxHandle = USBRxOnePacket(USB_DEVICE_AUDIO_MIDI_ENDPOINT,(uint8_t*)&ReceivedDataBuffer,64);

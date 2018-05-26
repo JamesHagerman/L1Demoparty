@@ -135,10 +135,10 @@ extern uint8_t maxNoteDivision;
 extern bool fuckIt;
 
 typedef enum  {
-    LOW = 11025, // 11025
-    MEDIUM = 22050, // 22050
+//    LOW = 11025, // 11025
+//    MEDIUM = 22050, // 22050
     HIGH = 44100, // 44100
-    MAX = 16000000 // 16MHz
+//    MAX = 16000000 // 16MHz
 } SAMPLE_RATES;
 
 typedef struct {
@@ -164,6 +164,19 @@ void togglePlay();
 void stop();
 void play();
 
+// Synth stuff
+extern uint8_t osc1CurrentNote;
+extern uint8_t osc2CurrentNote;
+extern uint8_t osc3CurrentNote;
+extern uint8_t osc4CurrentNote;
+extern uint8_t nextToPlay;
+extern bool lastCrow;
+void allowSynth();
+void allNoteOff();
+void noteOn(uint8_t note);
+void noteOff(uint8_t note);
+// end synth stuff
+
 void config_audio();
 void setSampleRate(SAMPLE_RATES newRate);
 void setBPM(uint8_t newBpm, uint8_t noteDivision);
@@ -184,6 +197,7 @@ void muteChannel(uint8_t chan);
 void unmuteChannel(uint8_t chan);
 void printSongForSave();
 
+void setWavetable(NCO *n, uint8_t wavetableIndex);
 NCO* findChanNCO(uint8_t chan);
 void increaseWavetableIndex(uint8_t chan);
 void decreaseWavetableIndex(uint8_t chan);

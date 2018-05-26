@@ -15,7 +15,7 @@
 extern "C" {
 #endif
     
-#define MAX_SCENES 5
+#define MAX_SCENES 6
 
 // TODO: Move this stuff into a ui library at some point:
 typedef struct {
@@ -59,6 +59,7 @@ extern uint16_t frames;
 extern char fpsTextBuffer[20];
 
 extern int16_t trackerSceneId;
+extern int16_t synthSceneId;
 
 void addScene(SCENE newScene);
 void switchScene(uint8_t nextScene);

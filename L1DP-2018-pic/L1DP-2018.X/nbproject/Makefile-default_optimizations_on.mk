@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=color_management.c drawing_helpers.c fb_control.c resolution_management.c sprites.c text.c addDrums.c allTracks.c credits2017.c intro2017.c shared.c trackerUI.c usb_device.c usb_descriptors.c usb_events.c main.c serial.c music.c demo_management.c hardware.c tty.c app_device_audio_midi.c app_led_usb_status.c system.c
+SOURCEFILES_QUOTED_IF_SPACED=color_management.c drawing_helpers.c fb_control.c resolution_management.c sprites.c text.c addDrums.c allTracks.c credits2017.c intro2017.c shared.c trackerUI.c synth.c usb_device.c usb_descriptors.c usb_events.c main.c serial.c music.c demo_management.c hardware.c tty.c app_device_audio_midi.c app_led_usb_status.c system.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/color_management.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/text.o ${OBJECTDIR}/addDrums.o ${OBJECTDIR}/allTracks.o ${OBJECTDIR}/credits2017.o ${OBJECTDIR}/intro2017.o ${OBJECTDIR}/shared.o ${OBJECTDIR}/trackerUI.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_events.o ${OBJECTDIR}/main.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/music.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/hardware.o ${OBJECTDIR}/tty.o ${OBJECTDIR}/app_device_audio_midi.o ${OBJECTDIR}/app_led_usb_status.o ${OBJECTDIR}/system.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/drawing_helpers.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/addDrums.o.d ${OBJECTDIR}/allTracks.o.d ${OBJECTDIR}/credits2017.o.d ${OBJECTDIR}/intro2017.o.d ${OBJECTDIR}/shared.o.d ${OBJECTDIR}/trackerUI.o.d ${OBJECTDIR}/usb_device.o.d ${OBJECTDIR}/usb_descriptors.o.d ${OBJECTDIR}/usb_events.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/demo_management.o.d ${OBJECTDIR}/hardware.o.d ${OBJECTDIR}/tty.o.d ${OBJECTDIR}/app_device_audio_midi.o.d ${OBJECTDIR}/app_led_usb_status.o.d ${OBJECTDIR}/system.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/color_management.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/text.o ${OBJECTDIR}/addDrums.o ${OBJECTDIR}/allTracks.o ${OBJECTDIR}/credits2017.o ${OBJECTDIR}/intro2017.o ${OBJECTDIR}/shared.o ${OBJECTDIR}/trackerUI.o ${OBJECTDIR}/synth.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_events.o ${OBJECTDIR}/main.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/music.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/hardware.o ${OBJECTDIR}/tty.o ${OBJECTDIR}/app_device_audio_midi.o ${OBJECTDIR}/app_led_usb_status.o ${OBJECTDIR}/system.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/color_management.o.d ${OBJECTDIR}/drawing_helpers.o.d ${OBJECTDIR}/fb_control.o.d ${OBJECTDIR}/resolution_management.o.d ${OBJECTDIR}/sprites.o.d ${OBJECTDIR}/text.o.d ${OBJECTDIR}/addDrums.o.d ${OBJECTDIR}/allTracks.o.d ${OBJECTDIR}/credits2017.o.d ${OBJECTDIR}/intro2017.o.d ${OBJECTDIR}/shared.o.d ${OBJECTDIR}/trackerUI.o.d ${OBJECTDIR}/synth.o.d ${OBJECTDIR}/usb_device.o.d ${OBJECTDIR}/usb_descriptors.o.d ${OBJECTDIR}/usb_events.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/serial.o.d ${OBJECTDIR}/music.o.d ${OBJECTDIR}/demo_management.o.d ${OBJECTDIR}/hardware.o.d ${OBJECTDIR}/tty.o.d ${OBJECTDIR}/app_device_audio_midi.o.d ${OBJECTDIR}/app_led_usb_status.o.d ${OBJECTDIR}/system.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/color_management.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/text.o ${OBJECTDIR}/addDrums.o ${OBJECTDIR}/allTracks.o ${OBJECTDIR}/credits2017.o ${OBJECTDIR}/intro2017.o ${OBJECTDIR}/shared.o ${OBJECTDIR}/trackerUI.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_events.o ${OBJECTDIR}/main.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/music.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/hardware.o ${OBJECTDIR}/tty.o ${OBJECTDIR}/app_device_audio_midi.o ${OBJECTDIR}/app_led_usb_status.o ${OBJECTDIR}/system.o
+OBJECTFILES=${OBJECTDIR}/color_management.o ${OBJECTDIR}/drawing_helpers.o ${OBJECTDIR}/fb_control.o ${OBJECTDIR}/resolution_management.o ${OBJECTDIR}/sprites.o ${OBJECTDIR}/text.o ${OBJECTDIR}/addDrums.o ${OBJECTDIR}/allTracks.o ${OBJECTDIR}/credits2017.o ${OBJECTDIR}/intro2017.o ${OBJECTDIR}/shared.o ${OBJECTDIR}/trackerUI.o ${OBJECTDIR}/synth.o ${OBJECTDIR}/usb_device.o ${OBJECTDIR}/usb_descriptors.o ${OBJECTDIR}/usb_events.o ${OBJECTDIR}/main.o ${OBJECTDIR}/serial.o ${OBJECTDIR}/music.o ${OBJECTDIR}/demo_management.o ${OBJECTDIR}/hardware.o ${OBJECTDIR}/tty.o ${OBJECTDIR}/app_device_audio_midi.o ${OBJECTDIR}/app_led_usb_status.o ${OBJECTDIR}/system.o
 
 # Source Files
-SOURCEFILES=color_management.c drawing_helpers.c fb_control.c resolution_management.c sprites.c text.c addDrums.c allTracks.c credits2017.c intro2017.c shared.c trackerUI.c usb_device.c usb_descriptors.c usb_events.c main.c serial.c music.c demo_management.c hardware.c tty.c app_device_audio_midi.c app_led_usb_status.c system.c
+SOURCEFILES=color_management.c drawing_helpers.c fb_control.c resolution_management.c sprites.c text.c addDrums.c allTracks.c credits2017.c intro2017.c shared.c trackerUI.c synth.c usb_device.c usb_descriptors.c usb_events.c main.c serial.c music.c demo_management.c hardware.c tty.c app_device_audio_midi.c app_led_usb_status.c system.c
 
 
 CFLAGS=
@@ -177,6 +177,13 @@ ${OBJECTDIR}/trackerUI.o: trackerUI.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/trackerUI.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  trackerUI.c  -o ${OBJECTDIR}/trackerUI.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/trackerUI.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -DXPRJ_default_optimizations_on=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -mlarge-arrays -mlarge-code -mlarge-data -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/trackerUI.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/synth.o: synth.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/synth.o.d 
+	@${RM} ${OBJECTDIR}/synth.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  synth.c  -o ${OBJECTDIR}/synth.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/synth.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -mno-eds-warn  -omf=elf -save-temps=obj -DXPRJ_default_optimizations_on=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -mlarge-arrays -mlarge-code -mlarge-data -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/synth.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/usb_device.o: usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -346,6 +353,13 @@ ${OBJECTDIR}/trackerUI.o: trackerUI.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/trackerUI.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  trackerUI.c  -o ${OBJECTDIR}/trackerUI.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/trackerUI.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -DXPRJ_default_optimizations_on=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -mlarge-arrays -mlarge-code -mlarge-data -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/trackerUI.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/synth.o: synth.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/synth.o.d 
+	@${RM} ${OBJECTDIR}/synth.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  synth.c  -o ${OBJECTDIR}/synth.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/synth.o.d"      -mno-eds-warn  -g -omf=elf -save-temps=obj -DXPRJ_default_optimizations_on=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -mlarge-arrays -mlarge-code -mlarge-data -menable-large-arrays -O1 -msmart-io=1 -Wall -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/synth.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/usb_device.o: usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
